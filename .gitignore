@@ -1,7 +1,25 @@
-*.class
 
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
+# Compiled # 
+############
+*.class
+*.nxj
+*.nxd
+out
+
+# Project #
+###########
+.classpath
+.externalToolBuilders
+.idea
+.project
+*.cproject
+.settings
+nbproject
+atlassian-ide-plugin.xml
+nb-configuration.xml
+*.iml
+*.ipr
+*.iws
 
 # Package Files #
 *.jar
