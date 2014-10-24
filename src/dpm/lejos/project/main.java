@@ -1,17 +1,13 @@
-package System;
+package project;
 
 /**
  * @author david
  * @version 1.0
- * @created 24-oct.-2014 11:26:30
+ * @created 24-oct.-2014 12:37:24
  */
 public class Main {
 
-	public static UltrasonicSensor frontUS;
-	public static NXTRegulatedMotor portMotor = Motor.A;
-	public static UltrasonicSensor portUS;
-	public static NXTRegulatedMotor strbMotor = Motor.B;
-	public static UltrasonicSensor strbUS;
+	public static Robot robot;
 	public Odometer m_Odometer;
 	public MissionPlanner m_MissionPlanner;
 
