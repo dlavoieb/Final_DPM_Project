@@ -25,8 +25,8 @@ public class Orienteering {
     private NXTRegulatedMotor rm;
     */
 
-    private double WHEEL_RADIUS;
     private double WHEEL_DISTANCE;
+    private double WHEEL_RADIUS;
     private static final int FORWARD_SPEED = 300;
     private static final int ROTATE_SPEED = 150;
     private static final int ACCELERATION = 1000;
@@ -49,178 +49,60 @@ public class Orienteering {
 
     public void virtualDeterministicPositioning() {
         this.plane = createPlane();
-        int startingX = 1;
-        int startingY = 2;
-        Direction startingDir = Direction.SOUTH;
+        int startingX = 0;
+        int startingY = 1;
+        Direction startingDir = Direction.NORTH;
 
         ArrayList<Motion> motionTrace = new ArrayList<Motion>();
         VirtualRobot vr = new VirtualRobot(startingX, startingY, startingDir);
 
         int counter = 0;
+        boolean hasWallLeft;
+        boolean hasWallRight;
+        boolean hasWallAhead;
         while(countPossibilities(this.plane) > 1) {
-            System.out.println("ITER = " + counter);
-            Motion optimalMotion;
-            if (vr.hasWallAhead(plane)) {
-                simulateOnAllTiles(Obstacle.OBSTACLE, motionTrace, plane);
-                optimalMotion = decideOptimalMotion(plane, motionTrace, Obstacle.OBSTACLE);
-                System.out.println("Optimal MOTION = " + optimalMotion);
-                vr.performMotion(optimalMotion);
-                motionTrace.add(optimalMotion);
+            hasWallLeft = vr.hasWallLeft(plane);
+            hasWallRight = vr.hasWallRight(plane);
+            hasWallAhead = vr.hasWallAhead(plane);
+
+            if (hasWallAhead) {
+                simulateOnAllTiles(motionTrace, plane, hasWallAhead, hasWallLeft, hasWallRight);
+                vr.performMotion(Motion.ROTATE);
+                motionTrace.add(Motion.ROTATE);
             } else {
-                simulateOnAllTiles(Obstacle.CLEAR, motionTrace, plane);
-                optimalMotion = decideOptimalMotion(plane, motionTrace, Obstacle.CLEAR);
-                System.out.println("Optimal MOTION = " + optimalMotion);
-                vr.performMotion(optimalMotion);
-                motionTrace.add(optimalMotion);
+                simulateOnAllTiles(motionTrace, plane, hasWallAhead, hasWallLeft, hasWallRight);
+                vr.performMotion(Motion.FORWARD);
+                motionTrace.add(Motion.FORWARD);
             }
 
-            printPlaneOptions(plane);
-
+            //printPlaneOptions(plane);
+            counter++;
         }
+
+        System.out.println(counter);
 
         Coordinate startingPosition = findStartingPosition();
         Coordinate endingPosition = findEndingPosition(motionTrace, startingPosition);
 
-        System.out.println("X = " + startingPosition.getX() + " Y = " + startingPosition.getY());
-        System.out.println("X = " + endingPosition.getX() + " Y = " + endingPosition.getY());
-
-        //printPlaneOptions();
-    }
-
-    public Motion decideOptimalMotion(Tile[][] plane, ArrayList<Motion> motionTrace, Obstacle obs) {
-        //we pass in the obstacle to decide which motions to simulate
-        //i.e if there is a wall ahead we don't want to simulate going forward
-
-        PossibilitiesEliminated rotateCW = new PossibilitiesEliminated();
-        PossibilitiesEliminated rotate = new PossibilitiesEliminated();
-        PossibilitiesEliminated forward = new PossibilitiesEliminated();
-
-        if (obs == Obstacle.CLEAR) {
-
-            Motion[] motions = { Motion.FORWARD, Motion.ROTATE, Motion.ROTATECW };
-            for (Motion motion : motions) {
-
-                if (motion == Motion.FORWARD) {
-                    motionTrace.add(Motion.FORWARD);
-                    calculatePossibilitiesEliminated(motionTrace, plane, forward);
-                } else if (motion == Motion.ROTATE) {
-                    motionTrace.add(Motion.ROTATE);
-                    calculatePossibilitiesEliminated(motionTrace, plane, rotate);
-                } else {
-                    motionTrace.add(Motion.ROTATECW);
-                    calculatePossibilitiesEliminated(motionTrace, plane, rotateCW);
-                }
-
-                motionTrace.remove(motionTrace.size() - 1);
-
-            }
-
-            System.out.println("FORWARD MIN " + forward.min());
-            System.out.println("ROTATE MIN " + rotate.min());
-            System.out.println("ROTATECW MIN " + rotateCW.min());
-
-
-            if (forward.min() >= rotateCW.min() && forward.min() >= rotate.min()  ) {
-                return Motion.FORWARD;
-            } else if (rotateCW.min() >= forward.min() && rotateCW.min() >= rotate.min()) {
-                return Motion.ROTATECW;
-            } else {
-                return Motion.ROTATE;
-            }
-
-        } else {
-
-            Motion[] motions = { Motion.ROTATE, Motion.ROTATECW };
-            for (Motion motion : motions) {
-
-                if (motion == Motion.ROTATE) {
-                    motionTrace.add(Motion.ROTATE);
-                    calculatePossibilitiesEliminated(motionTrace, plane, rotate);
-                } else {
-                    motionTrace.add(Motion.ROTATECW);
-                    calculatePossibilitiesEliminated(motionTrace, plane, rotateCW);
-                }
-
-                motionTrace.remove(motionTrace.size() - 1);
-
-            }
-
-            System.out.println("ROTATE MIN " + rotate.min());
-            System.out.println("ROTATECW MIN " + rotateCW.min());
-
-            if (rotateCW.min() >= rotate.min()) {
-                return Motion.ROTATECW;
-            } else {
-                return Motion.ROTATE;
-            }
-
-        }
-
-    }
-
-
-    public void calculatePossibilitiesEliminated(ArrayList<Motion> motionTrace, Tile[][] originalPlane, PossibilitiesEliminated posEliminated) {
-
-        Obstacle[] obstacles = { Obstacle.CLEAR, Obstacle.OBSTACLE };
-        Tile[][] planeCopy;
-        for (Obstacle obs : obstacles) {
-            planeCopy = planeCopy(originalPlane);
-            int eliminatedPosCount = 0;
-
-            for (int i = 0; i < planeCopy.length; i++) {
-                for (int j = 0; j < planeCopy.length; j++) {
-                    for (int k = 0; k < planeCopy.length; k++) {
-                        if (!planeCopy[i][j].isObstacle()) {
-                            Direction selectedDir;
-                            VirtualRobot vr;
-                            if (k == 0) {
-                                vr = new VirtualRobot(j, i, Direction.NORTH);
-                                selectedDir = Direction.NORTH;
-                            } else if (k == 1) {
-                                vr = new VirtualRobot(j, i, Direction.EAST);
-                                selectedDir = Direction.EAST;
-                            } else if (k == 2) {
-                                vr = new VirtualRobot(j, i, Direction.WEST);
-                                selectedDir = Direction.WEST;
-                            } else {
-                                vr = new VirtualRobot(j, i, Direction.SOUTH);
-                                selectedDir = Direction.SOUTH;
-                            }
-
-                            if (planeCopy[i][j].isPossible(vr.getDir())) {
-                                if (!motionTrace.isEmpty()) {
-                                    for (Motion motion : motionTrace ) {
-                                        if (motion == Motion.FORWARD ) {
-                                            vr.moveForward();
-                                        } else if (motion == Motion.ROTATE) {
-                                            vr.rotate();
-                                        } else {
-                                            vr.rotatecw();
-                                        }
-                                    }
-                                }
-
-                                boolean hasObstacle = planeCopy[vr.getY()][vr.getX()].hasObstacle(vr.getDir());
-                                if (hasObstacle && obs == Obstacle.CLEAR || !hasObstacle && obs == Obstacle.OBSTACLE) {
-                                    planeCopy[i][j].setPossibilityToFalse(selectedDir);
-                                    eliminatedPosCount++;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            posEliminated.submitCount(obs, eliminatedPosCount);
-        }
+        System.out.println("Ending pos x = " + endingPosition.getX() + " Y = " + endingPosition.getY() );
+        printPlaneOptions(plane);
     }
 
 
     public Tile[][] planeCopy(Tile[][] plane) {
-        Tile[][] newPlane = new Tile[plane.length][];
+
+        Tile[][] newPlane = new Tile[plane.length][plane[0].length];
         for (int i = 0; i < newPlane.length; i++){
-            newPlane[i] = Arrays.copyOf(plane[i], plane[i].length);
+            for (int j = 0; j < newPlane[0].length; j++) {
+                newPlane[i][j] = new Tile(plane[i][j]);
+            }
         }
 
+        /*printPlaneOptions(plane);
+        System.out.println();
+        printPlaneOptions(newPlane);*/
+
+        //System.out.println("Are planes equal??? = " + (plane.equals(newPlane)));
         return newPlane;
     }
 
@@ -241,6 +123,60 @@ public class Orienteering {
             }
             System.out.println();
             System.out.println();
+        }
+    }
+
+    /**
+     * simulate the recorded motion for all
+     * starting position possible
+     * @param motionTrace the stack of movements applied so far
+     * @param plane the playground layout
+     */
+    public void simulateOnAllTiles(ArrayList<Motion> motionTrace, Tile[][] plane, boolean hasWallAhead, boolean hasWallLeft, boolean hasWallRight) {
+        for (int i = 0; i < plane.length; i++) {
+            for (int j = 0; j < plane.length; j++) {
+                for (int k = 0; k < plane.length; k++) {
+                    if (!plane[i][j].isObstacle()) {
+                        Direction selectedDir;
+                        VirtualRobot vr;
+                        if (k == 0) {
+                            vr = new VirtualRobot(j, i, Direction.NORTH);
+                            selectedDir = Direction.NORTH;
+                        } else if (k == 1) {
+                            vr = new VirtualRobot(j, i, Direction.EAST);
+                            selectedDir = Direction.EAST;
+                        } else if (k == 2) {
+                            vr = new VirtualRobot(j, i, Direction.WEST);
+                            selectedDir = Direction.WEST;
+                        } else {
+                            vr = new VirtualRobot(j, i, Direction.SOUTH);
+                            selectedDir = Direction.SOUTH;
+                        }
+
+                        if (plane[i][j].isPossible(vr.getDir())) {
+                            if (!motionTrace.isEmpty()) {
+                                for (Motion motion : motionTrace ) {
+                                    if (motion == Motion.FORWARD ) {
+                                        vr.moveForward();
+                                    } else if (motion == Motion.ROTATE) {
+                                        vr.rotate();
+                                    } else {
+                                        vr.rotatecw();
+                                    }
+                                }
+                            }
+
+                            boolean hasObstacleAhead = vr.hasWallAhead(plane);
+                            boolean hasObstacleLeft = vr.hasWallLeft(plane);
+                            boolean hasObstacleRight = vr.hasWallRight(plane);
+
+                            if (hasObstacleAhead != hasWallAhead || hasWallLeft != hasObstacleLeft || hasWallRight != hasObstacleRight) {
+                                plane[i][j].setPossibilityToFalse(selectedDir);
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -393,19 +329,19 @@ public class Orienteering {
 		currentDirection = Direction.NORTH;
 		while (true) {
 			sleep(1000);
-			
+
 			if (currentDirection != Direction.NORTH) {
 				rotateNorth(currentDirection);
 				currentDirection = Direction.NORTH;
-			} 
-			
+			}
+
 			int distanceToWall = getFilteredData();
-			
+
 			if (y == 0 && x == 3) {
 				rotateNorth(currentDirection);
 				break;
 			}
-			
+
 			if (y > 0 && distanceToWall > DISTANCE_THRESHOLD && currentDirection == Direction.NORTH) {
 				moveForward();
 				y--;
@@ -440,13 +376,13 @@ public class Orienteering {
      * @return Coordinates where the robot started
      */
     public Coordinate findStartingPosition() {
-    	
-    	Direction[] directions = { Direction.NORTH, 
+
+    	Direction[] directions = { Direction.NORTH,
     							   Direction.SOUTH,
     							   Direction.EAST,
-    							   Direction.WEST 
+    							   Direction.WEST
               					 };
-    	
+
     	Coordinate coord = new Coordinate(0,0);
     	for(Direction dir : directions) {
     		for(int i = 0; i < plane.length; i++) {
@@ -544,57 +480,6 @@ public class Orienteering {
         rm.rotate(convertDistance(30), false);
     }*/
 
-    /**
-     * simulate the recorded motion for all
-     * starting position possible
-     * @param obs is there an obstacle in front of us
-     * @param motionTrace the stack of movements applied so far
-     * @param plane the playground layout
-     */
-    public void simulateOnAllTiles(Obstacle obs, ArrayList<Motion> motionTrace, Tile[][] plane) {
-        for (int i = 0; i < plane.length; i++) {
-            for (int j = 0; j < plane.length; j++) {
-                for (int k = 0; k < plane.length; k++) {
-                    if (!plane[i][j].isObstacle()) {
-                        Direction selectedDir;
-                        VirtualRobot vr;
-                        if (k == 0) {
-                            vr = new VirtualRobot(j, i, Direction.NORTH);
-                            selectedDir = Direction.NORTH;
-                        } else if (k == 1) {
-                            vr = new VirtualRobot(j, i, Direction.EAST);
-                            selectedDir = Direction.EAST;
-                        } else if (k == 2) {
-                            vr = new VirtualRobot(j, i, Direction.WEST);
-                            selectedDir = Direction.WEST;
-                        } else {
-                            vr = new VirtualRobot(j, i, Direction.SOUTH);
-                            selectedDir = Direction.SOUTH;
-                        }
-
-                        if (plane[i][j].isPossible(vr.getDir())) {
-                            if (!motionTrace.isEmpty()) {
-                                for (Motion motion : motionTrace ) {
-                                    if (motion == Motion.FORWARD ) {
-                                        vr.moveForward();
-                                    } else if (motion == Motion.ROTATE) {
-                                        vr.rotate();
-                                    } else {
-                                        vr.rotatecw();
-                                    }
-                                }
-                            }
-
-                            boolean hasObstacle = plane[vr.getY()][vr.getX()].hasObstacle(vr.getDir());
-                            if (hasObstacle && obs == Obstacle.CLEAR || !hasObstacle && obs == Obstacle.OBSTACLE) {
-                                plane[i][j].setPossibilityToFalse(selectedDir);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
 
     /**
      * Count the remaining possibilities for the starting position

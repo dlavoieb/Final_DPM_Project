@@ -39,6 +39,22 @@ public class Tile {
     }
 
     /**
+     * Copy Constructor
+     */
+    public Tile(Tile tile) {
+        this.isObstacle = tile.isObstacle();
+        this.possibleN = tile.isPossible(Direction.NORTH);
+        this.possibleS = tile.isPossible(Direction.SOUTH);
+        this.possibleW = tile.isPossible(Direction.WEST);
+        this.possibleE = tile.isPossible(Direction.EAST);
+        this.obstacleN = tile.hasObstacle(Direction.NORTH);
+        this.obstacleS = tile.hasObstacle(Direction.SOUTH);
+        this.obstacleW = tile.hasObstacle(Direction.WEST);
+        this.obstacleE = tile.hasObstacle(Direction.EAST);
+    }
+
+
+    /**
      * Get if there is an obstacle in certain direction
      * @param dir the direction to poll
      * @return presence of an obstacle in the polled direction

@@ -91,6 +91,47 @@ public class VirtualRobot {
         }
     }
 
+
+    /**
+     * Determines if the robot has a wall to its left
+     * @param plane
+     * @return
+     */
+    public boolean hasWallLeft(Tile[][] plane) {
+        synchronized (lock) {
+            if (this.dir == Direction.NORTH) {
+                return plane[y][x].hasObstacle(Direction.WEST);
+            } else if (this.dir == Direction.SOUTH) {
+                return plane[y][x].hasObstacle(Direction.EAST);
+            } else if (this.dir == Direction.EAST) {
+                return plane[y][x].hasObstacle(Direction.NORTH);
+            } else if (this.dir == Direction.WEST) {
+                return plane[y][x].hasObstacle(Direction.SOUTH);
+            }
+            return false;
+        }
+    }
+
+    /**
+     * Determines if the robot has a walsl to its right
+     * @param plane
+     * @return
+     */
+    public boolean hasWallRight(Tile[][] plane) {
+        synchronized (lock) {
+            if (this.dir == Direction.NORTH) {
+                return plane[y][x].hasObstacle(Direction.EAST);
+            } else if (this.dir == Direction.SOUTH) {
+                return plane[y][x].hasObstacle(Direction.WEST);
+            } else if (this.dir == Direction.EAST) {
+                return plane[y][x].hasObstacle(Direction.SOUTH);
+            } else if (this.dir == Direction.WEST) {
+                return plane[y][x].hasObstacle(Direction.NORTH);
+            }
+            return false;
+        }
+    }
+
     /**
      * public setter for x position
      * @param x new x position

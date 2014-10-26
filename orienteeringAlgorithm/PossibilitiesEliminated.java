@@ -33,6 +33,10 @@ public class PossibilitiesEliminated {
         return Math.max(countOnClear, countOnClear);
     }
 
+    public int max() {
+        return Math.max(countOnClear, countOnObstacle);
+    }
+
     public int min() {
         return Math.min(countOnClear, countOnObstacle);
     }
