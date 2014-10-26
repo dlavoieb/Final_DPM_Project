@@ -1,4 +1,8 @@
-package project;
+package dpm.lejos.project;
+
+import lejos.nxt.TouchSensor;
+
+import java.util.LinkedList;
 
 /**
  * @author david
@@ -8,7 +12,7 @@ package project;
 public class Grabber {
 
 	public boolean hasObject = false;
-	public LinkedList<BlockInSotrage> listBlocksInStorage;
+	public LinkedList<BlockInStorage> listBlocksInStorage;
 	private TouchSensor touchSensor;
 
 	public Grabber(){

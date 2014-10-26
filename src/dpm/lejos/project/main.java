@@ -1,4 +1,4 @@
-package project;
+package dpm.lejos.project;
 
 /**
  * @author david
@@ -11,7 +11,7 @@ public class Main {
 	public Odometer m_Odometer;
 	public MissionPlanner m_MissionPlanner;
 
-	public Main(){
+	public static void main(){
 
 	}
 

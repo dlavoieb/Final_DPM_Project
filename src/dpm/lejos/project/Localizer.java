@@ -1,4 +1,4 @@
-package project;
+package dpm.lejos.project;
 
 /**
  * @author david

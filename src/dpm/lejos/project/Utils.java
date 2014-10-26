@@ -1,4 +1,4 @@
-package project;
+package dpm.lejos.project;
 
 /**
  * @author david
@@ -17,7 +17,7 @@ public class Utils {
 	/**
 	 * converts a global robot travel distance to a motor rotation angle
 	 * 
-	 * @param distance
+	 * @param distance the distance to travel
 	 */
 	public static int robotAngleToMotorAngle(double distance){
 		return 0;
@@ -26,7 +26,7 @@ public class Utils {
 	/**
 	 * converts a global robot rotation to a motor rotation angle
 	 * 
-	 * @param angle
+	 * @param angle the angle to rotate
 	 */
 	public static int robotRotationToMotorAngle(double angle){
 		return 0;
