@@ -2,6 +2,8 @@
 
 //tiles on the grid, use for representing the plane.
 
+import java.util.ArrayList;
+
 /**
  * Class representing every unit tile on the playground board
  *
@@ -20,6 +22,8 @@ public class Tile {
     private boolean obstacleS;
     private boolean obstacleW;
     private boolean obstacleE;
+    private ArrayList<Tile> neighbourTiles;
+    private boolean visited;
 
     /**
      * Default constructor
@@ -36,6 +40,8 @@ public class Tile {
         this.obstacleS = false;
         this.obstacleW = false;
         this.obstacleE = false;
+        this.neighbourTiles = null;
+        this.visited = false;
     }
 
     /**
@@ -51,6 +57,19 @@ public class Tile {
         this.obstacleS = tile.hasObstacle(Direction.SOUTH);
         this.obstacleW = tile.hasObstacle(Direction.WEST);
         this.obstacleE = tile.hasObstacle(Direction.EAST);
+    }
+
+    /**
+     * Add tile to neighbour tiles array
+     */
+    public void addNeighbourTiles(Tile[] tiles) {
+        for (Tile tile : tiles) {
+            this.neighbourTiles.add(tile);
+        }
+    }
+
+    public ArrayList<Tile> getNeighbours() {
+        return this.neighbourTiles;
     }
 
 
@@ -147,4 +166,13 @@ public class Tile {
     public boolean isObstacle() {
         return isObstacle;
     }
+
+    public void setVisited(boolean visited) {
+        this.visited = visited;
+    }
+
+    public boolean getVisited() {
+        return this.visited;
+    }
+
 }

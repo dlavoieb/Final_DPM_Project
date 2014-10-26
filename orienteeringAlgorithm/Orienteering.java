@@ -35,6 +35,15 @@ public class Orienteering {
     private static int DISTANCE_THRESHOLD = 30;
 
 
+    public Orienteering() {
+        this.plane = createPlane();
+    }
+
+    public Tile[][] getPlane() {
+        return this.plane;
+    }
+
+
     /*
     public Orienteering(UltrasonicSensor us, NXTRegulatedMotor leftMotor, NXTRegulatedMotor rightMotor, double wheel_distance, double wheel_radius) {
         this.plane = createPlane();
@@ -46,7 +55,9 @@ public class Orienteering {
     }
     */
 
-
+    /**
+     * Optimized localization algorithm with 3 US
+     */
     public void virtualDeterministicPositioning() {
         this.plane = createPlane();
         int startingX = 0;
@@ -88,7 +99,11 @@ public class Orienteering {
         printPlaneOptions(plane);
     }
 
-
+    /**
+     * Creates a copy of the plane
+     * @param plane
+     * @return
+     */
     public Tile[][] planeCopy(Tile[][] plane) {
 
         Tile[][] newPlane = new Tile[plane.length][plane[0].length];
