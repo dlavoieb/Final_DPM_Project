@@ -13,9 +13,6 @@ public class Localizer {
 
 	}
 
-	public void finalize() throws Throwable {
-
-	}
 	public void doLocalize(){
 
 	}

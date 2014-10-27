@@ -15,7 +15,4 @@ public class MissionPlanner {
 
 	}
 
-	public void finalize() throws Throwable {
-
-	}
 }//end MissionPlanner

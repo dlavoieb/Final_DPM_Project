@@ -11,9 +11,6 @@ public class Utils {
 
 	}
 
-	public void finalize() throws Throwable {
-
-	}
 	/**
 	 * converts a global robot travel distance to a motor rotation angle
 	 * 

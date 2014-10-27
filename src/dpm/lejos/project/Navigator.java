@@ -16,9 +16,6 @@ public class Navigator {
 
 	}
 
-	public void finalize() throws Throwable {
-
-	}
 	/**
 	 * 
 	 * @param angle

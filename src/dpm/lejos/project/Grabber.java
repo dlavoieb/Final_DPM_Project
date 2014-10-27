@@ -19,9 +19,6 @@ public class Grabber {
 
 	}
 
-	public void finalize() throws Throwable {
-
-	}
 	/**
 	 * close claw,
 	 * check for touch contact

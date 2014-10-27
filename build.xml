@@ -1,6 +1,6 @@
-<project name="dpm.lejos.lab" default="uploadandrun">
+<project name="dpm.lejos.project" default="link">
 	<description>
-    	org.lejos.example.HelloWorld build file
+    	dpm.lejos.project build file
     </description>
 
 	<!-- set properties for this build -->

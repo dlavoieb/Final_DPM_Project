@@ -11,9 +11,6 @@ public class LineDetector {
 
 	}
 
-	public void finalize() throws Throwable {
-
-	}
 	public void timedOut(){
 
 	}

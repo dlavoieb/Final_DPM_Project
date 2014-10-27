@@ -15,7 +15,4 @@ public class Main {
 
 	}
 
-	public void finalize() throws Throwable {
-
-	}
 }//end Main
