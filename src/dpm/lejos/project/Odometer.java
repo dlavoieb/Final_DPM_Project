@@ -1,13 +1,15 @@
 package dpm.lejos.project;
 
 import lejos.nxt.ColorSensor;
-import lejos.nxt.LightSensor;
 import lejos.nxt.NXTRegulatedMotor;
 
 /**
- * @author david
+ * Odometer class polls the tachometers from
+ * the drive motors to estimate the current
+ * position and heading
+ *
+ * @author David Lavoie-Boutin
  * @version 1.0
- * @created 24-oct.-2014 12:37:24
  */
 public class Odometer extends Thread{
 

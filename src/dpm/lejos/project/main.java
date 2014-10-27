@@ -1,9 +1,12 @@
 package dpm.lejos.project;
 
 /**
- * @author david
+ * Main executable
+ *
+ * Targeted to the master brick
+ *
+ * @author David Lavoie-Boutin
  * @version 1.0
- * @created 24-oct.-2014 12:37:24
  */
 public class Main {
 

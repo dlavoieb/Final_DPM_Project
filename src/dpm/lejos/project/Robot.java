@@ -10,10 +10,11 @@ import java.io.IOException;
 
 /**
  * Provides access to all the robots sensors and actuators
+ *
  * Holds all the parameters and constants relevant to the whole system
+ *
  * @author David Lavoie-Boutin
  * @version 1.0
- * @created 24-oct.-2014 12:37:24
  */
 public class Robot {
 
@@ -24,12 +25,24 @@ public class Robot {
 
     public double wheelBase;
     public double wheelRadius;
-    public double lsOffset;
+    public double lightSensorOffset;
 
+    /**
+     * motor for lifting and lowering the arms
+     */
     public RemoteMotor clawLift;
+    /**
+     * motor for opening and closing the grabbing mechanism
+     */
     public RemoteMotor clawClose;
 
+    /**
+     * color sensor on the grabbing mechanism
+     */
 	public ColorSensor clawColor;
+    /**
+     * touch sensor on the grabbing mechanism
+     */
 	public TouchSensor clawTouch;
 
     public NXTRegulatedMotor motorPort = Motor.A; //   <---
@@ -43,24 +56,26 @@ public class Robot {
     /**
      * The front facing ultrasonic sensor
      */
-    public UltrasonicSensor usFront = new UltrasonicSensor(SensorPort.S1); //   <---
+    public UltrasonicSensor usFront;
     /**
      * The port facing ultrasonic sensor
      */
-	public UltrasonicSensor usPort = new UltrasonicSensor(SensorPort.S2);  //   <---
+	public UltrasonicSensor usPort;
     /**
      * The starboard facing ultrasonic sensor
      */
-	public UltrasonicSensor usStrb = new UltrasonicSensor(SensorPort.S3);  //   <---
+	public UltrasonicSensor usStrb;
 
 	/**
 	 * Color sensor facing down for odometry correction
 	 */
 	public ColorSensor colorSensor;
 
-
-
-
+    /**
+     * default constructor
+     *
+     * no parameters, all defaults should be initialized in this class
+     */
     public Robot(){
         try {
             LCD.clear();
@@ -80,7 +95,12 @@ public class Robot {
 
         clawLift = slave.A;
         clawClose = slave.B;
-	}
+
+        usFront = new UltrasonicSensor(slave.S1);
+        usPort = new UltrasonicSensor(slave.S2);
+        usStrb = new UltrasonicSensor(slave.S3);
+
+    }
 
 
 }//end Robot
