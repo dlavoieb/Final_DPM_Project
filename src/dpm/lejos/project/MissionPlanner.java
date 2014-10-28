@@ -1,9 +1,12 @@
 package dpm.lejos.project;
 
 /**
- * @author david
+ * High level mission planning.
+ *
+ * Implements the over all strategy
+ *
+ * @author David Lavoie-Boutin
  * @version 1.0
- * @created 24-oct.-2014 12:37:24
  */
 public class MissionPlanner {
 
@@ -15,7 +18,4 @@ public class MissionPlanner {
 
 	}
 
-	public void finalize() throws Throwable {
-
-	}
 }//end MissionPlanner

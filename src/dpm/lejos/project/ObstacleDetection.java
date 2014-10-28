@@ -5,27 +5,42 @@ import lejos.util.TimerListener;
 import lejos.util.Timer;
 
 /**
- * @author david
+ * Obstacle detection class monitors
+ * all the ultrasonic sensors to
+ * detect the presence of obstacles
+ *
+ * @author David Lavoie-Boutin
  * @version 1.0
- * @created 24-oct.-2014 12:37:24
  */
 public class ObstacleDetection implements TimerListener{
 
 	private UltrasonicSensor frontUS;
     private int PERIOD = 10;
     private final Timer timer;
+    private Robot m_robot;
 
-	public ObstacleDetection(){
+    /**
+     * default constructor
+     * @param robot Robot object
+     */
+	public ObstacleDetection(Robot robot){
         timer = new Timer(PERIOD, this);
+        m_robot = robot;
 	}
 
 	public void finalize() {
 
 	}
-	public void detectObstacles(){
+
+	private void detectObstacles(){
 
 	}
 
+    /**
+     * callback for the timer
+     *
+     * does the polling of the 3 ultrasonic sensors
+     */
 	public void timedOut(){
 
 	}

@@ -1,53 +1,76 @@
 package dpm.lejos.project;
 
-import lejos.nxt.LightSensor;
+import lejos.nxt.ColorSensor;
 import lejos.nxt.NXTRegulatedMotor;
 
 /**
- * @author david
+ * Odometer class polls the tachometers from
+ * the drive motors to estimate the current
+ * position and heading
+ *
+ * @author David Lavoie-Boutin
  * @version 1.0
- * @created 24-oct.-2014 12:37:24
  */
 public class Odometer extends Thread{
 
-	private final LightSensor centerLS;
+	private final ColorSensor centerLS;
 	private final NXTRegulatedMotor portMotor;
 	private final NXTRegulatedMotor stbdMotor;
 	private double theta = 0;
 	private double x = 0;
 	private double y = 0;
-	public LineDetector m_LineDetector;
+	private LineDetector m_LineDetector;
 
-	public Odometer(){
+    private final Object lock;
+    private static Robot m_robot;
 
+    /**
+     * constructor for the odometer
+     * @param robot robot object containing initialized drive motors and light sensors
+     */
+	public Odometer(Robot robot){
+        m_robot = robot;
+        centerLS = m_robot.colorSensor;
+        portMotor = m_robot.motorPort;
+        stbdMotor = m_robot.motorStrb;
+        lock = new Object();
 	}
 
-	public void finalize() throws Throwable {
+    /**
+     * runnable method overriding the thread method.
+     *
+     * This method will be ran in a separate thread
+     * continuously polling the tachometers and
+     * integrating the instantaneous speed to get
+     * the total linear and angular displacement
+     */
+    public void run(){
 
-	}
+    }
+
 	/**
-	 * 
-	 * @param portMotor
-	 * @param strbMotor
-	 * @param frontLS
-	 */
-	public Odometer(NXTRegulatedMotor portMotor, NXTRegulatedMotor strbMotor, LightSensor frontLS ){
-
+	 * This method is the single entry point
+     * to get the position of the robot.
+  	 */
+	public double [] getPosition(){
+        synchronized (lock) {
+            return new double[]{x, y, theta};
+        }
 	}
 
 	/**
-	 * 
-	 * @param position
-	 */
-	public void getPosition(double[] position){
-
-	}
-
-	/**
-	 * 
-	 * @param position
+	 * Single point of entry to set
+     * the position of the odometer
+	 *
+     * @param position array containing the position
+     *                 of the robot
 	 */
 	public void setPosition(double[] position){
-
+        if (position.length != 3) return;
+        synchronized (lock){
+            x = position[0];
+            y = position[1];
+            theta = position[2];
+        }
 	}
 }//end Odometer

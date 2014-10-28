@@ -5,9 +5,10 @@ import lejos.nxt.TouchSensor;
 import java.util.LinkedList;
 
 /**
- * @author david
+ * Class managing the grabbing mechanism
+ *
+ * @author David Lavoie-Boutin
  * @version 1.0
- * @created 24-oct.-2014 12:37:24
  */
 public class Grabber {
 
@@ -19,9 +20,6 @@ public class Grabber {
 
 	}
 
-	public void finalize() throws Throwable {
-
-	}
 	/**
 	 * close claw,
 	 * check for touch contact

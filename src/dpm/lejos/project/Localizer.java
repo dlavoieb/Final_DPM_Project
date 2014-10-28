@@ -1,9 +1,8 @@
 package dpm.lejos.project;
 
 /**
- * @author david
+ * @author David Lavoie-Boutin
  * @version 1.0
- * @created 24-oct.-2014 12:37:24
  */
 public class Localizer {
 
@@ -13,9 +12,13 @@ public class Localizer {
 
 	}
 
-	public void finalize() throws Throwable {
-
-	}
+    /**
+     * perform the localisation task
+     *
+     * this determines our initial position
+     * and orientation sets our current position
+     * based on our previous movements
+     */
 	public void doLocalize(){
 
 	}

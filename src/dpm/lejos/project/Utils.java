@@ -1,25 +1,20 @@
 package dpm.lejos.project;
 
 /**
- * @author david
+ * Conversion utilities
+ *
+ * @author David Lavoie-Boutin
  * @version 1.0
- * @created 24-oct.-2014 12:37:24
  */
 public class Utils {
 
-	public Utils(){
-
-	}
-
-	public void finalize() throws Throwable {
-
-	}
 	/**
 	 * converts a global robot travel distance to a motor rotation angle
 	 * 
 	 * @param distance the distance to travel
-	 */
-	public static int robotAngleToMotorAngle(double distance){
+	 * @param robot the robot object
+     */
+	public static int robotAngleToMotorAngle(double distance, Robot robot){
 		return 0;
 	}
 
@@ -27,8 +22,9 @@ public class Utils {
 	 * converts a global robot rotation to a motor rotation angle
 	 * 
 	 * @param angle the angle to rotate
+     * @param robot the robot object
 	 */
-	public static int robotRotationToMotorAngle(double angle){
+	public static int robotRotationToMotorAngle(double angle, Robot robot){
 		return 0;
 	}
 }//end Utils

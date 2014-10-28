@@ -1,45 +1,47 @@
 package dpm.lejos.project;
 
 /**
- * @author david
+ * Provides all the necessary navigation capabilities
+ *
+ * All motion is managed by this class
+ *
+ * @author David Lavoie-Boutin
  * @version 1.0
- * @created 24-oct.-2014 12:37:24
  */
 public class Navigator {
 
 	private boolean noObstacle = true;
 	private Odometer odometer;
-	public Odometer m_Odometer;
-	public ObstacleDetection m_ObstacleDetection;
+	private Odometer m_Odometer;
+	private ObstacleDetection m_ObstacleDetection;
 
-	public Navigator(){
+    private Robot m_robot;
 
+    /**
+     * default constructor
+     *
+     * @param robot the robot object
+     */
+	public Navigator(Robot robot){
+        m_robot = robot;
 	}
 
-	public void finalize() throws Throwable {
-
-	}
 	/**
-	 * 
-	 * @param angle
+	 * method used to rotate the
+     * robot to an absolute angle
+     *
+	 * @param angle the angle to rotate to
 	 */
 	public void rotateTo(double angle){
 
 	}
 
 	/**
+	 * method used to send the robot to a
+     * predetermined absolute location
 	 * 
-	 * @param value
-	 */
-	public void setNoObstacle(boolean value){
-
-	}
-
-	/**
-	 * travelTo
-	 * 
-	 * @param x
-	 * @param y
+	 * @param x the x coordinate
+	 * @param y the y coordinate
 	 */
 	public void travelTo(double x, double y){
 

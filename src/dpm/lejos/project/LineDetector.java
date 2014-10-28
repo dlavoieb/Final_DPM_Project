@@ -1,20 +1,55 @@
 package dpm.lejos.project;
 
+import lejos.util.Timer;
+import lejos.util.TimerListener;
+
 /**
- * @author david
+ * Class that polls the down facing light sensor to detect floor lines
+ *
+ * @author David Lavoie-Boutin
  * @version 1.0
- * @created 24-oct.-2014 12:37:24
  */
-public class LineDetector {
+public class LineDetector implements TimerListener {
 
-	public LineDetector(){
+    private static final int DEFAULT_PERIOD = 25;
+    private Timer timer;
+
+    private Robot m_robot;
+
+    private boolean isLine;
+    /**
+     * default constructor
+     * @param robot requires the robot object containing the light sensor
+     */
+    public LineDetector(Robot robot){
+        timer = new Timer(DEFAULT_PERIOD, this);
+        m_robot = robot;
+    }
+
+    /**
+     * constructor with added period adjustment capability
+     * @param robot requires the robot object containing the light sensor
+     * @param period the period of the timer
+     */
+     public LineDetector(Robot robot, int period) {
+        timer = new Timer(period, this);
+    }
+
+    /**
+     * callback for the timer timeout
+     */
+    public void timedOut(){
 
 	}
 
-	public void finalize() throws Throwable {
+    /**
+     * get if the robot is over a line
+     *
+     * @return return true if sensor currently detecting line
+     */
+    public boolean isLine(){
+        return isLine;
+    }
 
-	}
-	public void timedOut(){
-
-	}
+    public void finalize(){}
 }//end LineDetector

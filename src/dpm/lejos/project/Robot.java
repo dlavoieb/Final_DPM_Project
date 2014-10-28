@@ -1,12 +1,20 @@
 package dpm.lejos.project;
 
 import lejos.nxt.*;
+import lejos.nxt.comm.RS485;
+import lejos.nxt.remote.RemoteMotor;
 import lejos.nxt.remote.RemoteNXT;
+import lejos.util.Delay;
+
+import java.io.IOException;
 
 /**
- * @author david
+ * Provides access to all the robots sensors and actuators
+ *
+ * Holds all the parameters and constants relevant to the whole system
+ *
+ * @author David Lavoie-Boutin
  * @version 1.0
- * @created 24-oct.-2014 12:37:24
  */
 public class Robot {
 
@@ -17,71 +25,82 @@ public class Robot {
 
     public double wheelBase;
     public double wheelRadius;
+    public double lightSensorOffset;
 
-    public static NXTRegulatedMotor clawActuator;
+    /**
+     * motor for lifting and lowering the arms
+     */
+    public RemoteMotor clawLift;
+    /**
+     * motor for opening and closing the grabbing mechanism
+     */
+    public RemoteMotor clawClose;
+
+    /**
+     * color sensor on the grabbing mechanism
+     */
 	public ColorSensor clawColor;
+    /**
+     * touch sensor on the grabbing mechanism
+     */
 	public TouchSensor clawTouch;
 
-    public static NXTRegulatedMotor motorPort;
-	public static NXTRegulatedMotor motorStrb;
+    public NXTRegulatedMotor motorPort = Motor.A; //   <---
+	public NXTRegulatedMotor motorStrb = Motor.B; //   <---
 
+    /**
+     * Secondary nxt providing additional I/O ports
+     */
     public RemoteNXT slave;
 
     /**
      * The front facing ultrasonic sensor
      */
-    public static UltrasonicSensor usFront;
+    public UltrasonicSensor usFront;
     /**
      * The port facing ultrasonic sensor
      */
-	public static UltrasonicSensor usPort;
+	public UltrasonicSensor usPort;
     /**
      * The starboard facing ultrasonic sensor
      */
-	public static UltrasonicSensor usStrb;
+	public UltrasonicSensor usStrb;
 
 	/**
 	 * Color sensor facing down for odometry correction
 	 */
-	public static ColorSensor colorSensor;
-
-	public Robot(){
-        this(SensorPort.S1, SensorPort.S2, SensorPort.S3);
-	}
+	public ColorSensor colorSensor;
 
     /**
-     * full constructor
+     * default constructor
      *
-     * @param usFrontPort the port for the front facing ultrasonic sensor
-     * @param usPortPort the port for the port facing ultrasonic sensor
-     * @param usStrbPort the port for the starboard facing ultrasonic sensor
-     * @param colorPort
-     * @param clawColorPort
-     * @param clawTouchPort
-     * @param portMotorPort
-     * @param strbMotorPort
-     * @param clawMotorPort
-     * @param remoteNXT
+     * no parameters, all defaults should be initialized in this class
      */
-    public Robot (SensorPort usFrontPort, SensorPort usPortPort, SensorPort usStrbPort, SensorPort colorPort, SensorPort clawColorPort, SensorPort clawTouchPort, MotorPort portMotorPort, MotorPort strbMotorPort, MotorPort clawMotorPort, RemoteNXT remoteNXT){
-        slave = remoteNXT;
+    public Robot(){
+        try {
+            LCD.clear();
+            LCD.drawString("Connecting...",0,0);
+            slave = new RemoteNXT("TEAM08-2", RS485.getConnector());
+            LCD.clear();
+            LCD.drawString("Connected",0,1);
+            Sound.systemSound(false, 1);
+            Delay.msDelay(500);
+        } catch (IOException e) {
+            LCD.clear();
+            LCD.drawString("Failed",0,0);
+            Sound.systemSound(false, 4);
+            Delay.msDelay(2000);
+            System.exit(1);
+        }
 
-        usFront = new UltrasonicSensor(usFrontPort);
-        usPort = new UltrasonicSensor(usPortPort);
-        usStrb = new UltrasonicSensor(usStrbPort);
-        colorSensor = new ColorSensor(colorPort);
-        clawColor = new ColorSensor(clawColorPort);
-        clawTouch = new TouchSensor(clawTouchPort);
+        clawLift = slave.A;
+        clawClose = slave.B;
 
-        motorPort = new NXTRegulatedMotor(portMotorPort);
-        motorStrb = new NXTRegulatedMotor(strbMotorPort);
-        clawActuator = new NXTRegulatedMotor(clawMotorPort);
-
+        usFront = new UltrasonicSensor(slave.S1);
+        usPort = new UltrasonicSensor(slave.S2);
+        usStrb = new UltrasonicSensor(slave.S3);
 
     }
 
 
-	public void finalize() throws Throwable {
-
-	}
 }//end Robot
