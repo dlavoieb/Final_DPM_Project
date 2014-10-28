@@ -4,8 +4,12 @@
 public class VirtualTester {
 
     public static void main(String[] args) {
-        Orienteering orienteering = new Orienteering();
-        orienteering.virtualDeterministicPositioning();
+        //Orienteering orienteering = new Orienteering();
+        //orienteering.virtualDeterministicPositioning();
+
+        Navigator nav = new Navigator();
+
+
     }
 
 }

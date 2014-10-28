@@ -24,6 +24,7 @@ public class Tile {
     private boolean obstacleE;
     private ArrayList<Tile> neighbourTiles;
     private boolean visited;
+    private Coordinate id;
 
     /**
      * Default constructor
@@ -40,8 +41,9 @@ public class Tile {
         this.obstacleS = false;
         this.obstacleW = false;
         this.obstacleE = false;
-        this.neighbourTiles = null;
+        this.neighbourTiles = new ArrayList<Tile>();
         this.visited = false;
+        this.id = null;
     }
 
     /**
@@ -175,4 +177,11 @@ public class Tile {
         return this.visited;
     }
 
+    public Coordinate getId() {
+        return id;
+    }
+
+    public void setId(Coordinate id) {
+        this.id = id;
+    }
 }
