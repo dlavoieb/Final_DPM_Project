@@ -14,7 +14,7 @@ public class Main {
 	public Odometer m_Odometer;
 	public MissionPlanner m_MissionPlanner;
 
-	public static void main(){
+	public static void main(String [] argv){
 
 	}
 
