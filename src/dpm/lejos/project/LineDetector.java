@@ -32,14 +32,18 @@ public class LineDetector implements TimerListener {
      * @param period the period of the timer
      */
      public LineDetector(Robot robot, int period) {
-        timer = new Timer(period, this);
+         m_robot=robot;
+         timer = new Timer(period, this);
     }
 
     /**
      * callback for the timer timeout
+     *
+     * checks the value of the read light
+     * and compares with the set threshold
      */
     public void timedOut(){
-
+        isLine = m_robot.LIGHT_THRESHOLD > m_robot.colorSensor.getNormalizedLightValue();
 	}
 
     /**
@@ -51,5 +55,4 @@ public class LineDetector implements TimerListener {
         return isLine;
     }
 
-    public void finalize(){}
 }//end LineDetector

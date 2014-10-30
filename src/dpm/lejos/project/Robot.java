@@ -27,6 +27,8 @@ public class Robot {
     public double wheelRadius = 2; //TODO : Get real value
     public double lightSensorOffset = 5; //TODO : Get real value
 
+    public int LIGHT_THRESHOLD = 500;
+
     /**
      * motor for lifting and lowering the arms
      */
