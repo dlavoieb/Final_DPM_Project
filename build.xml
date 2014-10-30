@@ -188,13 +188,12 @@
 			destdir="${docs.dir}"
 			source="${source.version}"
 			encoding="${source.encoding}"
-			charset="utf-8"
+            charset="utf-8"
 			locale="en_US"
 			author="true"
 			access="protected"
 			windowtitle="DPM Team 22 documentation"
 			verbose="false"
-            overview="src/dpm/lejos/Lab3Code/overview.html"
             private="false"
 		>
 			<bootclasspath refid="lejos.nxt" />
