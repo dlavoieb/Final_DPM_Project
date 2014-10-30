@@ -1,10 +1,6 @@
 /**
- *
- *
  * @author Daniel Macario
  * @version 1.0
- * @deprecated
- *
  */
 @Deprecated
 public class PossibilitiesEliminated {
