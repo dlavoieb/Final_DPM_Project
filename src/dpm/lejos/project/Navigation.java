@@ -8,7 +8,7 @@ package dpm.lejos.project;
  * @author David Lavoie-Boutin
  * @version 1.0
  */
-public class Navigator {
+public class Navigation {
 
 	private boolean noObstacle = true;
 	private Odometer odometer;
@@ -22,7 +22,7 @@ public class Navigator {
      *
      * @param robot the robot object
      */
-	public Navigator(Robot robot){
+	public Navigation(Robot robot){
         m_robot = robot;
 	}
 
