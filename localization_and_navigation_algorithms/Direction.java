@@ -3,6 +3,7 @@
 /**
  * Four possible cardinal points
  * @author Daniel Macario
+ * @version 1.1
  */
 public enum Direction {
     /**

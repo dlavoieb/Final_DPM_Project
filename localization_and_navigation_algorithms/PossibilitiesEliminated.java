@@ -1,13 +1,27 @@
 /**
- * Created by danielmacario on 14-10-23.
+ *
+ *
+ * @author Daniel Macario
+ * @version 1.0
+ * @deprecated
+ *
  */
+@Deprecated
 public class PossibilitiesEliminated {
 
     private int countOnClear;
     private int countOnObstacle;
 
+    /**
+     * default constructor
+     */
     public PossibilitiesEliminated() { }
 
+    /**
+     * constructor with initial values
+     * @param countOnClear initial
+     * @param countOnObstacle initial
+     */
     public PossibilitiesEliminated(int countOnClear, int countOnObstacle) {
         this.countOnClear = countOnClear;
         this.countOnObstacle = countOnObstacle;

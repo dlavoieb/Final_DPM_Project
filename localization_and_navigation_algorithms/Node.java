@@ -1,7 +1,8 @@
 import java.util.ArrayList;
 
 /**
- * Created by danielmacario on 14-10-28.
+ * @author Daniel Macario
+ * @version 1.0
  */
 public class Node {
 

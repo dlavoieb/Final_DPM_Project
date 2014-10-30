@@ -10,7 +10,8 @@ import java.util.Set;
 import java.util.HashSet;
 
 /**
- * Created by danielmacario on 14-10-26.
+ * @author Daniel Macario
+ * @version 1.0
  */
 public class Navigator {
 

@@ -27,10 +27,10 @@ public class Navigator {
 	}
 
 	/**
-	 * method used to rotate the
+	 * method used to rotateCCW the
      * robot to an absolute angle
      *
-	 * @param angle the angle to rotate to
+	 * @param angle the angle to rotateCCW to
 	 */
 	public void rotateTo(double angle){
 

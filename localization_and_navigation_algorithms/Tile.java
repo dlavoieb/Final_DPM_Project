@@ -1,7 +1,3 @@
-
-
-//tiles on the grid, use for representing the plane.
-
 import java.util.ArrayList;
 
 /**
@@ -10,6 +6,7 @@ import java.util.ArrayList;
  * Each tile has 4 sides and measures 30 cm x 30 cm or 1 in x 1 in
  *
  * @author Daniel Macario
+ * @version 2.0
  */
 public class Tile {
 
