@@ -90,37 +90,37 @@ public class Navigator {
 
     public List getDirectionsTest(Node start, Node finish){
 
-        MapImpl<Node, Boolean> vis = new MapImpl<Node, Boolean>();
-        MapImpl<Node, Node> prev = new MapImpl<Node, Node>();
-
         LinkedList<Node> directions = new LinkedList<Node>();
-        Queue<Node> q = new Queue<Node>();
+        LinkedList<Node> reverseDirections = new LinkedList<Node>();
+        LinkedList<Node> q = new LinkedList<Node>();
         Node current = start;
-        q.push(current);
-        vis.put(current, true);
+        q.add(current);
+        current.setVisited(true);
+
         while(!q.isEmpty()){
             current = q.pop();
             if (current.equals(finish)){
                 break;
             }else{
                 for(Node node : current.getNeighbours()){
-                    if(!vis.containsKey(node)){
+                    if(!node.getVisited()){
                         q.push(node);
-                        vis.put(node, true);
-                        prev.put(node, current);
+                        node.setVisited(true);
+                        node.setPrevious(current);
                     }
                 }
             }
         }
+
         if (!current.equals(finish)){
             System.out.println("can't reach destination");
         }
-        for(Node node = finish; node != null; node = prev.get(node)) {
-            directions.add(node);
+        for(Node node = finish; node != null; node = node.getPrevious()) {
+            reverseDirections.push(node);
         }
-//        Collections.reverse(directions);
-        printDirections(directions);
-        return directions;
+        
+        printDirections(reverseDirections);
+        return reverseDirections;
     }
 
     public void printDirections(List<Node> directions) {
@@ -136,11 +136,13 @@ public class Navigator {
 
         private Coordinate coordinate;
         private ArrayList<Node> neighbours;
-
+        private boolean visited;
+        private Node previous;
 
         public Node(Coordinate coordinate) {
             this.coordinate = coordinate;
             this.neighbours = new ArrayList<Node>();
+            this.visited = false;
         }
 
         public ArrayList<Node> getNeighbours() {
@@ -161,6 +163,14 @@ public class Navigator {
             }
         }
 
+        public void setVisited(boolean visited) {
+            this.visited = visited;
+        }
+
+        public boolean getVisited() {
+            return this.visited;
+        }
+
         public Coordinate getCoordinate() {
             return coordinate;
         }
@@ -175,6 +185,14 @@ public class Navigator {
 
         public int getY() {
             return this.coordinate.getY();
+        }
+
+        public Node getPrevious() {
+            return this.previous;
+        }
+
+        public void setPrevious(Node previous) {
+            this.previous = previous;
         }
 
     }
