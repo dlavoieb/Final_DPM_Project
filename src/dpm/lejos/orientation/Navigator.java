@@ -1,8 +1,11 @@
 package dpm.lejos.orientation;
 
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
+import dpm.lejos.utils.MapImpl;
 import dpm.lejos.utils.Queue;
 
 
@@ -87,8 +90,8 @@ public class Navigator {
 
     public List getDirectionsTest(Node start, Node finish){
 
-        Map<Node, Boolean> vis = new HashMap<Node, Boolean>();
-        Map<Node, Node> prev = new HashMap<Node, Node>();
+        MapImpl<Node, Boolean> vis = new MapImpl<Node, Boolean>();
+        MapImpl<Node, Node> prev = new MapImpl<Node, Node>();
 
         LinkedList<Node> directions = new LinkedList<Node>();
         Queue<Node> q = new Queue<Node>();
