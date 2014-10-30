@@ -4,6 +4,8 @@
       <root url="jar:///Applications/leJOS_NXJ/lib/nxt/classes.jar!/" />
     </CLASSES>
     <JAVADOC />
-    <SOURCES />
+    <SOURCES>
+      <root url="file://$PROJECT_DIR$/../../lejos-code/classes/src" />
+    </SOURCES>
   </library>
 </component>
