@@ -37,7 +37,7 @@ public class MapImpl<K,V> implements java.util.Map {
      */
     @Override
     public boolean containsKey(Object key) {
-        return keyList.contains(key);
+        return keyList.contains((K)key);
     }
 
     /**
