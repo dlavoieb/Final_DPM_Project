@@ -48,14 +48,14 @@ public class Tile {
      */
     public Tile(Tile tile) {
         this.isObstacle = tile.isObstacle();
-        this.possibleN = tile.isPossible(Direction.NORTH);
-        this.possibleS = tile.isPossible(Direction.SOUTH);
-        this.possibleW = tile.isPossible(Direction.WEST);
-        this.possibleE = tile.isPossible(Direction.EAST);
-        this.obstacleN = tile.hasObstacle(Direction.NORTH);
-        this.obstacleS = tile.hasObstacle(Direction.SOUTH);
-        this.obstacleW = tile.hasObstacle(Direction.WEST);
-        this.obstacleE = tile.hasObstacle(Direction.EAST);
+        this.possibleN = tile.isPossible(Orienteering.Direction.NORTH);
+        this.possibleS = tile.isPossible(Orienteering.Direction.SOUTH);
+        this.possibleW = tile.isPossible(Orienteering.Direction.WEST);
+        this.possibleE = tile.isPossible(Orienteering.Direction.EAST);
+        this.obstacleN = tile.hasObstacle(Orienteering.Direction.NORTH);
+        this.obstacleS = tile.hasObstacle(Orienteering.Direction.SOUTH);
+        this.obstacleW = tile.hasObstacle(Orienteering.Direction.WEST);
+        this.obstacleE = tile.hasObstacle(Orienteering.Direction.EAST);
     }
 
     /**
@@ -77,12 +77,12 @@ public class Tile {
      * @param dir the direction to poll
      * @return presence of an obstacle in the polled direction
      */
-    public boolean hasObstacle(Direction dir) {
-        if (dir == Direction.NORTH) {
+    public boolean hasObstacle(Orienteering.Direction dir) {
+        if (dir == Orienteering.Direction.NORTH) {
             return this.obstacleN;
-        } else if (dir == Direction.WEST) {
+        } else if (dir == Orienteering.Direction.WEST) {
             return this.obstacleW;
-        } else if (dir == Direction.EAST) {
+        } else if (dir == Orienteering.Direction.EAST) {
             return this.obstacleE;
         } else {
             return this.obstacleS;
@@ -94,12 +94,12 @@ public class Tile {
      * @param dir the direction to change
      */
     
-    public void setPossibilityToFalse(Direction dir) {
-        if (dir == Direction.NORTH) {
+    public void setPossibilityToFalse(Orienteering.Direction dir) {
+        if (dir == Orienteering.Direction.NORTH) {
             this.possibleN = false;
-        } else if (dir == Direction.WEST) {
+        } else if (dir == Orienteering.Direction.WEST) {
             this.possibleW = false;
-        } else if (dir == Direction.EAST) {
+        } else if (dir == Orienteering.Direction.EAST) {
             this.possibleE = false;
         } else {
             this.possibleS = false;
@@ -111,12 +111,12 @@ public class Tile {
      * @param dir the direction to change
      * @param value the desired value to set
      */
-    public void setObstacle(Direction dir, boolean value) {
-        if (dir == Direction.NORTH) {
+    public void setObstacle(Orienteering.Direction dir, boolean value) {
+        if (dir == Orienteering.Direction.NORTH) {
             this.obstacleN = value;
-        } else if (dir == Direction.WEST) {
+        } else if (dir == Orienteering.Direction.WEST) {
             this.obstacleW = value;
-        } else if (dir == Direction.EAST) {
+        } else if (dir == Orienteering.Direction.EAST) {
             this.obstacleE = value;
         } else {
             this.obstacleS = value;
@@ -128,12 +128,12 @@ public class Tile {
      * @param dir the direction to poll
      * @return the existence of an obstacle in that direction
      */
-    public boolean isPossible(Direction dir) {
-        if (dir == Direction.NORTH) {
+    public boolean isPossible(Orienteering.Direction dir) {
+        if (dir == Orienteering.Direction.NORTH) {
             return this.possibleN;
-        } else if (dir == Direction.WEST) {
+        } else if (dir == Orienteering.Direction.WEST) {
             return this.possibleW;
-        } else if (dir == Direction.EAST) {
+        } else if (dir == Orienteering.Direction.EAST) {
             return this.possibleE;
         } else {
             return this.possibleS;

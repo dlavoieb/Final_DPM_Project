@@ -102,9 +102,9 @@ public class Orienteering {
     }
 
     /**
-     * Creates a copy of the plane
-     * @param plane
-     * @return
+     * Creates a copy of the plane not just a second reference
+     * @param plane the plane object reference
+     * @return duplicate of the plane
      */
     public Tile[][] planeCopy(Tile[][] plane) {
 
@@ -132,9 +132,9 @@ public class Orienteering {
         Direction[] dirs = {Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
 
         for (Direction dir : dirs) {
-            for (int i = 0; i < plane.length; i++) {
+            for (Tile[] aPlane : plane) {
                 for (int j = 0; j < plane.length; j++) {
-                    System.out.print(plane[i][j].isPossible(dir) + "  ");
+                    System.out.print(aPlane[j].isPossible(dir) + "  ");
                 }
                 System.out.println();
             }
@@ -505,13 +505,13 @@ public class Orienteering {
      */
     public int countPossibilities(Tile[][] plane) {
         int posCount = 0;
-        for (int i = 0; i < plane.length; i++) {
+        for (Tile[] aPlane : plane) {
             for (int j = 0; j < plane.length; j++) {
-                if (!plane[i][j].isObstacle()) {
-                    if (plane[i][j].isPossible(Direction.NORTH)) posCount++;
-                    if (plane[i][j].isPossible(Direction.SOUTH)) posCount++;
-                    if (plane[i][j].isPossible(Direction.WEST)) posCount++;
-                    if (plane[i][j].isPossible(Direction.EAST)) posCount++;
+                if (!aPlane[j].isObstacle()) {
+                    if (aPlane[j].isPossible(Direction.NORTH)) posCount++;
+                    if (aPlane[j].isPossible(Direction.SOUTH)) posCount++;
+                    if (aPlane[j].isPossible(Direction.WEST)) posCount++;
+                    if (aPlane[j].isPossible(Direction.EAST)) posCount++;
                 }
             }
         }
@@ -815,6 +815,30 @@ public class Orienteering {
          * Travel to the next tile in the current direction
          */
         FORWARD
+    }
+
+    /**
+     * Four possible cardinal points
+     * @author Daniel Macario
+     * @version 1.1
+     */
+    public enum Direction {
+        /**
+         * Facing north
+         */
+        NORTH,
+        /**
+         * Facing south
+         */
+        SOUTH,
+        /**
+         * Facing east
+         */
+        EAST,
+        /**
+         * facing west
+         */
+        WEST
     }
 
 }

@@ -1,13 +1,10 @@
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Hashtable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Queue;
 import java.util.LinkedList;
-import java.util.Set;
-import java.util.HashSet;
 
 /**
  * @author Daniel Macario
@@ -128,4 +125,54 @@ public class Navigator {
             System.out.println("Coords = " + node.getX() + " " + node.getY());
     }
 
+    /**
+     * @author Daniel Macario
+     * @version 1.0
+     */
+    public class Node {
+
+        private Coordinate coordinate;
+        private ArrayList<Node> neighbours;
+
+
+        public Node(Coordinate coordinate) {
+            this.coordinate = coordinate;
+            this.neighbours = new ArrayList<Node>();
+        }
+
+        public ArrayList<Node> getNeighbours() {
+            return neighbours;
+        }
+
+        public void setNeighbours(ArrayList<Node> neighbours) {
+            this.neighbours = neighbours;
+        }
+
+        public void addNeighbour(Node n) {
+            this.neighbours.add(n);
+        }
+
+        public void addNeighbours(Node[] n) {
+            for (Node node : n) {
+                neighbours.add(node);
+            }
+        }
+
+        public Coordinate getCoordinate() {
+            return coordinate;
+        }
+
+        public void setCoordinate(Coordinate coordinate) {
+            this.coordinate = coordinate;
+        }
+
+        public int getX() {
+            return this.coordinate.getX();
+        }
+
+        public int getY() {
+            return this.coordinate.getY();
+        }
+
+    }
 }
