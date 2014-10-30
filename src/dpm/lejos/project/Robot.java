@@ -23,9 +23,9 @@ public class Robot {
     public static final int CRUISE_SPEED = 200;
     public static final int ROTATION_SPEED = 150;
 
-    public double wheelBase;
-    public double wheelRadius;
-    public double lightSensorOffset;
+    public double wheelBase = 10; //TODO : Get real value
+    public double wheelRadius = 2; //TODO : Get real value
+    public double lightSensorOffset = 5; //TODO : Get real value
 
     /**
      * motor for lifting and lowering the arms
@@ -39,11 +39,11 @@ public class Robot {
     /**
      * color sensor on the grabbing mechanism
      */
-	public ColorSensor clawColor;
+	public ColorSensor clawColor = new ColorSensor(SensorPort.S3);
     /**
      * touch sensor on the grabbing mechanism
      */
-	public TouchSensor clawTouch;
+	public TouchSensor clawTouch = new TouchSensor(SensorPort.S1);
 
     public NXTRegulatedMotor motorPort = Motor.A; //   <---
 	public NXTRegulatedMotor motorStrb = Motor.B; //   <---
@@ -69,7 +69,7 @@ public class Robot {
 	/**
 	 * Color sensor facing down for odometry correction
 	 */
-	public ColorSensor colorSensor;
+	public ColorSensor colorSensor = new ColorSensor(SensorPort.S2);
 
     /**
      * default constructor
