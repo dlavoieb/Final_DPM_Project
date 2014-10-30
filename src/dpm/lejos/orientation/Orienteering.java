@@ -1,12 +1,9 @@
 package dpm.lejos.orientation;
-/*
-import lejos.nxt.LCD;
-import lejos.nxt.NXTRegulatedMotor;
-import lejos.nxt.Sound;
-import lejos.nxt.UltrasonicSensor;
-*/
+
+import dpm.lejos.project.Robot;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Orientation and navigation methods
@@ -19,16 +16,6 @@ public class Orienteering {
 
     private Tile[][] plane;
 
-    //TODO: Change constructor parameters to use the robot class for all the parameters
-
-    /*
-    private UltrasonicSensor us;
-    private NXTRegulatedMotor lm;
-    private NXTRegulatedMotor rm;
-    */
-
-    private double WHEEL_DISTANCE;
-    private double WHEEL_RADIUS;
     private static final int FORWARD_SPEED = 300;
     private static final int ROTATE_SPEED = 150;
     private static final int ACCELERATION = 1000;
@@ -36,6 +23,7 @@ public class Orienteering {
     private Direction endingDir;
     private static int DISTANCE_THRESHOLD = 30;
 
+    private Robot robot;
 
     public Orienteering() {
         this.plane = createPlane();
@@ -46,16 +34,12 @@ public class Orienteering {
     }
 
 
-    /*
-    public Orienteering(UltrasonicSensor us, NXTRegulatedMotor leftMotor, NXTRegulatedMotor rightMotor, double wheel_distance, double wheel_radius) {
+
+    public Orienteering(Robot robot) {
         this.plane = createPlane();
-        this.us = us;
-        this.lm = leftMotor;
-        this.rm = rightMotor;
-        this.WHEEL_DISTANCE=wheel_distance;
-        this.WHEEL_RADIUS=wheel_radius;
+        this.robot=robot;
     }
-    */
+
 
     /**
      * Optimized localization algorithm with 3 US
