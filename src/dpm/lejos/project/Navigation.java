@@ -11,7 +11,6 @@ package dpm.lejos.project;
 public class Navigation {
 
 	private boolean noObstacle = true;
-	private Odometer odometer;
 	private Odometer m_Odometer;
 	private ObstacleDetection m_ObstacleDetection;
 
