@@ -14,8 +14,8 @@ public class Utils {
 	 * @param distance the distance to travel
 	 * @param robot the robot object
      */
-	public static int robotAngleToMotorAngle(double distance, Robot robot){
-		return 0;
+	public static int robotDistanceToMotorAngle(double distance, Robot robot){
+        return (int) ((180.0 * distance) / (Math.PI * robot.wheelRadius));
 	}
 
 	/**
@@ -25,6 +25,6 @@ public class Utils {
      * @param robot the robot object
 	 */
 	public static int robotRotationToMotorAngle(double angle, Robot robot){
-		return 0;
+        return robotDistanceToMotorAngle(Math.PI * robot.wheelBase * angle / 360.0 + 0.1, robot);
 	}
 }//end Utils

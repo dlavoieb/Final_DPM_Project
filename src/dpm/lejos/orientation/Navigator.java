@@ -1,13 +1,8 @@
 package dpm.lejos.orientation;
 
-
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-
-import dpm.lejos.utils.MapImpl;
-import dpm.lejos.utils.Queue;
-
 
 /**
  * @author Daniel Macario
