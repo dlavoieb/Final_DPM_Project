@@ -29,6 +29,7 @@ public class Robot {
 
     public int LIGHT_THRESHOLD = 500;
     public int tileLenght = 30;
+    public int ODOMETER_PERIOD = 100;
 
     /**
      * motor for lifting and lowering the arms
