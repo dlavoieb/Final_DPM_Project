@@ -565,7 +565,7 @@ public class Orienteering {
      * @return number of degrees the motor should travel to match the desired distance
      */
     private int convertDistance(double distance) {
-        return (int) ((180.0 * distance) / (Math.PI * this.WHEEL_RADIUS));
+        return (int) ((180.0 * distance) / (Math.PI * robot.wheelRadius));
     }
 
     /**
@@ -576,7 +576,7 @@ public class Orienteering {
      * @return the angle a motor should travel for the robot to rotateCCW
      */
     private int convertAngle(double angle) {
-        return convertDistance(Math.PI * this.WHEEL_DISTANCE * angle / 360.0 + 0.1);
+        return convertDistance(Math.PI * robot.wheelBase * angle / 360.0 + 0.1);
     }
 
     /**
