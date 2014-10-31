@@ -98,13 +98,13 @@ public class Navigator {
         current.setVisited(true);
 
         while(!q.isEmpty()){
-            current = q.pop();
+            current = q.remove(0);
             if (current.equals(finish)){
                 break;
             }else{
                 for(Node node : current.getNeighbours()){
                     if(!node.getVisited()){
-                        q.push(node);
+                        q.add(node);
                         node.setVisited(true);
                         node.setPrevious(current);
                     }
@@ -116,7 +116,7 @@ public class Navigator {
             System.out.println("can't reach destination");
         }
         for(Node node = finish; node != null; node = node.getPrevious()) {
-            reverseDirections.push(node);
+            reverseDirections.add(node);
         }
         
         printDirections(reverseDirections);
