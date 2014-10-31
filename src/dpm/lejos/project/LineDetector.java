@@ -21,9 +21,11 @@ public class LineDetector implements TimerListener {
      * default constructor
      * @param robot requires the robot object containing the light sensor
      */
-    public LineDetector(Robot robot){
+    public LineDetector(Robot robot, boolean start){
         timer = new Timer(DEFAULT_PERIOD, this);
         m_robot = robot;
+
+        if (start) timer.start();
     }
 
     /**
@@ -31,9 +33,10 @@ public class LineDetector implements TimerListener {
      * @param robot requires the robot object containing the light sensor
      * @param period the period of the timer
      */
-     public LineDetector(Robot robot, int period) {
+     public LineDetector(Robot robot, int period, boolean start) {
          m_robot=robot;
          timer = new Timer(period, this);
+         if(start) timer.start();
     }
 
     /**
@@ -55,4 +58,10 @@ public class LineDetector implements TimerListener {
         return isLine;
     }
 
+    /**
+     * manual start of the timer
+     */
+    public void startTimer(){
+        timer.start();
+    }
 }//end LineDetector

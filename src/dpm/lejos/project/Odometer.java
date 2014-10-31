@@ -43,7 +43,7 @@ public class Odometer extends Thread{
 
         prevTachoL = 0;
         prevTachoR = 0;
-        m_LineDetector = new LineDetector(m_robot);
+        m_LineDetector = new LineDetector(m_robot, true);
 
     }
 
