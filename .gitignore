@@ -17,7 +17,7 @@ out
 nbproject
 atlassian-ide-plugin.xml
 nb-configuration.xml
-*.iml
+
 *.ipr
 *.iws
 

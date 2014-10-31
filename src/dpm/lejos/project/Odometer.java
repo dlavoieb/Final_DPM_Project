@@ -92,6 +92,7 @@ public class Odometer extends Thread{
                     Thread.sleep(m_robot.ODOMETER_PERIOD - (updateEnd - updateStart));
                 } catch (InterruptedException e) {
                     e.printStackTrace();
+                    break;
                 }
             }
         }
