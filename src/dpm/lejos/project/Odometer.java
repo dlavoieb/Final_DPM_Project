@@ -107,6 +107,20 @@ public class Odometer extends Thread{
         }
 	}
 
+    private void correct(){
+        if (m_LineDetector.isLine()){
+            double xmod = x - (x % m_robot.tileLenght) * m_robot.tileLenght;
+            double ymod = y - (y % m_robot.tileLenght) * m_robot.tileLenght;
+            if (xmod<ymod){
+                //closer to x line
+
+            }
+            else {
+                // closer to y line
+            }
+        }
+    }
+
 	/**
 	 * Single point of entry to set
      * the position of the odometer
