@@ -41,6 +41,10 @@ public class Navigator {
     //TODO: encode the 12x12 grid as a graph. We receive the data by bluetooth, then to traverse all we need to is
     //TODO: set certains nodes to be obstacles
 
+    /**
+     * method encoding the course layout as an array of nodes
+     * @return the representation of the course layout
+     */
     public Node[] generateGraph() {
 
 
@@ -85,21 +89,20 @@ public class Navigator {
 
     public List getDirectionsTest(Node start, Node finish){
 
-        LinkedList<Node> directions = new LinkedList<Node>();
         LinkedList<Node> reverseDirections = new LinkedList<Node>();
-        LinkedList<Node> q = new LinkedList<Node>();
+        LinkedList<Node> queue = new LinkedList<Node>();
         Node current = start;
-        q.add(current);
+        queue.add(current);
         current.setVisited(true);
 
-        while(!q.isEmpty()){
-            current = q.remove(0);
+        while(!queue.isEmpty()){
+            current = queue.remove(0);
             if (current.equals(finish)){
                 break;
             }else{
                 for(Node node : current.getNeighbours()){
                     if(!node.getVisited()){
-                        q.add(node);
+                        queue.add(node);
                         node.setVisited(true);
                         node.setPrevious(current);
                     }
@@ -124,6 +127,10 @@ public class Navigator {
     }
 
     /**
+     * Class for layout representation
+     *
+     * Each <code>Node</code> represents a fixed tile of the playground
+     * so there should be 12x12 so 144 instances of these Nodes
      * @author Daniel Macario
      * @version 1.0
      */
