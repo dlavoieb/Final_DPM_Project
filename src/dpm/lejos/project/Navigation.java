@@ -1,5 +1,7 @@
 package dpm.lejos.project;
 
+import dpm.lejos.orientation.Orienteering.*;
+
 /**
  * Provides all the necessary navigation capabilities
  *
@@ -79,6 +81,72 @@ public class Navigation {
         m_robot.motorStrb.setSpeed(m_robot.ROTATE_SPEED);
         m_robot.motorPort.rotate(Utils.robotRotationToMotorAngle(90, m_robot), true);
         m_robot.motorStrb.rotate(Utils.robotRotationToMotorAngle(-90, m_robot), false);
+    }
+
+/**
+ * position the robot facing north
+ * @param destinationDirection the current heading
+ */
+	public void rotateToDirection(Direction destinationDirection) {
+
+        Direction robotDirection = m_robot.getDirection();
+
+        if (robotDirection == Direction.NORTH) {
+            switch (destinationDirection) {
+                case SOUTH:
+                    rotate90CounterClock();
+                    rotate90CounterClock();
+                    break;
+                case EAST:
+                    rotate90CounterClock();
+                    break;
+                case WEST:
+                    rotate90ClockWise();
+                    break;
+            }
+        } else if (robotDirection == Direction.SOUTH) {
+            switch (destinationDirection) {
+                case NORTH:
+                    rotate90CounterClock();
+                    rotate90CounterClock();
+                    break;
+                case EAST:
+                    rotate90ClockWise();
+                    break;
+                case WEST:
+                    rotate90CounterClock();
+                    break;
+            }
+        } else if (robotDirection == Direction.EAST) {
+            switch (destinationDirection) {
+                case NORTH:
+                    rotate90ClockWise();
+                    break;
+                case SOUTH:
+                    rotate90CounterClock();
+                    break;
+                case WEST:
+                    rotate90CounterClock();
+                    rotate90CounterClock();
+                    break;
+            }
+        } else {
+            switch (destinationDirection) {
+                case NORTH:
+                    rotate90CounterClock();
+                    break;
+                case SOUTH:
+                    rotate90ClockWise();
+                    break;
+                case EAST:
+                    rotate90CounterClock();
+                    rotate90CounterClock();
+                    break;
+            }
+        }
+
+        m_robot.setDirection(destinationDirection);
+
     }
     
 }//end Navigator

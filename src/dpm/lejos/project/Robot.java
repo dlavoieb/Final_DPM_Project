@@ -1,5 +1,7 @@
 package dpm.lejos.project;
 
+import dpm.lejos.orientation.Orienteering;
+import dpm.lejos.orientation.Orienteering.*;
 import lejos.nxt.*;
 import lejos.nxt.comm.RS485;
 import lejos.nxt.remote.RemoteMotor;
@@ -26,6 +28,7 @@ public class Robot {
     public double wheelBase = 19.3; //TODO : Continue to tweak
     public double wheelRadius = 1.65;
     public double lightSensorOffset = 5; //TODO : Get real value
+    private Direction direction = null;
 
     public int LIGHT_THRESHOLD = 500;
     public double tileLength = 30.5;
@@ -104,6 +107,22 @@ public class Robot {
         usPort = new UltrasonicSensor(slave.S2);
         usStrb = new UltrasonicSensor(slave.S3);
 
+    }
+
+    /**
+     * get the current direction the robot is looking at.
+     * @return
+     */
+    public Direction getDirection() {
+        return direction;
+    }
+
+    /**
+     * Modify the direction the robot is looking at.
+     * @param direction
+     */
+    public void setDirection(Direction direction) {
+        this.direction = direction;
     }
 
 
