@@ -46,14 +46,19 @@ public class Navigation {
 
 	}
 
+    public void floatMotors(){
+        m_robot.motorStrb.flt(true);
+        m_robot.motorPort.flt(true);
+    }
+
     /**
      * move the robot one tile forward
      */
     public void moveForward() {
-        m_robot.motorPort.setSpeed(m_robot.ROTATE_SPEED);
-        m_robot.motorStrb.setSpeed(m_robot.ROTATE_SPEED);
-        m_robot.motorPort.rotate(Utils.robotDistanceToMotorAngle(m_robot.tileLenght, m_robot), true);
-        m_robot.motorStrb.rotate(Utils.robotDistanceToMotorAngle(m_robot.tileLenght, m_robot), false);
+        m_robot.motorPort.setSpeed(m_robot.CRUISE_SPEED);
+        m_robot.motorStrb.setSpeed(m_robot.CRUISE_SPEED);
+        m_robot.motorPort.rotate(Utils.robotDistanceToMotorAngle(m_robot.tileLength, m_robot), true);
+        m_robot.motorStrb.rotate(Utils.robotDistanceToMotorAngle(m_robot.tileLength, m_robot), false);
     }
 
     /**
