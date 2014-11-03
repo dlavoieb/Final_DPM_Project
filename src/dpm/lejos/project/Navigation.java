@@ -1,6 +1,9 @@
 package dpm.lejos.project;
 
+import dpm.lejos.orientation.Navigator;
 import dpm.lejos.orientation.Orienteering.*;
+
+import java.util.LinkedList;
 
 /**
  * Provides all the necessary navigation capabilities
@@ -148,5 +151,5 @@ public class Navigation {
         m_robot.setDirection(destinationDirection);
 
     }
-    
+
 }//end Navigator

@@ -1,5 +1,8 @@
 package dpm.lejos.orientation;
 
+import dpm.lejos.project.Navigation;
+import dpm.lejos.project.Robot;
+
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -10,18 +13,17 @@ import java.util.List;
  */
 public class Navigator {
 
-    private Orienteering or;
-    private Tile[][] plane;
+    private Robot robot;
+    private Navigation navigation;
+    private Node[][] graphPlane;
     private Node graphRoot;
     private Tile tileA;
     private Tile tileB;
 
-    public Navigator() {
-        Orienteering or = new Orienteering();
-        plane = or.getPlane();
-        Node[] endNodes = generateGraph();
-        getDirectionsTest(endNodes[0], endNodes[1]);
-
+    public Navigator(Robot robot, Navigation navigation) {
+        this.robot = robot;
+        this.navigation = navigation;
+        this.graphPlane = generateGraph();
     }
 
 
@@ -45,7 +47,7 @@ public class Navigator {
      * method encoding the course layout as an array of nodes
      * @return the representation of the course layout
      */
-    public Node[] generateGraph() {
+    public Node[][] generateGraph() {
 
 
         Node r0c0 = new Node(new Coordinate(0,0));
@@ -83,15 +85,25 @@ public class Navigator {
         r3c2.addNeighbours(new Node[] {r2c2, r3c3});
         r3c3.addNeighbours(new Node[] {r2c3, r3c2});
 
-        return new Node[] {r3c3, r0c3};
+        Node[][] graphPlane = {{r0c0, r0c1, r0c2, r0c3},
+                               {r1c0, r1c1, r1c2, r1c3},
+                               {r2c0, r2c1, r2c2, r2c3},
+                               {r3c0, r3c1, r3c2, r3c3}};
+
+        return graphPlane;
 
     }
 
-    public List getDirectionsTest(Node start, Node finish){
+    public void navigate(Coordinate endingCoordinate){
+
+        Coordinate startingCoordinate = robot.getPositionOnGrid();
+
+        //TODO: make sure that this is not BACKWARDS!!!!
+        Node current = graphPlane[startingCoordinate.getX()][startingCoordinate.getY()];
+        Node finish = graphPlane[endingCoordinate.getX()][startingCoordinate.getY()];
 
         LinkedList<Node> reverseDirections = new LinkedList<Node>();
         LinkedList<Node> queue = new LinkedList<Node>();
-        Node current = start;
         queue.add(current);
         current.setVisited(true);
 
@@ -110,15 +122,19 @@ public class Navigator {
             }
         }
 
-        if (!current.equals(finish)){
-            System.out.println("can't reach destination");
-        }
         for(Node node = finish; node != null; node = node.getPrevious()) {
             reverseDirections.add(node);
         }
         
         printDirections(reverseDirections);
-        return reverseDirections;
+
+        travelTo(reverseDirections);
+    }
+
+    private void travelTo(LinkedList<Node> directions) {
+
+
+
     }
 
     public void printDirections(List<Node> directions) {
