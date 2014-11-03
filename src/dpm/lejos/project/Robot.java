@@ -18,10 +18,10 @@ import java.io.IOException;
  */
 public class Robot {
 
-	public static final int ACCELERATION = 500;
-	public static final int CLAW_SPEED = 200;
-    public static final int CRUISE_SPEED = 200;
-    public static final int ROTATION_SPEED = 150;
+	public final int ACCELERATION = 500;
+	public final int CLAW_SPEED = 200;
+    public final int CRUISE_SPEED = 200;
+    public final int ROTATE_SPEED = 150;
 
     public double wheelBase = 10; //TODO : Get real value
     public double wheelRadius = 2; //TODO : Get real value

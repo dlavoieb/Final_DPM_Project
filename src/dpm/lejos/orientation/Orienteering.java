@@ -1,5 +1,6 @@
 package dpm.lejos.orientation;
 
+import dpm.lejos.project.Navigation;
 import dpm.lejos.project.Robot;
 import lejos.nxt.UltrasonicSensor;
 
@@ -16,23 +17,22 @@ import java.util.Arrays;
 public class Orienteering {
 
     private Tile[][] plane;
-
-    private static final int FORWARD_SPEED = 300;
-    private static final int ROTATE_SPEED = 150;
-    private static final int ACCELERATION = 1000;
     private Direction startingDir;
     private Direction endingDir;
     private static int DISTANCE_THRESHOLD = 30;
+    private Navigation navigation;
 
     private Robot robot;
 
     public Orienteering() {
         this.plane = createPlane();
+        this.navigation = new Navigation(new Robot());
     }
 
-    public Orienteering(Robot robot) {
+    public Orienteering(Robot robot, Navigation navigation) {
         this.plane = createPlane();
         this.robot = robot;
+        this.navigation = navigation;
     }
 
 
@@ -59,11 +59,11 @@ public class Orienteering {
 
             if (hasWallAhead) {
                 simulateOnAllTiles(motionTrace, plane, hasWallAhead, hasWallLeft, hasWallRight);
-                rotate90ClockWise();
+                navigation.rotate90ClockWise();
                 motionTrace.add(Motion.ROTATE);
             } else {
                 simulateOnAllTiles(motionTrace, plane, hasWallAhead, hasWallLeft, hasWallRight);
-                moveForward();
+                navigation.moveForward();
                 motionTrace.add(Motion.FORWARD);
             }
 
@@ -212,15 +212,6 @@ public class Orienteering {
     }*/
 
     /**
-     * Returns a random boolean based on Java's Math.random()
-     * function. Used for stochastic positioning
-     * @return a boolean variable
-     */
-    public boolean getRandomBoolean() {
-        return Math.random() < 0.5;
-    }
-
-    /**
      * Calculates the starting location and orientation of the robot
      * once it has has finished eliminating impossible
      * starting points on the grid
@@ -301,35 +292,6 @@ public class Orienteering {
 
     */
 
-    /**
-     * rotate the physical robot 90 degrees counterclockwise
-     */
-    public void rotate90CounterClock() {
-        robot.motorPort.setSpeed(ROTATE_SPEED);
-        robot.motorStrb.setSpeed(ROTATE_SPEED);
-        robot.motorPort.rotate(convertAngle(-90), true);
-        robot.motorStrb.rotate(convertAngle(90), false);
-    }
-
-    /**
-     * rotate the physical robot 90 degrees clockwise
-     */
-    public void rotate90ClockWise() {
-        robot.motorPort.setSpeed(ROTATE_SPEED);
-        robot.motorStrb.setSpeed(ROTATE_SPEED);
-        robot.motorPort.rotate(convertAngle(90), true);
-        robot.motorStrb.rotate(convertAngle(-90), false);
-    }
-
-    /**
-     * move the robot one tile forward
-     */
-    public void moveForward() {
-        robot.motorPort.setSpeed(ROTATE_SPEED);
-        robot.motorStrb.setSpeed(ROTATE_SPEED);
-        robot.motorPort.rotate(convertDistance(30), true);
-        robot.motorStrb.rotate(convertDistance(30), false);
-    }
 
 
     /**

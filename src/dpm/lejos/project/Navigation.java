@@ -45,4 +45,35 @@ public class Navigation {
 	public void travelTo(double x, double y){
 
 	}
+
+    /**
+     * move the robot one tile forward
+     */
+    public void moveForward() {
+        m_robot.motorPort.setSpeed(m_robot.ROTATE_SPEED);
+        m_robot.motorStrb.setSpeed(m_robot.ROTATE_SPEED);
+        m_robot.motorPort.rotate(Utils.robotDistanceToMotorAngle(m_robot.tileLenght, m_robot), true);
+        m_robot.motorStrb.rotate(Utils.robotDistanceToMotorAngle(m_robot.tileLenght, m_robot), false);
+    }
+
+    /**
+     * rotate the physical robot 90 degrees counterclockwise
+     */
+    public void rotate90CounterClock() {
+        m_robot.motorPort.setSpeed(m_robot.ROTATE_SPEED);
+        m_robot.motorStrb.setSpeed(m_robot.ROTATE_SPEED);
+        m_robot.motorPort.rotate(Utils.robotRotationToMotorAngle(-90, m_robot), true);
+        m_robot.motorStrb.rotate(Utils.robotRotationToMotorAngle(90, m_robot), false);
+    }
+
+    /**
+     * rotate the physical robot 90 degrees clockwise
+     */
+    public void rotate90ClockWise() {
+        m_robot.motorPort.setSpeed(m_robot.ROTATE_SPEED);
+        m_robot.motorStrb.setSpeed(m_robot.ROTATE_SPEED);
+        m_robot.motorPort.rotate(Utils.robotRotationToMotorAngle(90, m_robot), true);
+        m_robot.motorStrb.rotate(Utils.robotRotationToMotorAngle(-90, m_robot), false);
+    }
+    
 }//end Navigator
