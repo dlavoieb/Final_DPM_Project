@@ -23,8 +23,8 @@ public class Robot {
     public final int CRUISE_SPEED = 200;
     public final int ROTATE_SPEED = 150;
 
-    public double wheelBase = 9.525; //TODO : Get real value
-    public double wheelRadius = 1.65; //TODO : Get real value
+    public double wheelBase = 19.3; //TODO : Continue to tweak
+    public double wheelRadius = 1.65;
     public double lightSensorOffset = 5; //TODO : Get real value
 
     public int LIGHT_THRESHOLD = 500;
