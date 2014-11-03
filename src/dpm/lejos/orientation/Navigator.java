@@ -1,6 +1,7 @@
 package dpm.lejos.orientation;
 
 import dpm.lejos.project.Navigation;
+import dpm.lejos.orientation.Orienteering.Direction;
 import dpm.lejos.project.Robot;
 
 import java.util.ArrayList;
@@ -16,29 +17,12 @@ public class Navigator {
     private Robot robot;
     private Navigation navigation;
     private Node[][] graphPlane;
-    private Node graphRoot;
-    private Tile tileA;
-    private Tile tileB;
 
     public Navigator(Robot robot, Navigation navigation) {
         this.robot = robot;
         this.navigation = navigation;
         this.graphPlane = generateGraph();
     }
-
-
-    //Grid encoding
-
-    /*
-    0,0    0,1    0,2   0,3
-
-    1,0    1,1    1,2   1,3
-
-    2,0    2,1    2,2   2,3
-
-    3,0    3,1    3,2   3,3
-    */
-
 
     //TODO: encode the 12x12 grid as a graph. We receive the data by bluetooth, then to traverse all we need to is
     //TODO: set certains nodes to be obstacles
@@ -128,13 +112,65 @@ public class Navigator {
         
         printDirections(reverseDirections);
 
+        //delete the first node (the robot know its position)
+        //TODO: verify that this is correct!
+        reverseDirections.remove(0);
+
         travelTo(reverseDirections);
     }
 
+    //Grid encoding
+
+    /*
+    0,0    0,1    0,2   0,3
+
+    1,0    1,1    1,2   1,3
+
+    2,0    2,1    2,2   2,3
+
+    3,0    3,1    3,2   3,3
+    */
+
     private void travelTo(LinkedList<Node> directions) {
 
+        Coordinate currentPosition = robot.getPositionOnGrid();
+        Direction currentDirection = robot.getDirection();
 
+        for (Node node : directions) {
+            Coordinate nextPosition = node.getCoordinate();
 
+            //Note that the robot can only move in one axis at a time
+            //So the new coordinate will either have a new X or a new Y
+            //TODO: discuss if we should adapt the coordinate system
+
+            if (currentPosition.getX() != nextPosition.getX()) {
+                //Robot is moving in the y-axis
+                if (currentPosition.getX() > nextPosition.getX()) {
+                    //Robot is moving north
+                    navigation.rotateToDirection(Direction.NORTH);
+                    navigation.moveForward();
+                } else if (currentPosition.getX() < nextPosition.getX()) {
+                    //robot is moving south
+                    navigation.rotateToDirection(Direction.SOUTH);
+                    navigation.moveForward();
+                }
+            } else if (currentPosition.getY() != nextPosition.getY()) {
+                //Robot is moving in the x-axis
+                if (currentPosition.getY() > nextPosition.getY()) {
+                    //Robot is moving west
+                    navigation.rotateToDirection(Direction.WEST);
+                    navigation.moveForward();
+                } else if (currentPosition.getY() < nextPosition.getY()) {
+                    //robot is moving east
+                    navigation.rotateToDirection(Direction.EAST);
+                    navigation.moveForward();
+                }
+            }
+        }
+
+        //set position of the robot to the last tile visited
+        //TODO: verify that this actually works.
+        robot.setPositionOnGrid(directions.get(directions.size() - 1).getCoordinate());
     }
 
     public void printDirections(List<Node> directions) {
