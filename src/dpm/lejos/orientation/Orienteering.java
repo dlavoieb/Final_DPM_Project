@@ -1,8 +1,10 @@
 package dpm.lejos.orientation;
 
 import dpm.lejos.project.Robot;
+import lejos.nxt.UltrasonicSensor;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Orientation and navigation methods
@@ -28,50 +30,44 @@ public class Orienteering {
         this.plane = createPlane();
     }
 
-    public Tile[][] getPlane() {
-        return this.plane;
-    }
-
-
-
     public Orienteering(Robot robot) {
         this.plane = createPlane();
-        this.robot=robot;
+        this.robot = robot;
     }
 
 
     /**
      * Optimized localization algorithm with 3 US
+     *
+     * Determines the initial location and orientation of the robot
+     * based on data obtained from its surroundings.
+     *
      */
     public void virtualDeterministicPositioning() {
         this.plane = createPlane();
-        int startingX = 0;
-        int startingY = 1;
-        Direction startingDir = Direction.NORTH;
 
         ArrayList<Motion> motionTrace = new ArrayList<Motion>();
-        VirtualRobot vr = new VirtualRobot(startingX, startingY, startingDir);
 
         int counter = 0;
         boolean hasWallLeft;
         boolean hasWallRight;
         boolean hasWallAhead;
         while(countPossibilities(this.plane) > 1) {
-            hasWallLeft = vr.hasWallLeft(plane);
-            hasWallRight = vr.hasWallRight(plane);
-            hasWallAhead = vr.hasWallAhead(plane);
+            hasWallLeft = getFilteredData(Direction.WEST) > DISTANCE_THRESHOLD;
+            hasWallRight = getFilteredData(Direction.EAST) > DISTANCE_THRESHOLD;
+            hasWallAhead = getFilteredData(Direction.NORTH) > DISTANCE_THRESHOLD;
 
             if (hasWallAhead) {
                 simulateOnAllTiles(motionTrace, plane, hasWallAhead, hasWallLeft, hasWallRight);
-                vr.performMotion(Motion.ROTATE);
+                rotate90ClockWise();
                 motionTrace.add(Motion.ROTATE);
             } else {
                 simulateOnAllTiles(motionTrace, plane, hasWallAhead, hasWallLeft, hasWallRight);
-                vr.performMotion(Motion.FORWARD);
+                moveForward();
                 motionTrace.add(Motion.FORWARD);
             }
 
-            //printPlaneOptions(plane);
+            //TODO: use printPlaneOptions(plane) for debugging purposes
             counter++;
         }
 
@@ -80,8 +76,8 @@ public class Orienteering {
         Coordinate startingPosition = findStartingPosition();
         Coordinate endingPosition = findEndingPosition(motionTrace, startingPosition);
 
-        System.out.println("Ending pos x = " + endingPosition.getX() + " Y = " + endingPosition.getY() );
         printPlaneOptions(plane);
+        System.out.println("Ending pos x = " + endingPosition.getX() + " Y = " + endingPosition.getY());
     }
 
     /**
@@ -184,71 +180,20 @@ public class Orienteering {
         }
     }
 
-
-
-    /**
-     * Determines the initial location and orientation of the robot
-     * based on data obtained from its surroundings.
-     *
-     * The robot is rotated
-     * and moved forward depending on the distances recorded by the US.
-     *
-     * Then It the trace of movements it performs are simulated on all valid
-     * starting positions of the grid, which allows us to cross out all positions
-     * until only one remains.
-     *
-     * At this point we have found the starting position of
-     * the robot.
-     *
-     * After, we compute the ending position based on trace of motions,
-     * and finally the robot is driven
-     * to the north-east corner and oriented north.
-     */
-    /*public void deterministicPositioning() {
-        ArrayList<Motion> motionTrace = new ArrayList<Motion>();
-
-        lm.setAcceleration(ACCELERATION);
-        rm.setAcceleration(ACCELERATION);
-        while(countPossibilities(this.plane) > 1) {
-
-        	sleep(1000);
-            int distanceToWall = getFilteredData();
-
-            if (distanceToWall < DISTANCE_THRESHOLD) {
-                simulateOnAllTiles(Obstacle.OBSTACLE, motionTrace, plane);
-                rotate90CounterClock();
-                motionTrace.add(Motion.ROTATE);
-            } else {
-                simulateOnAllTiles(Obstacle.CLEAR, motionTrace, plane);
-                moveForward();
-                motionTrace.add(Motion.FORWARD);
-            }
-        }
-        
-        Coordinate startingPosition = findStartingPosition();
-        Coordinate endingPosition = findEndingPosition(motionTrace, startingPosition);
-
-        printInitialConditions(startingPosition);
-
-        moveToPlaneCorner(endingPosition);
-
-        printGoodbye(motionTrace);
-    }*/
-
     /**
      * Prints the number of moves performed once we have
      * reached the end of the entire motion
      * @param motionTrace the stack of movements applied so far
      */
-    /*private void printGoodbye(ArrayList<Motion> motionTrace){
-        LCD.drawString("Completed orienteering", 0,0);
-        LCD.drawString("Number of moves:", 0,1);
-        LCD.drawString(String.valueOf(motionTrace.size()),0,2);
+//    private void printGoodbye(ArrayList<Motion> motionTrace){
+//        LCD.drawString("Completed orienteering", 0,0);
+//        LCD.drawString("Number of moves:", 0,1);
+//        LCD.drawString(String.valueOf(motionTrace.size()),0,2);
+//
+//        Sound.twoBeeps();
+//    }
 
-        Sound.twoBeeps();
-    }
-
-    *//**
+    /**
      * print the initial conditions to the LCD display
      * @param startingPosition the initial position
      *//*
@@ -267,52 +212,6 @@ public class Orienteering {
     }*/
 
     /**
-     * finds the initial position and orientation of the robot
-     * based on a random series of forward and rotation moves
-     *
-     * the algorithm records the moves made and compares the possible
-     * initial position that would allow such moves to be possible
-     *
-     */
-
-    /*public void stochasticPositioning() {
-
-        ArrayList<Motion> motionTrace = new ArrayList<Motion>();
-        lm.setAcceleration(ACCELERATION);
-        rm.setAcceleration(ACCELERATION);
-        while(countPossibilities(this.plane) > 1) {
-        	sleep(1000);
-            int distanceToWall = getFilteredData();
-
-            if (distanceToWall < DISTANCE_THRESHOLD) {
-                simulateOnAllTiles(Obstacle.OBSTACLE, motionTrace, plane);
-                rotate90CounterClock();
-                motionTrace.add(Motion.ROTATE);
-            } else {
-            	boolean shouldRotate = getRandomBoolean();
-
-            	if (shouldRotate) {
-            		simulateOnAllTiles(Obstacle.CLEAR, motionTrace, plane);
-                    rotate90CounterClock();
-                    motionTrace.add(Motion.ROTATE);
-            	} else {
-            		simulateOnAllTiles(Obstacle.CLEAR, motionTrace, plane);
-                    moveForward();
-                    motionTrace.add(Motion.FORWARD);
-            	}
-            }
-        }
-
-        Coordinate startingPosition = findStartingPosition();
-
-        Coordinate endingPosition = findEndingPosition(motionTrace, startingPosition);
-        printInitialConditions(startingPosition);
-        //moveToPlaneCorner(endingPosition);
-
-        printGoodbye(motionTrace);
-    }*/
-
-    /**
      * Returns a random boolean based on Java's Math.random()
      * function. Used for stochastic positioning
      * @return a boolean variable
@@ -320,58 +219,6 @@ public class Orienteering {
     public boolean getRandomBoolean() {
         return Math.random() < 0.5;
     }
-
-    /**
-     * move the robot to a corner facing north
-     * @param endingPosition the tile we want to move to
-     */
-    /*public void moveToPlaneCorner(Coordinate endingPosition) {
-		Direction currentDirection;
-    	int y = endingPosition.getY();
-		int x = endingPosition.getX();
-		rotateNorth(null);
-		currentDirection = Direction.NORTH;
-		while (true) {
-			sleep(1000);
-
-			if (currentDirection != Direction.NORTH) {
-				rotateNorth(currentDirection);
-				currentDirection = Direction.NORTH;
-			}
-
-			int distanceToWall = getFilteredData();
-
-			if (y == 0 && x == 3) {
-				rotateNorth(currentDirection);
-				break;
-			}
-
-			if (y > 0 && distanceToWall > DISTANCE_THRESHOLD && currentDirection == Direction.NORTH) {
-				moveForward();
-				y--;
-			} else if (x == 1 && y != 0) {
-				moveForward();
-				y--;
-			} else if (y > 0 && distanceToWall < DISTANCE_THRESHOLD && x > 1) {
-				rotate90CounterClock();
-				moveForward();
-				currentDirection = Direction.WEST;
-				x--;
-			} else if (y > 0 && distanceToWall < DISTANCE_THRESHOLD && x < 1) {
-				rotate90ClockWise();
-				moveForward();
-				currentDirection = Direction.EAST;
-				x++;
-			} else if (y == 0) {
-				rotate90ClockWise();
-				currentDirection = Direction.EAST;
-				while (getFilteredData() > DISTANCE_THRESHOLD) {
-					moveForward();
-					x++;
-				}
-			}
-		}
-	}*/
 
     /**
      * Calculates the starting location and orientation of the robot
@@ -425,8 +272,8 @@ public class Orienteering {
 		this.endingDir = vr.getDir();
         return new Coordinate(vr.getX(), vr.getY());
     }
-/*
-    *//**
+
+    /**
      * position the robot facing north
      * @param dir the current heading
      *//*
@@ -452,38 +299,58 @@ public class Orienteering {
 		}
     }
 
-    *//**
-     * rotateCCW the physical robot 90 degrees counterclockwise
-     *//*
+    */
 
+    /**
+     * rotate the physical robot 90 degrees counterclockwise
+     */
     public void rotate90CounterClock() {
-    	lm.setSpeed(ROTATE_SPEED);
-        rm.setSpeed(ROTATE_SPEED);
-        lm.rotateCCW(convertAngle(-90), true);
-        rm.rotateCCW(convertAngle(90), false);
+        robot.motorPort.setSpeed(ROTATE_SPEED);
+        robot.motorStrb.setSpeed(ROTATE_SPEED);
+        robot.motorPort.rotate(convertAngle(-90), true);
+        robot.motorStrb.rotate(convertAngle(90), false);
     }
 
-    *//**
-     * rotateCCW the physical robot 90 degrees clockwise
-     *//*
-
+    /**
+     * rotate the physical robot 90 degrees clockwise
+     */
     public void rotate90ClockWise() {
-    	lm.setSpeed(ROTATE_SPEED);
-        rm.setSpeed(ROTATE_SPEED);
-        lm.rotateCCW(convertAngle(90), true);
-        rm.rotateCCW(convertAngle(-90), false);
+        robot.motorPort.setSpeed(ROTATE_SPEED);
+        robot.motorStrb.setSpeed(ROTATE_SPEED);
+        robot.motorPort.rotate(convertAngle(90), true);
+        robot.motorStrb.rotate(convertAngle(-90), false);
     }
 
-    *//**
+    /**
      * move the robot one tile forward
-     *//*
+     */
     public void moveForward() {
-    	lm.setSpeed(FORWARD_SPEED);
-        rm.setSpeed(FORWARD_SPEED);
-        lm.rotateCCW(convertDistance(30), true);
-        rm.rotateCCW(convertDistance(30), false);
-    }*/
+        robot.motorPort.setSpeed(ROTATE_SPEED);
+        robot.motorStrb.setSpeed(ROTATE_SPEED);
+        robot.motorPort.rotate(convertDistance(30), true);
+        robot.motorStrb.rotate(convertDistance(30), false);
+    }
 
+
+    /**
+     * Conversion from desired travel distance to motor rotation angle (tacho count)
+     * @param distance distance to travel
+     * @return number of degrees the motor should travel to match the desired distance
+     */
+    private int convertDistance(double distance) {
+        return (int) ((180.0 * distance) / (Math.PI * robot.wheelRadius));
+    }
+
+    /**
+     * Translates a desired rotation of the robot around its center to a
+     * number of degrees each wheel should turn
+     *
+     * @param angle the angle the robot should rotate
+     * @return the angle a motor should travel for the robot to rotate
+     */
+    private int convertAngle(double angle) {
+        return convertDistance(Math.PI * robot.wheelBase * angle / 360.0 + 0.1);
+    }
 
     /**
      * Count the remaining possibilities for the starting position
@@ -533,6 +400,14 @@ public class Orienteering {
     }
 
     /**
+     * retrieves the plane object
+     * @return
+     */
+    public Tile[][] getPlane() {
+        return this.plane;
+    }
+
+    /**
      * setup for initial playground layout
      * @param plane the reference to the Tile array
      */
@@ -563,24 +438,36 @@ public class Orienteering {
      * and return the median value
      * @return the filtered distance read with the us sensor
      */
-    /*private int getFilteredData() {
+    private int getFilteredData(Direction dir) {
 		int distance;
 		int[] dist = new int[5];
-		for (int i = 0; i < 5; i++) {
-			us.ping();
+        UltrasonicSensor us;
+        if (dir == Direction.NORTH) {
+            us = robot.usFront;
+        } else if (dir == Direction.EAST){
+            us = robot.usStrb;
+        } else {
+            us = robot.usPort;
+        }
 
-			// wait for ping to complete
-			sleep(50);
-			// there will be a delay
-			dist[i] = us.getDistance();
+		for (int i = 0; i < 5; i++) {
+
+            us.ping();
+            // wait for ping to complete
+            //TODO: decide on a time for us readings
+            sleep(25);
+            // there will be a delay
+            dist[i] = us.getDistance();
 
 		}
 
         Arrays.sort(dist);
 		distance = dist[2];
-				
+
+        //if (distance < DISTANCE_THRESHOLD)
+
 		return distance;
-	}*/
+	}
 
     /**
      * Sleep thread
