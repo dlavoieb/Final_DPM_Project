@@ -110,8 +110,8 @@ public class Odometer extends Thread{
 
     private void correct(){
         if (m_LineDetector.isLine()){
-            double xmod = x - (x % m_robot.tileLenght) * m_robot.tileLenght;
-            double ymod = y - (y % m_robot.tileLenght) * m_robot.tileLenght;
+            double xmod = x - (x % m_robot.tileLength) * m_robot.tileLength;
+            double ymod = y - (y % m_robot.tileLength) * m_robot.tileLength;
             if (xmod<ymod){
                 //closer to x line
                 x = x - xmod - m_robot.lightSensorOffset;
