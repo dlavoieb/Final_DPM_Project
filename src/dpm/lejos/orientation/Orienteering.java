@@ -292,28 +292,6 @@ public class Orienteering {
 
     */
 
-
-
-    /**
-     * Conversion from desired travel distance to motor rotation angle (tacho count)
-     * @param distance distance to travel
-     * @return number of degrees the motor should travel to match the desired distance
-     */
-    private int convertDistance(double distance) {
-        return (int) ((180.0 * distance) / (Math.PI * robot.wheelRadius));
-    }
-
-    /**
-     * Translates a desired rotation of the robot around its center to a
-     * number of degrees each wheel should turn
-     *
-     * @param angle the angle the robot should rotate
-     * @return the angle a motor should travel for the robot to rotate
-     */
-    private int convertAngle(double angle) {
-        return convertDistance(Math.PI * robot.wheelBase * angle / 360.0 + 0.1);
-    }
-
     /**
      * Count the remaining possibilities for the starting position
      * @param plane the plane object reference
