@@ -9,7 +9,7 @@ public class VirtualTester {
         //Orienteering orienteering = new Orienteering();
         //orienteering.virtualDeterministicPositioning();
 
-        Navigator nav = new Navigator();
+        //Navigator nav = new Navigator();
 
 
     }

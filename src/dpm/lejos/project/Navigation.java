@@ -1,5 +1,6 @@
 package dpm.lejos.project;
 
+import dpm.lejos.orientation.Coordinate;
 import dpm.lejos.orientation.Navigator;
 import dpm.lejos.orientation.Orienteering.*;
 
@@ -18,6 +19,7 @@ public class Navigation {
 	private boolean noObstacle = true;
 	private Odometer m_Odometer;
 	private ObstacleDetection m_ObstacleDetection;
+    private Navigation navigation;
 
     private Robot m_robot;
 
@@ -28,6 +30,8 @@ public class Navigation {
      */
 	public Navigation(Robot robot){
         m_robot = robot;
+        navigation = new Navigation(robot);
+
 	}
 
 	/**
@@ -50,6 +54,15 @@ public class Navigation {
 	public void travelTo(double x, double y){
 
 	}
+
+    /**
+     * moves the robot to the specified coordinate
+     * See the plane encoding in the orienteering or navigator classes
+     * @param destination
+     */
+    public void travelTo(Coordinate destination) {
+        navigation.travelTo(destination);
+    }
 
     public void floatMotors(){
         m_robot.motorStrb.flt(true);
@@ -152,4 +165,4 @@ public class Navigation {
 
     }
 
-}//end Navigator
+}//end Navigation
