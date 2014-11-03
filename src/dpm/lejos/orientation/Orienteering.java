@@ -265,34 +265,6 @@ public class Orienteering {
     }
 
     /**
-     * position the robot facing north
-     * @param dir the current heading
-     *//*
-	public void rotateNorth(Direction dir) {
-		if (dir == null) {
-			if (this.endingDir == Direction.SOUTH) {
-	    		rotate90CounterClock();
-	    		rotate90CounterClock();
-	    	} else if (this.endingDir == Direction.EAST) {
-	    		rotate90CounterClock();
-	    	} else if (this.endingDir == Direction.WEST) {
-	    		rotate90ClockWise();
-	    	}
-		} else {
-			if (dir == Direction.SOUTH) {
-	    		rotate90CounterClock();
-	    		rotate90CounterClock();
-	    	} else if (dir == Direction.EAST) {
-	    		rotate90CounterClock();
-	    	} else if (dir == Direction.WEST) {
-	    		rotate90ClockWise();
-	    	}
-		}
-    }
-
-    */
-
-    /**
      * Count the remaining possibilities for the starting position
      * @param plane the plane object reference
      * @return the number of possible starting position

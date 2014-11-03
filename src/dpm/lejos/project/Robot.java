@@ -1,6 +1,6 @@
 package dpm.lejos.project;
 
-import dpm.lejos.orientation.Orienteering;
+import dpm.lejos.orientation.Coordinate;
 import dpm.lejos.orientation.Orienteering.*;
 import lejos.nxt.*;
 import lejos.nxt.comm.RS485;
@@ -28,7 +28,9 @@ public class Robot {
     public double wheelBase = 19.3; //TODO : Continue to tweak
     public double wheelRadius = 1.65;
     public double lightSensorOffset = 5; //TODO : Get real value
+
     private Direction direction = null;
+    private Coordinate positionOnGrid;
 
     public int LIGHT_THRESHOLD = 500;
     public double tileLength = 30.5;
@@ -110,7 +112,25 @@ public class Robot {
     }
 
     /**
-     * get the current direction the robot is looking at.
+     * returns the coordinate represeting the position of the robot
+     * on the grid
+     * @return
+     */
+    public Coordinate getPositionOnGrid() {
+        return positionOnGrid;
+    }
+
+    /**
+     * sets the coordinate representing the position of the robot
+     * on the grid
+     * @param positionOnGrid
+     */
+    public void setPositionOnGrid(Coordinate positionOnGrid) {
+        this.positionOnGrid = positionOnGrid;
+    }
+
+    /**
+     * get the current direction the robot is looking at
      * @return
      */
     public Direction getDirection() {
@@ -118,7 +138,7 @@ public class Robot {
     }
 
     /**
-     * Modify the direction the robot is looking at.
+     * Modify the direction the robot is looking at
      * @param direction
      */
     public void setDirection(Direction direction) {
