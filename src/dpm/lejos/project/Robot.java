@@ -2,6 +2,7 @@ package dpm.lejos.project;
 
 import dpm.lejos.orientation.Coordinate;
 import dpm.lejos.orientation.Orienteering.*;
+import dpm.lejos.orientation.Tile;
 import lejos.nxt.*;
 import lejos.nxt.comm.RS485;
 import lejos.nxt.remote.RemoteMotor;
@@ -31,6 +32,7 @@ public class Robot {
 
     private Direction direction = null;
     private Coordinate positionOnGrid;
+    private Tile[][] plane;
 
     public int LIGHT_THRESHOLD = 500;
     public double tileLength = 30.5;
@@ -109,6 +111,24 @@ public class Robot {
         usPort = new UltrasonicSensor(slave.S2);
         usStrb = new UltrasonicSensor(slave.S3);
 
+    }
+
+    /**
+     * returns the plane object used for localization
+     * and navigation purposes
+     * @return
+     */
+    public Tile[][] getPlane() {
+        return plane;
+    }
+
+    /**
+     * Sets the plane object used for localization
+     * and navigation purposes
+     * @param plane
+     */
+    public void setPlane(Tile[][] plane) {
+        this.plane = plane;
     }
 
     /**

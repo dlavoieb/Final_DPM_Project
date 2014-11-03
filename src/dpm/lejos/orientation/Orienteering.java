@@ -32,9 +32,21 @@ public class Orienteering {
     public Orienteering(Robot robot, Navigation navigation) {
         this.plane = createPlane();
         this.robot = robot;
+        robot.setPlane(plane);
         this.navigation = navigation;
     }
 
+    //Grid encoding
+
+    /*
+    0,0    0,1    0,2   0,3
+
+    1,0    1,1    1,2   1,3
+
+    2,0    2,1    2,2   2,3
+
+    3,0    3,1    3,2   3,3
+    */
 
     /**
      * Optimized localization algorithm with 3 US
@@ -76,8 +88,12 @@ public class Orienteering {
         Coordinate startingPosition = findStartingPosition();
         Coordinate endingPosition = findEndingPosition(motionTrace, startingPosition);
 
-        printPlaneOptions(plane);
-        System.out.println("Ending pos x = " + endingPosition.getX() + " Y = " + endingPosition.getY());
+        //Set the attributes used to know the position of the robot on the grid
+        robot.setPositionOnGrid(endingPosition);
+        robot.setDirection(endingDir);
+
+        //Use for debugging purposes
+        //printPlaneOptions(plane);
     }
 
     /**
@@ -98,7 +114,6 @@ public class Orienteering {
         System.out.println();
         printPlaneOptions(newPlane);*/
 
-        //System.out.println("Are planes equal??? = " + (plane.equals(newPlane)));
         return newPlane;
     }
 
