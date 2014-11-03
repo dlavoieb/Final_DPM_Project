@@ -23,12 +23,12 @@ public class Robot {
     public final int CRUISE_SPEED = 200;
     public final int ROTATE_SPEED = 150;
 
-    public double wheelBase = 10; //TODO : Get real value
-    public double wheelRadius = 2; //TODO : Get real value
+    public double wheelBase = 9.525; //TODO : Get real value
+    public double wheelRadius = 1.65; //TODO : Get real value
     public double lightSensorOffset = 5; //TODO : Get real value
 
     public int LIGHT_THRESHOLD = 500;
-    public int tileLenght = 30;
+    public double tileLength = 30.5;
     public int ODOMETER_PERIOD = 100;
 
     /**
