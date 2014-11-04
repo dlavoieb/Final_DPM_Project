@@ -31,8 +31,8 @@ public class Odometer extends Thread{
         lock = new Object();
         m_robot = robot;
 
-        leftMotor = m_robot.motorPort;
-        rightMotor = m_robot.motorStrb;
+        leftMotor = m_robot.motorLeft;
+        rightMotor = m_robot.motorRight;
         leftMotor.resetTachoCount();
         rightMotor.resetTachoCount();
 

@@ -1,17 +1,12 @@
 package dpm.lejos.project;
 
 import dpm.lejos.orientation.Coordinate;
-import dpm.lejos.orientation.Navigator;
 import dpm.lejos.orientation.Navigator.Node;
 import dpm.lejos.orientation.Orienteering.*;
 import dpm.lejos.orientation.Tile;
 import lejos.nxt.*;
-import lejos.nxt.comm.RS485;
 import lejos.nxt.remote.RemoteMotor;
 import lejos.nxt.remote.RemoteNXT;
-import lejos.util.Delay;
-
-import java.io.IOException;
 
 /**
  * Provides access to all the robots sensors and actuators
@@ -25,7 +20,8 @@ public class Robot {
 
 	public final int ACCELERATION = 500;
 	public final int CLAW_SPEED = 200;
-    public final int CRUISE_SPEED = 200;
+    //TODO: decide actual cruise speed - seems to slow
+    public final int CRUISE_SPEED = 250;
     public final int ROTATE_SPEED = 150;
 
     public double wheelBase = 19.3; //TODO : Continue to tweak
@@ -62,8 +58,8 @@ public class Robot {
      */
 	public TouchSensor clawTouch = new TouchSensor(SensorPort.S1);
 
-    public NXTRegulatedMotor motorPort = Motor.A; //   <---
-	public NXTRegulatedMotor motorStrb = Motor.B; //   <---
+    public NXTRegulatedMotor motorLeft = Motor.A; //   <---
+	public NXTRegulatedMotor motorRight = Motor.B; //   <---
 
     /**
      * Secondary nxt providing additional I/O ports
@@ -77,11 +73,11 @@ public class Robot {
     /**
      * The port facing ultrasonic sensor
      */
-	public UltrasonicSensor usPort;
+	public UltrasonicSensor usLeft;
     /**
      * The starboard facing ultrasonic sensor
      */
-	public UltrasonicSensor usStrb;
+	public UltrasonicSensor usRight;
 
 	/**
 	 * Color sensor facing down for odometry correction
@@ -94,7 +90,7 @@ public class Robot {
      * no parameters, all defaults should be initialized in this class
      */
     public Robot(){
-        try {
+      /*  try {
             LCD.clear();
             LCD.drawString("Connecting...",0,0);
             slave = new RemoteNXT("TEAM08-2", RS485.getConnector());
@@ -112,10 +108,10 @@ public class Robot {
 
         clawLift = slave.A;
         clawClose = slave.B;
-
-        usFront = new UltrasonicSensor(slave.S1);
-        usPort = new UltrasonicSensor(slave.S2);
-        usStrb = new UltrasonicSensor(slave.S3);
+*/
+        usFront = new UltrasonicSensor(SensorPort.S2);
+        usLeft = new UltrasonicSensor(SensorPort.S1);
+        usRight = new UltrasonicSensor(SensorPort.S3);
 
     }
 

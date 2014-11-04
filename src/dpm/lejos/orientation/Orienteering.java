@@ -3,6 +3,7 @@ package dpm.lejos.orientation;
 import dpm.lejos.project.Navigation;
 import dpm.lejos.project.Robot;
 import lejos.nxt.UltrasonicSensor;
+import lejos.nxt.comm.RConsole;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -65,14 +66,23 @@ public class Orienteering {
         boolean hasWallRight;
         boolean hasWallAhead;
         while(countPossibilities(this.plane) > 1) {
-            hasWallLeft = getFilteredData(Direction.WEST) > DISTANCE_THRESHOLD;
-            hasWallRight = getFilteredData(Direction.EAST) > DISTANCE_THRESHOLD;
-            hasWallAhead = getFilteredData(Direction.NORTH) > DISTANCE_THRESHOLD;
+            int distanceLeft = getFilteredData(robot.usLeft);
+            int distanceRight = getFilteredData(robot.usRight);
+            int distanceForward = getFilteredData(robot.usFront);
+
+//            RConsole.println("data left = " + distanceLeft);
+//            RConsole.println("data right = " + distanceRight);
+//            RConsole.println("data front = " + distanceForward);
+
+
+            hasWallLeft = distanceLeft < DISTANCE_THRESHOLD;
+            hasWallRight = distanceRight < DISTANCE_THRESHOLD;
+            hasWallAhead = distanceForward < DISTANCE_THRESHOLD;
 
             if (hasWallAhead) {
                 simulateOnAllTiles(motionTrace, plane, hasWallAhead, hasWallLeft, hasWallRight);
-                navigation.rotate90ClockWise();
-                motionTrace.add(Motion.ROTATE);
+                navigation.rotate90CounterClock();
+                motionTrace.add(Motion.ROTATECCW);
             } else {
                 simulateOnAllTiles(motionTrace, plane, hasWallAhead, hasWallLeft, hasWallRight);
                 navigation.moveForward();
@@ -87,6 +97,10 @@ public class Orienteering {
 
         Coordinate startingPosition = findStartingPosition();
         Coordinate endingPosition = findEndingPosition(motionTrace, startingPosition);
+        System.out.println("Start X = " + startingPosition.getX() + " Y = " + startingPosition.getY());
+        System.out.println("Starting dir = " + startingDir);
+        System.out.println("X = " + endingPosition.getX() + " Y = " + endingPosition.getY());
+        System.out.println("Ending dir = " + endingDir);
 
         //Set the attributes used to know the position of the robot on the grid
         robot.setPositionOnGrid(endingPosition);
@@ -147,7 +161,8 @@ public class Orienteering {
      * @param hasWallLeft boolean
      * @param hasWallRight boolean
      */
-    public void simulateOnAllTiles(ArrayList<Motion> motionTrace, Tile[][] plane, boolean hasWallAhead, boolean hasWallLeft, boolean hasWallRight) {
+    public void simulateOnAllTiles(ArrayList<Motion> motionTrace, Tile[][] plane, boolean hasWallAhead,
+                                   boolean hasWallLeft, boolean hasWallRight) {
         for (int i = 0; i < plane.length; i++) {
             for (int j = 0; j < plane.length; j++) {
                 for (int k = 0; k < plane.length; k++) {
@@ -173,7 +188,7 @@ public class Orienteering {
                                 for (Motion motion : motionTrace ) {
                                     if (motion == Motion.FORWARD ) {
                                         vr.moveForward();
-                                    } else if (motion == Motion.ROTATE) {
+                                    } else if (motion == Motion.ROTATECCW) {
                                         vr.rotateCCW();
                                     } else {
                                         vr.rotateCW();
@@ -245,7 +260,8 @@ public class Orienteering {
     		for(int i = 0; i < plane.length; i++) {
     			for(int j = 0; j < plane.length; j++) {
     				if (plane[i][j].isPossible(dir)) {
-    					coord = new Coordinate(j,i);
+    					//TODO: make sure coords are not backwards
+                        coord = new Coordinate(i,j);
     					this.startingDir = dir;
     					break;
     				}
@@ -276,7 +292,8 @@ public class Orienteering {
             }
         }
 		this.endingDir = vr.getDir();
-        return new Coordinate(vr.getX(), vr.getY());
+        //TODO: make sure coords are not backwards
+        return new Coordinate(vr.getY(), vr.getX());
     }
 
     /**
@@ -364,18 +381,11 @@ public class Orienteering {
      * take five readings with the ultrasonic sensor
      * and return the median value
      * @return the filtered distance read with the us sensor
+     * @param us
      */
-    private int getFilteredData(Direction dir) {
+    private int getFilteredData(UltrasonicSensor us) {
 		int distance;
 		int[] dist = new int[5];
-        UltrasonicSensor us;
-        if (dir == Direction.NORTH) {
-            us = robot.usFront;
-        } else if (dir == Direction.EAST){
-            us = robot.usStrb;
-        } else {
-            us = robot.usPort;
-        }
 
 		for (int i = 0; i < 5; i++) {
 
@@ -468,7 +478,7 @@ public class Orienteering {
          */
         public void performMotion(Motion m) {
             if (m == Motion.FORWARD) moveForward();
-            else if (m == Motion.ROTATE) rotateCCW();
+            else if (m == Motion.ROTATECCW) rotateCCW();
             else rotateCW();
         }
 
@@ -588,7 +598,7 @@ public class Orienteering {
         /**
          * rotate 90 degree counter-clockwise
          */
-        ROTATE,
+        ROTATECCW,
         /**
          * rotate 90 degrees clock-wise
          */

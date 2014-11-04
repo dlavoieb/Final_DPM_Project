@@ -4,8 +4,6 @@ import dpm.lejos.orientation.Coordinate;
 import dpm.lejos.orientation.Navigator;
 import dpm.lejos.orientation.Orienteering.*;
 
-import java.util.LinkedList;
-
 /**
  * Provides all the necessary navigation capabilities
  *
@@ -19,7 +17,7 @@ public class Navigation {
 	private boolean noObstacle = true;
 	private Odometer m_Odometer;
 	private ObstacleDetection m_ObstacleDetection;
-    private Navigation navigation;
+    private Navigator navigator;
 
     private Robot m_robot;
 
@@ -30,7 +28,7 @@ public class Navigation {
      */
 	public Navigation(Robot robot){
         m_robot = robot;
-        navigation = new Navigation(robot);
+        navigator = new Navigator(robot, this);
 
 	}
 
@@ -61,48 +59,48 @@ public class Navigation {
      * @param destination
      */
     public void travelTo(Coordinate destination) {
-        navigation.travelTo(destination);
+        navigator.navigate(destination);
     }
 
     public void floatMotors(){
-        m_robot.motorStrb.flt(true);
-        m_robot.motorPort.flt(true);
+        m_robot.motorRight.flt(true);
+        m_robot.motorLeft.flt(true);
     }
 
     /**
      * move the robot one tile forward
      */
     public void moveForward() {
-        m_robot.motorPort.setSpeed(m_robot.CRUISE_SPEED);
-        m_robot.motorStrb.setSpeed(m_robot.CRUISE_SPEED);
-        m_robot.motorPort.rotate(Utils.robotDistanceToMotorAngle(m_robot.tileLength, m_robot), true);
-        m_robot.motorStrb.rotate(Utils.robotDistanceToMotorAngle(m_robot.tileLength, m_robot), false);
+        m_robot.motorLeft.setSpeed(m_robot.CRUISE_SPEED);
+        m_robot.motorRight.setSpeed(m_robot.CRUISE_SPEED);
+        m_robot.motorLeft.rotate(Utils.robotDistanceToMotorAngle(m_robot.tileLength, m_robot), true);
+        m_robot.motorRight.rotate(Utils.robotDistanceToMotorAngle(m_robot.tileLength, m_robot), false);
     }
 
     /**
      * rotate the physical robot 90 degrees counterclockwise
      */
     public void rotate90CounterClock() {
-        m_robot.motorPort.setSpeed(m_robot.ROTATE_SPEED);
-        m_robot.motorStrb.setSpeed(m_robot.ROTATE_SPEED);
-        m_robot.motorPort.rotate(Utils.robotRotationToMotorAngle(-90, m_robot), true);
-        m_robot.motorStrb.rotate(Utils.robotRotationToMotorAngle(90, m_robot), false);
+        m_robot.motorLeft.setSpeed(m_robot.ROTATE_SPEED);
+        m_robot.motorRight.setSpeed(m_robot.ROTATE_SPEED);
+        m_robot.motorLeft.rotate(Utils.robotRotationToMotorAngle(-90, m_robot), true);
+        m_robot.motorRight.rotate(Utils.robotRotationToMotorAngle(90, m_robot), false);
     }
 
     /**
      * rotate the physical robot 90 degrees clockwise
      */
     public void rotate90ClockWise() {
-        m_robot.motorPort.setSpeed(m_robot.ROTATE_SPEED);
-        m_robot.motorStrb.setSpeed(m_robot.ROTATE_SPEED);
-        m_robot.motorPort.rotate(Utils.robotRotationToMotorAngle(90, m_robot), true);
-        m_robot.motorStrb.rotate(Utils.robotRotationToMotorAngle(-90, m_robot), false);
+        m_robot.motorLeft.setSpeed(m_robot.ROTATE_SPEED);
+        m_robot.motorRight.setSpeed(m_robot.ROTATE_SPEED);
+        m_robot.motorLeft.rotate(Utils.robotRotationToMotorAngle(90, m_robot), true);
+        m_robot.motorRight.rotate(Utils.robotRotationToMotorAngle(-90, m_robot), false);
     }
 
-/**
- * position the robot facing north
- * @param destinationDirection the current heading
- */
+    /**
+    * position the robot facing north
+    * @param destinationDirection the current heading
+    */
 	public void rotateToDirection(Direction destinationDirection) {
 
         Direction robotDirection = m_robot.getDirection();
