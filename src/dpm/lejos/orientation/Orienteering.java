@@ -1,6 +1,7 @@
 package dpm.lejos.orientation;
 
 import dpm.lejos.project.Navigation;
+import dpm.lejos.project.Odometer;
 import dpm.lejos.project.Robot;
 import lejos.nxt.UltrasonicSensor;
 import lejos.nxt.comm.RConsole;
@@ -27,7 +28,8 @@ public class Orienteering {
 
     public Orienteering() {
         this.plane = createPlane();
-        this.navigation = new Navigation(new Robot());
+        this.robot = new Robot();
+        this.navigation = new Navigation(robot, new Odometer(robot));
     }
 
     public Orienteering(Robot robot, Navigation navigation) {

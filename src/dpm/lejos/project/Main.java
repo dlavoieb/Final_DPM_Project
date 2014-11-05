@@ -19,29 +19,38 @@ public class Main {
 
         Odometer odometer = new Odometer(robot);
         OdometryDisplay display = new OdometryDisplay(odometer);
-        Navigation navigation = new Navigation(robot);
+        Navigation navigation = new Navigation(robot, odometer);
         Orienteering orienteering = new Orienteering(robot, navigation);
+        Grabber grabber = new Grabber(robot);
 
 
-        orienteering.virtualDeterministicPositioning();
-//        display.start();
-//        odometer.start();
-//
-//        navigation.moveForward();
-//        navigation.rotate90ClockWise();
-//        navigation.moveForward();
-//        navigation.rotate90ClockWise();
-//        navigation.moveForward();
-//        navigation.rotate90ClockWise();
-//        navigation.moveForward();
-//        navigation.rotate90ClockWise();
-        while (Button.waitForAnyPress() != Button.ID_ESCAPE){
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+        //orienteering.virtualDeterministicPositioning();
+        display.start();
+        odometer.start();
+
+        int option = 0;
+        while (option == 0)
+            option = Button.waitForAnyPress();
+        switch(option) {
+            case Button.ID_LEFT:
+                navigation.moveForward();
+                navigation.rotate90ClockWise();
+                navigation.moveForward();
+                navigation.rotate90ClockWise();
+                navigation.moveForward();
+                navigation.rotate90ClockWise();
+                navigation.moveForward();
+                navigation.rotate90ClockWise();
+            case Button.ID_RIGHT:
+                grabber.lowerClaw();
+                Button.waitForAnyPress();
+                grabber.riseClaw();
+            default:
+                System.out.println("Error - invalid button");
+                System.exit(-1);
+                break;
         }
+
         System.exit(0);
     }
 

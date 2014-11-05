@@ -30,7 +30,12 @@ public class MissionPlanner {
      * 5- Drop blocks
      * 6- repeat from 2 onwards
      */
-    public void startMission(){}
+    public void startMission(){
+        while (true){
+            m_Localizer.doLocalize();
+            m_Navigation.travelTo(2,2);
+        }
+    }
 
 
 
