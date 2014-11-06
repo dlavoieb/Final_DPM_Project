@@ -16,9 +16,20 @@ public class Grabber {
 	public LinkedList<BlockInStorage> listBlocksInStorage;
 	private TouchSensor touchSensor;
 
-	public Grabber(){
-
+    private Robot robot;
+	public Grabber(Robot robot){
+        this.robot = robot;
 	}
+
+    public void lowerClaw(){
+        robot.clawLift.setSpeed(robot.CLAW_SPEED);
+        robot.clawLift.rotate(-robot.clawLowerDistance);
+    }
+
+    public void riseClaw(){
+        robot.clawLift.setSpeed(robot.CLAW_SPEED);
+        robot.clawLift.rotate(robot.clawLowerDistance);
+    }
 
 	/**
 	 * close claw,

@@ -24,6 +24,8 @@ public class Robot {
     public final int CRUISE_SPEED = 250;
     public final int ROTATE_SPEED = 150;
 
+    public int clawLowerDistance = 540;
+
     public double wheelBase = 19.3; //TODO : Continue to tweak
     public double wheelRadius = 1.65;
     public double lightSensorOffset = 5; //TODO : Get real value
@@ -43,7 +45,7 @@ public class Robot {
     /**
      * motor for lifting and lowering the arms
      */
-    public RemoteMotor clawLift;
+    public NXTRegulatedMotor clawLift = Motor.C;
     /**
      * motor for opening and closing the grabbing mechanism
      */

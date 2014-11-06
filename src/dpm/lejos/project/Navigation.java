@@ -26,9 +26,10 @@ public class Navigation {
      *
      * @param robot the robot object
      */
-	public Navigation(Robot robot){
+	public Navigation(Robot robot, Odometer odometer){
         m_robot = robot;
         navigator = new Navigator(robot, this);
+        m_Odometer=odometer;
 
 	}
 
