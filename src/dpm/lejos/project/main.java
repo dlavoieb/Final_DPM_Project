@@ -15,6 +15,8 @@ import lejos.nxt.comm.RConsole;
 public class Main {
 
 	public static void main(String [] argv){
+        RConsole.openUSB(10000);
+        RConsole.println("Connected!!!!");
         Robot robot = new Robot();
 
         Odometer odometer = new Odometer(robot);
@@ -24,9 +26,9 @@ public class Main {
 
 
         orienteering.virtualDeterministicPositioning();
-//        display.start();
-//        odometer.start();
-//
+        //display.start();
+        //odometer.start();
+
 //        navigation.moveForward();
 //        navigation.rotate90ClockWise();
 //        navigation.moveForward();

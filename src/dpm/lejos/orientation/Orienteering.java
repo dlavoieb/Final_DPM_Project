@@ -22,7 +22,6 @@ public class Orienteering {
     private Direction endingDir;
     private static int DISTANCE_THRESHOLD = 30;
     private Navigation navigation;
-
     private Robot robot;
 
     public Orienteering() {
@@ -44,7 +43,7 @@ public class Orienteering {
 
     1,0    1,1    1,2   1,3
 
-    2,0    2,1    2,2   2,3
+    0,0    2,1    2,2   2,3
 
     3,0    3,1    3,2   3,3
     */
@@ -93,14 +92,14 @@ public class Orienteering {
             counter++;
         }
 
-        System.out.println(counter);
+        RConsole.println(Integer.toString(counter));
 
         Coordinate startingPosition = findStartingPosition();
         Coordinate endingPosition = findEndingPosition(motionTrace, startingPosition);
-        System.out.println("Start X = " + startingPosition.getX() + " Y = " + startingPosition.getY());
-        System.out.println("Starting dir = " + startingDir);
-        System.out.println("X = " + endingPosition.getX() + " Y = " + endingPosition.getY());
-        System.out.println("Ending dir = " + endingDir);
+        RConsole.println("Start X = " + startingPosition.getX() + " Y = " + startingPosition.getY());
+        RConsole.println("Starting dir = " + startingDir);
+        RConsole.println("X = " + endingPosition.getX() + " Y = " + endingPosition.getY());
+        RConsole.println("Ending dir = " + endingDir);
 
         //Set the attributes used to know the position of the robot on the grid
         robot.setPositionOnGrid(endingPosition);
@@ -170,16 +169,16 @@ public class Orienteering {
                         Direction selectedDir;
                         VirtualRobot vr;
                         if (k == 0) {
-                            vr = new VirtualRobot(j, i, Direction.NORTH);
+                            vr = new VirtualRobot(i, j, Direction.NORTH);
                             selectedDir = Direction.NORTH;
                         } else if (k == 1) {
-                            vr = new VirtualRobot(j, i, Direction.EAST);
+                            vr = new VirtualRobot(i, j, Direction.EAST);
                             selectedDir = Direction.EAST;
                         } else if (k == 2) {
-                            vr = new VirtualRobot(j, i, Direction.WEST);
+                            vr = new VirtualRobot(i, j, Direction.WEST);
                             selectedDir = Direction.WEST;
                         } else {
-                            vr = new VirtualRobot(j, i, Direction.SOUTH);
+                            vr = new VirtualRobot(i, j, Direction.SOUTH);
                             selectedDir = Direction.SOUTH;
                         }
 
@@ -293,7 +292,7 @@ public class Orienteering {
         }
 		this.endingDir = vr.getDir();
         //TODO: make sure coords are not backwards
-        return new Coordinate(vr.getY(), vr.getX());
+        return new Coordinate(vr.getX(), vr.getY());
     }
 
     /**
@@ -377,6 +376,16 @@ public class Orienteering {
         plane[3][1].closeAllPossibilities();
     }
 
+    /*
+    0,0    0,1    0,2   0,3
+
+    1,0    1,1    1,2   1,3
+
+    2,0    2,1    2,2   2,3
+
+    3,0    3,1    3,2   3,3
+    */
+
     /**
      * take five readings with the ultrasonic sensor
      * and return the median value
@@ -441,10 +450,10 @@ public class Orienteering {
          */
         public void moveForward() {
             synchronized (lock) {
-                if (this.dir == Direction.NORTH) y--;
-                else if (this.dir == Direction.SOUTH) y++;
-                else if (this.dir == Direction.EAST) x++;
-                else x--;
+                if (this.dir == Direction.NORTH) x--;
+                else if (this.dir == Direction.SOUTH) x++;
+                else if (this.dir == Direction.EAST) y++;
+                else y--;
             }
         }
 
@@ -489,10 +498,10 @@ public class Orienteering {
          */
         public boolean hasWallAhead(Tile[][] plane) {
             synchronized (lock) {
-                if (this.dir == Direction.NORTH) return plane[y][x].hasObstacle(Direction.NORTH);
-                else if (this.dir == Direction.SOUTH) return plane[y][x].hasObstacle(Direction.SOUTH);
-                else if (this.dir == Direction.EAST) return plane[y][x].hasObstacle(Direction.EAST);
-                else if (this.dir == Direction.WEST) return plane[y][x].hasObstacle(Direction.WEST);
+                if (this.dir == Direction.NORTH) return plane[x][y].hasObstacle(Direction.NORTH);
+                else if (this.dir == Direction.SOUTH) return plane[x][y].hasObstacle(Direction.SOUTH);
+                else if (this.dir == Direction.EAST) return plane[x][y].hasObstacle(Direction.EAST);
+                else if (this.dir == Direction.WEST) return plane[x][y].hasObstacle(Direction.WEST);
                 return false;
             }
         }
@@ -505,10 +514,10 @@ public class Orienteering {
          */
         public boolean hasWallLeft(Tile[][] plane) {
             synchronized (lock) {
-                if (this.dir == Direction.NORTH) return plane[y][x].hasObstacle(Direction.WEST);
-                else if (this.dir == Direction.SOUTH) return plane[y][x].hasObstacle(Direction.EAST);
-                else if (this.dir == Direction.EAST) return plane[y][x].hasObstacle(Direction.NORTH);
-                else if (this.dir == Direction.WEST) return plane[y][x].hasObstacle(Direction.SOUTH);
+                if (this.dir == Direction.NORTH) return plane[x][y].hasObstacle(Direction.WEST);
+                else if (this.dir == Direction.SOUTH) return plane[x][y].hasObstacle(Direction.EAST);
+                else if (this.dir == Direction.EAST) return plane[x][y].hasObstacle(Direction.NORTH);
+                else if (this.dir == Direction.WEST) return plane[x][y].hasObstacle(Direction.SOUTH);
                 return false;
             }
         }
@@ -520,10 +529,10 @@ public class Orienteering {
          */
         public boolean hasWallRight(Tile[][] plane) {
             synchronized (lock) {
-                if (this.dir == Direction.NORTH) return plane[y][x].hasObstacle(Direction.EAST);
-                else if (this.dir == Direction.SOUTH) return plane[y][x].hasObstacle(Direction.WEST);
-                else if (this.dir == Direction.EAST) return plane[y][x].hasObstacle(Direction.SOUTH);
-                else if (this.dir == Direction.WEST) return plane[y][x].hasObstacle(Direction.NORTH);
+                if (this.dir == Direction.NORTH) return plane[x][y].hasObstacle(Direction.EAST);
+                else if (this.dir == Direction.SOUTH) return plane[x][y].hasObstacle(Direction.WEST);
+                else if (this.dir == Direction.EAST) return plane[x][y].hasObstacle(Direction.SOUTH);
+                else if (this.dir == Direction.WEST) return plane[x][y].hasObstacle(Direction.NORTH);
                 return false;
             }
         }
