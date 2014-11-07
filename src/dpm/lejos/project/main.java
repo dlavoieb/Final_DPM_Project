@@ -42,7 +42,7 @@ public class Main {
 //        RConsole.println("looking west");
 
         //orienteering.virtualDeterministicPositioning();
-        //navigation.travelTo(new Coordinate(1,1));
+        navigation.travelTo(new Coordinate(1,1));
         //display.start();
         //odometer.start();
 

@@ -86,8 +86,8 @@ public class Navigator {
         Node current = graphPlane[startingCoordinate.getX()][startingCoordinate.getY()];
         Node finish = graphPlane[endingCoordinate.getX()][startingCoordinate.getY()];
 
-        LinkedList<Node> reverseDirections = new LinkedList<Node>();
-        LinkedList<Node> queue = new LinkedList<Node>();
+        ArrayList<Node> reverseDirections = new ArrayList<Node>();
+        ArrayList<Node> queue = new ArrayList<Node>();
         queue.add(current);
         current.setVisited(true);
 
@@ -107,15 +107,10 @@ public class Navigator {
         }
 
         for(Node node = finish; node != null; node = node.getPrevious()) {
-            reverseDirections.add(node);
+            reverseDirections.add(0, node);
         }
         
         printDirections(reverseDirections);
-
-        //delete the first node (the robot know its position)
-        //TODO: verify that this is correct!
-        reverseDirections.remove(0);
-
         travelTo(reverseDirections);
     }
 
@@ -131,13 +126,13 @@ public class Navigator {
     3,0    3,1    3,2   3,3
     */
 
-    private void travelTo(LinkedList<Node> directions) {
+    private void travelTo(ArrayList<Node> directions) {
 
-        Coordinate currentPosition = robot.getPositionOnGrid();
+        Coordinate currentPosition = directions.remove(0).getCoordinate();
         Direction currentDirection = robot.getDirection();
-
+        Coordinate nextPosition;
         for (Node node : directions) {
-            Coordinate nextPosition = node.getCoordinate();
+            nextPosition = node.getCoordinate();
 
             //Note that the robot can only move in one axis at a time
             //So the new coordinate will either have a new X or a new Y
@@ -162,7 +157,6 @@ public class Navigator {
                     navigation.moveForward();
                 } else if (currentPosition.getY() < nextPosition.getY()) {
                     //robot is moving east
-                    navigation.rotateToDirection(Direction.EAST);
                     navigation.moveForward();
                 }
             }
