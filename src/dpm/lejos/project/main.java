@@ -1,5 +1,7 @@
 package dpm.lejos.project;
 
+import dpm.lejos.orientation.Coordinate;
+import dpm.lejos.orientation.Orienteering.Direction;
 import dpm.lejos.orientation.Orienteering;
 import lejos.nxt.Button;
 import lejos.nxt.comm.RConsole;
@@ -14,7 +16,7 @@ import lejos.nxt.comm.RConsole;
  */
 public class Main {
 
-	public static void main(String [] argv){
+	public static void main(String [] argv) throws InterruptedException {
         RConsole.openUSB(10000);
         Robot robot = new Robot();
 
@@ -24,8 +26,23 @@ public class Main {
         Orienteering orienteering = new Orienteering(robot, navigation);
         //Grabber grabber = new Grabber(robot);
 
+        robot.setPositionOnGrid(new Coordinate(1,0));
+        robot.setDirection(Direction.EAST);
 
-        orienteering.virtualDeterministicPositioning();
+//        navigation.rotateToDirection(Direction.NORTH);
+//        Thread.sleep(1000);
+//        RConsole.println("looking north");
+//        navigation.rotateToDirection(Direction.SOUTH);
+//        Thread.sleep(1000);
+//        RConsole.println("looking south");
+//        navigation.rotateToDirection(Direction.EAST);
+//        Thread.sleep(1000);
+//        RConsole.println("looking east");
+//        navigation.rotateToDirection(Direction.WEST);
+//        RConsole.println("looking west");
+
+        //orienteering.virtualDeterministicPositioning();
+        //navigation.travelTo(new Coordinate(1,1));
         //display.start();
         //odometer.start();
 

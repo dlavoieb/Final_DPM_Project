@@ -113,10 +113,10 @@ public class Navigation {
                     rotate90CounterClock();
                     break;
                 case EAST:
-                    rotate90CounterClock();
+                    rotate90ClockWise();
                     break;
                 case WEST:
-                    rotate90ClockWise();
+                    rotate90CounterClock();
                     break;
             }
         } else if (robotDirection == Direction.SOUTH) {
@@ -126,19 +126,19 @@ public class Navigation {
                     rotate90CounterClock();
                     break;
                 case EAST:
-                    rotate90ClockWise();
+                    rotate90CounterClock();
                     break;
                 case WEST:
-                    rotate90CounterClock();
+                    rotate90ClockWise();
                     break;
             }
         } else if (robotDirection == Direction.EAST) {
             switch (destinationDirection) {
                 case NORTH:
-                    rotate90ClockWise();
+                    rotate90CounterClock();
                     break;
                 case SOUTH:
-                    rotate90CounterClock();
+                    rotate90ClockWise();
                     break;
                 case WEST:
                     rotate90CounterClock();
@@ -148,10 +148,10 @@ public class Navigation {
         } else {
             switch (destinationDirection) {
                 case NORTH:
-                    rotate90CounterClock();
+                    rotate90ClockWise();
                     break;
                 case SOUTH:
-                    rotate90ClockWise();
+                    rotate90CounterClock();
                     break;
                 case EAST:
                     rotate90CounterClock();

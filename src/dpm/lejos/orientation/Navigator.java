@@ -3,6 +3,7 @@ package dpm.lejos.orientation;
 import dpm.lejos.project.Navigation;
 import dpm.lejos.orientation.Orienteering.Direction;
 import dpm.lejos.project.Robot;
+import lejos.nxt.comm.RConsole;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -32,7 +33,6 @@ public class Navigator {
      * @return the representation of the course layout
      */
     public Node[][] generateGraph() {
-
 
         Node r0c0 = new Node(new Coordinate(0,0));
         Node r0c1 = new Node(new Coordinate(0,1));
@@ -81,7 +81,7 @@ public class Navigator {
     public void navigate(Coordinate endingCoordinate){
 
         Coordinate startingCoordinate = robot.getPositionOnGrid();
-
+        RConsole.println("start x = " + Integer.toString(startingCoordinate.getX()) + " y = " + Integer.toString(startingCoordinate.getY()));
         //TODO: make sure that this is not BACKWARDS!!!!
         Node current = graphPlane[startingCoordinate.getX()][startingCoordinate.getY()];
         Node finish = graphPlane[endingCoordinate.getX()][startingCoordinate.getY()];
@@ -175,7 +175,7 @@ public class Navigator {
 
     public void printDirections(List<Node> directions) {
         for (Node node : directions)
-            System.out.println("Coords = " + node.getX() + " " + node.getY());
+            RConsole.println("Coords = " + node.getX() + " " + node.getY());
     }
 
     /**
