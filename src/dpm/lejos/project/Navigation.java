@@ -1,8 +1,11 @@
 package dpm.lejos.project;
 
 import dpm.lejos.orientation.Coordinate;
-import dpm.lejos.orientation.Navigator;
+import dpm.lejos.orientation.Mapper;
 import dpm.lejos.orientation.Orienteering.*;
+import lejos.nxt.comm.RConsole;
+
+import java.util.ArrayList;
 
 /**
  * Provides all the necessary navigation capabilities
@@ -17,7 +20,7 @@ public class Navigation {
 	private boolean noObstacle = true;
 	private Odometer m_Odometer;
 	private ObstacleDetection m_ObstacleDetection;
-    private Navigator navigator;
+    private Mapper mapper;
 
     private Robot m_robot;
 
@@ -28,7 +31,7 @@ public class Navigation {
      */
 	public Navigation(Robot robot, Odometer odometer){
         m_robot = robot;
-        navigator = new Navigator(robot, this);
+        mapper = new Mapper(0);
         m_Odometer=odometer;
 
 	}
@@ -60,7 +63,7 @@ public class Navigation {
      * @param destination
      */
     public void travelTo(Coordinate destination) {
-        navigator.navigate(destination);
+        navigate(destination);
     }
 
     public void floatMotors(){
@@ -164,4 +167,81 @@ public class Navigation {
 
     }
 
+
+
+    public void performMoves(ArrayList<Mapper.Node> directions) {
+
+        Coordinate currentPosition = directions.remove(0).getCoordinate();
+        Coordinate nextPosition;
+        for (Mapper.Node node : directions) {
+            nextPosition = node.getCoordinate();
+
+            //Note that the robot can only move in one axis at a time
+            //So the new coordinate will either have a new X or a new Y
+            //TODO: discuss if we should adapt the coordinate system
+
+            if (currentPosition.getX() != nextPosition.getX()) {
+                //Robot is moving in the y-axis
+                if (currentPosition.getX() > nextPosition.getX()) {
+                    //Robot is moving north
+                    rotateToDirection(Direction.NORTH);
+                    moveForward();
+                } else if (currentPosition.getX() < nextPosition.getX()) {
+                    //robot is moving south
+                    rotateToDirection(Direction.SOUTH);
+                    moveForward();
+                }
+            } else if (currentPosition.getY() != nextPosition.getY()) {
+                //Robot is moving in the x-axis
+                if (currentPosition.getY() > nextPosition.getY()) {
+                    //Robot is moving west
+                    rotateToDirection(Direction.WEST);
+                    moveForward();
+                } else if (currentPosition.getY() < nextPosition.getY()) {
+                    //robot is moving east
+                    moveForward();
+                }
+            }
+        }
+
+        //set position of the robot to the last tile visited
+        //TODO: verify that this actually works.
+        m_robot.setPositionOnGrid(directions.get(directions.size() - 1).getCoordinate());
+    }
+
+    public void navigate(Coordinate endingCoordinate){
+
+        Coordinate startingCoordinate = m_robot.getPositionOnGrid();
+        RConsole.println("start x = " + Integer.toString(startingCoordinate.getX()) + " y = " + Integer.toString(startingCoordinate.getY()));
+        //TODO: make sure that this is not BACKWARDS!!!!
+        Mapper.Node current = mapper.graphPlane[startingCoordinate.getX()][startingCoordinate.getY()];
+        Mapper.Node finish = mapper.graphPlane[endingCoordinate.getX()][startingCoordinate.getY()];
+
+        ArrayList<Mapper.Node> reverseDirections = new ArrayList<Mapper.Node>();
+        ArrayList<Mapper.Node> queue = new ArrayList<Mapper.Node>();
+        queue.add(current);
+        current.setVisited(true);
+
+        while(!queue.isEmpty()){
+            current = queue.remove(0);
+            if (current.equals(finish)){
+                break;
+            }else{
+                for(Mapper.Node node : current.getNeighbours()){
+                    if(!node.getVisited()){
+                        queue.add(node);
+                        node.setVisited(true);
+                        node.setPrevious(current);
+                    }
+                }
+            }
+        }
+
+        for(Mapper.Node node = finish; node != null; node = node.getPrevious()) {
+            reverseDirections.add(0, node);
+        }
+
+        mapper.printDirections(reverseDirections);
+        performMoves(reverseDirections);
+    }
 }//end Navigation
