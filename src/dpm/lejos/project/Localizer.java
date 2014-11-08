@@ -3,7 +3,9 @@ package dpm.lejos.project;
 /**
  * @author David Lavoie-Boutin
  * @version 1.0
+ * @deprecated
  */
+@Deprecated
 public class Localizer {
 
 	public Odometer m_Odometer;

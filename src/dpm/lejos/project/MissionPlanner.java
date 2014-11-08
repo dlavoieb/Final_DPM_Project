@@ -1,6 +1,5 @@
 package dpm.lejos.project;
 
-import dpm.lejos.orientation.Coordinate;
 import dpm.lejos.orientation.Orienteering;
 import lejos.nxt.Button;
 
@@ -18,7 +17,6 @@ public class MissionPlanner {
     private final OdometryDisplay display;
     private final Navigation m_Navigation;
     private final Grabber m_Grabber;
-//    private final Localizer m_Localizer;
     private final Orienteering orienteering;
 
 	public MissionPlanner(Navigation navigation, Grabber grabber, Orienteering orienteering, Odometer odometer, OdometryDisplay display) {
@@ -44,7 +42,7 @@ public class MissionPlanner {
      */
     public void startMission(){
         while (true){
-          //  m_Localizer.doLocalize();
+            orienteering.deterministicPositioning();
             m_Navigation.travelTo(2,2);
         }
     }
