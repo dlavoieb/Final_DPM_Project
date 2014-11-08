@@ -57,7 +57,7 @@ public class Orienteering {
      * based on data obtained from its surroundings.
      *
      */
-    public void virtualDeterministicPositioning() {
+    public void deterministicPositioning() {
         this.plane = createPlane();
 
         ArrayList<Motion> motionTrace = new ArrayList<Motion>();
