@@ -1,5 +1,9 @@
 package dpm.lejos.project;
 
+import dpm.lejos.orientation.Coordinate;
+import dpm.lejos.orientation.Orienteering;
+import lejos.nxt.Button;
+
 /**
  * High level mission planning.
  *
@@ -10,12 +14,20 @@ package dpm.lejos.project;
  */
 public class MissionPlanner {
 
-	public Navigation m_Navigation;
-	public Grabber m_Grabber;
-	public Localizer m_Localizer;
+    private final Odometer odometer;
+    private final OdometryDisplay display;
+    private final Navigation m_Navigation;
+    private final Grabber m_Grabber;
+//    private final Localizer m_Localizer;
+    private final Orienteering orienteering;
 
-	public MissionPlanner() {
+	public MissionPlanner(Navigation navigation, Grabber grabber, Orienteering orienteering, Odometer odometer, OdometryDisplay display) {
 
+        this.m_Navigation = navigation;
+        this.m_Grabber = grabber;
+        this.orienteering = orienteering;
+        this.odometer = odometer;
+        this.display = display;
     }
 
     /**
@@ -32,8 +44,36 @@ public class MissionPlanner {
      */
     public void startMission(){
         while (true){
-            m_Localizer.doLocalize();
+          //  m_Localizer.doLocalize();
             m_Navigation.travelTo(2,2);
+        }
+    }
+
+    public void demoMission(){
+        display.start();
+        odometer.start();
+
+        int option = 0;
+        while (option == 0)
+            option = Button.waitForAnyPress();
+        switch(option) {
+            case Button.ID_LEFT:
+                m_Navigation.moveForward();
+                m_Navigation.rotate90ClockWise();
+                m_Navigation.moveForward();
+                m_Navigation.rotate90ClockWise();
+                m_Navigation.moveForward();
+                m_Navigation.rotate90ClockWise();
+                m_Navigation.moveForward();
+                m_Navigation.rotate90ClockWise();
+            case Button.ID_RIGHT:
+                m_Grabber.lowerClaw();
+                Button.waitForAnyPress();
+                m_Grabber.riseClaw();
+            default:
+                System.out.println("Error - invalid button");
+                System.exit(-1);
+                break;
         }
     }
 
