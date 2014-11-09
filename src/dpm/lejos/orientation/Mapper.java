@@ -13,13 +13,19 @@ import java.util.List;
  */
 public class Mapper {
 
+    private MapID mapID;
+
+    public enum MapID {LAB4}
+
     public Node[][] graphPlane;
+
 
     /**
      * prepare the map
-     * @param mapNumber number of the map layout used
+     * @param mapID number of the map layout used
      */
-    public Mapper(int mapNumber) {
+    public Mapper(MapID mapID) {
+        this.mapID = mapID;
         this.graphPlane = generateGraph();
     }
 
@@ -108,6 +114,7 @@ public class Mapper {
         Node r5c9 = new Node(new Coordinate(5,9));
         Node r5c10 = new Node(new Coordinate(5,10));
         Node r5c11 = new Node(new Coordinate(5,11));
+
         Node r6c0 = new Node(new Coordinate(6,0));
         Node r6c1 = new Node(new Coordinate(6,1));
         Node r6c2 = new Node(new Coordinate(6,2));
@@ -187,27 +194,37 @@ public class Mapper {
         Node r11c11 = new Node(new Coordinate(11,11));
 
 
-        // r0c0, r1c2, r1c3, r3c1 are obstacles - means no nodes
-        r0c1.addNeighbours(new Node[] {r0c2, r1c1});
-        r0c2.addNeighbours(new Node[] {r0c1, r0c3, r1c2});
-        r0c3.addNeighbours(new Node[] {r0c2, r1c3});
-        r1c0.addNeighbours(new Node[] {r1c1, r2c0});
-        r1c1.addNeighbours(new Node[] {r1c0, r0c1, r2c1, r1c2});
-        r2c0.addNeighbours(new Node[] {r2c1, r3c0, r1c0});
-        r2c1.addNeighbours(new Node[] {r2c0, r1c1, r2c2});
-        r2c2.addNeighbours(new Node[] {r2c1, r2c3, r3c2});
-        r2c3.addNeighbours(new Node[] {r2c2, r3c3});
-        r3c0.addNeighbours(new Node[] {r2c0});
-        r3c2.addNeighbours(new Node[] {r2c2, r3c3});
-        r3c3.addNeighbours(new Node[] {r2c3, r3c2});
+        Node[][] graphPlane;
 
-        Node[][] graphPlane = {{r0c0, r0c1, r0c2, r0c3},
-                               {r1c0, r1c1, r1c2, r1c3},
-                               {r2c0, r2c1, r2c2, r2c3},
-                               {r3c0, r3c1, r3c2, r3c3}};
+        switch (mapID){
 
-        return graphPlane;
+            case LAB4:
+                // r0c0, r1c2, r1c3, r3c1 are obstacles - means no nodes
 
+                r0c1.addNeighbours(new Node[] {r0c2, r1c1});
+                r0c2.addNeighbours(new Node[] {r0c1, r0c3, r1c2});
+                r0c3.addNeighbours(new Node[] {r0c2, r1c3});
+                r1c0.addNeighbours(new Node[] {r1c1, r2c0});
+                r1c1.addNeighbours(new Node[] {r1c0, r0c1, r2c1, r1c2});
+                r2c0.addNeighbours(new Node[] {r2c1, r3c0, r1c0});
+                r2c1.addNeighbours(new Node[] {r2c0, r1c1, r2c2});
+                r2c2.addNeighbours(new Node[] {r2c1, r2c3, r3c2});
+                r2c3.addNeighbours(new Node[] {r2c2, r3c3});
+                r3c0.addNeighbours(new Node[] {r2c0});
+                r3c2.addNeighbours(new Node[] {r2c2, r3c3});
+                r3c3.addNeighbours(new Node[] {r2c3, r3c2});
+
+                graphPlane = new Node[][] {{r0c0, r0c1, r0c2, r0c3},
+                                            {r1c0, r1c1, r1c2, r1c3},
+                                            {r2c0, r2c1, r2c2, r2c3},
+                                            {r3c0, r3c1, r3c2, r3c3}};
+                break;
+
+            default:
+                graphPlane = null;
+            }
+
+        return  graphPlane;
     }
 
     //Grid encoding
