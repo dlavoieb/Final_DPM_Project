@@ -19,8 +19,7 @@ public class Navigation {
 
 	private boolean noObstacle = true;
 	private Odometer m_Odometer;
-	private ObstacleDetection m_ObstacleDetection;
-    private Mapper mapper;
+	private Mapper mapper;
 
     private Robot m_robot;
 
