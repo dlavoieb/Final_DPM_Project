@@ -30,6 +30,10 @@ public class Robot {
     public double wheelRadius = 1.65;
     public double lightSensorOffset = 5; //TODO : Get real value
 
+
+    public final double ACCEPTABLE_ANGLE = 1.00;
+    public final double ACCEPTABLE_LINEAR = 1.00;
+
     private Direction direction = null;
     private Coordinate positionOnGrid;
     //the plane is used for localization

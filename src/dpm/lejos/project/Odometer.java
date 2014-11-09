@@ -106,7 +106,25 @@ public class Odometer extends Thread{
         synchronized (lock) {
             return new double[]{x, y, theta};
         }
-	}
+    }
+
+    public double getX(){
+        synchronized (lock) {
+            return x;
+        }
+    }
+
+    public double getY(){
+        synchronized (lock) {
+            return y;
+        }
+    }
+
+    public double getTheta(){
+        synchronized (lock) {
+            return theta;
+        }
+    }
 
     private void correct(){
         if (m_LineDetector.isLine()){
