@@ -38,6 +38,8 @@ public class Navigation {
 
     /**
      * Rotates the robot to the desired angle using the optimal angle and direction
+     *
+     * Positive angle goes counterCW
      * @param theta the desired angle to rotate to
      */
     public void turnTo(double theta){
@@ -209,20 +211,14 @@ public class Navigation {
      * rotate the physical robot 90 degrees counterclockwise
      */
     public void rotate90CounterClock() {
-        m_robot.motorLeft.setSpeed(m_robot.ROTATE_SPEED);
-        m_robot.motorRight.setSpeed(m_robot.ROTATE_SPEED);
-        m_robot.motorLeft.rotate(Utils.robotRotationToMotorAngle(-90, m_robot), true);
-        m_robot.motorRight.rotate(Utils.robotRotationToMotorAngle(90, m_robot), false);
+        turnTo(m_Odometer.getTheta() + 90);
     }
 
     /**
      * rotate the physical robot 90 degrees clockwise
      */
     public void rotate90ClockWise() {
-        m_robot.motorLeft.setSpeed(m_robot.ROTATE_SPEED);
-        m_robot.motorRight.setSpeed(m_robot.ROTATE_SPEED);
-        m_robot.motorLeft.rotate(Utils.robotRotationToMotorAngle(90, m_robot), true);
-        m_robot.motorRight.rotate(Utils.robotRotationToMotorAngle(-90, m_robot), false);
+        turnTo(m_Odometer.getTheta() - 90);
     }
 
     /**
