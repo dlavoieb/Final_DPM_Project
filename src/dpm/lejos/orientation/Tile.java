@@ -47,6 +47,7 @@ public class Tile {
 
     /**
      * Copy Constructor
+     * @param tile the Reference object
      */
     public Tile(Tile tile) {
         this.isObstacle = tile.isObstacle();

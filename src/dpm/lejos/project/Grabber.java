@@ -13,7 +13,6 @@ import java.util.LinkedList;
 public class Grabber {
 
 	public boolean hasObject = false;
-	public LinkedList<BlockInStorage> listBlocksInStorage;
 	private TouchSensor touchSensor;
 
     private Robot robot;

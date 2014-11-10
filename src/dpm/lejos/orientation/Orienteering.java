@@ -346,7 +346,7 @@ public class Orienteering {
 
     /**
      * retrieves the plane object
-     * @return
+     * @return the Tile object
      */
     public Tile[][] getPlane() {
         return this.plane;

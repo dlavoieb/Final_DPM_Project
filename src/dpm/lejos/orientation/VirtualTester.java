@@ -7,7 +7,7 @@ public class VirtualTester {
 
     public static void main(String[] args) {
         //Orienteering orienteering = new Orienteering();
-        //orienteering.virtualDeterministicPositioning();
+        //orienteering.deterministicPositioning();
 
         //Navigator nav = new Navigator();
 
