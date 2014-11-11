@@ -46,7 +46,7 @@ public class Navigation {
         RConsole.println("start x = " + Integer.toString(startingCoordinate.getX()) + " y = " + Integer.toString(startingCoordinate.getY()));
         //TODO: make sure that this is not BACKWARDS!!!!
         Mapper.Node current = mapper.graphPlane[startingCoordinate.getX()][startingCoordinate.getY()];
-        Mapper.Node finish = mapper.graphPlane[endingCoordinate.getX()][startingCoordinate.getY()];
+        Mapper.Node finish = mapper.graphPlane[endingCoordinate.getX()][endingCoordinate.getY()];
 
         ArrayList<Mapper.Node> reverseDirections = new ArrayList<Mapper.Node>();
         ArrayList<Mapper.Node> queue = new ArrayList<Mapper.Node>();
@@ -57,7 +57,7 @@ public class Navigation {
             current = queue.remove(0);
             if (current.equals(finish)){
                 break;
-            }else{
+            } else {
                 for(Mapper.Node node : current.getNeighbours()){
                     if(!node.getVisited()){
                         queue.add(node);
@@ -68,12 +68,14 @@ public class Navigation {
             }
         }
 
+        RConsole.println(Integer.toString(reverseDirections.size()));
+
         for(Mapper.Node node = finish; node != null; node = node.getPrevious()) {
             reverseDirections.add(0, node);
         }
 
         mapper.printDirections(reverseDirections);
-        performMoves(reverseDirections);
+        //performMoves(reverseDirections);
     }
 
     /**
@@ -123,7 +125,7 @@ public class Navigation {
 	/**
 	 * method used to send the robot to a
      * predetermined absolute location
-	 * 
+	 *
 	 * @param x the x coordinate
 	 * @param y the y coordinate
 	 */
