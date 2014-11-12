@@ -167,6 +167,8 @@ public class Navigation {
      * @param destination
      */
     public void travelTo(Coordinate destination) {
+        travelTo(destination.getX()* m_robot.tileLength + m_robot.tileLength/2.0 ,destination.getY()* m_robot.tileLength + m_robot.tileLength/2.0);
+
         navigate(destination);
     }
 

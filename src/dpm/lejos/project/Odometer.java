@@ -14,7 +14,8 @@ public class Odometer extends Thread{
 
 	private final NXTRegulatedMotor leftMotor;
 	private final NXTRegulatedMotor rightMotor;
-	private LineDetector m_LineDetector;
+    private boolean correct = false;
+    private LineDetector m_LineDetector;
 
     private final Object lock;
     private static Robot m_robot;
@@ -45,6 +46,11 @@ public class Odometer extends Thread{
         prevTachoR = 0;
         m_LineDetector = new LineDetector(m_robot, true);
 
+    }
+
+    public Odometer (Robot robot, boolean correct){
+        this(robot);
+        this.correct = correct;
     }
 
     /**
@@ -83,6 +89,10 @@ public class Odometer extends Thread{
                 //update current position
                 x += dCenter * Math.cos(theta);
                 y += dCenter * Math.sin(theta);
+            }
+
+            if (correct){
+                correct();
             }
 
             // this ensures that the odometer only runs once every period
@@ -126,17 +136,22 @@ public class Odometer extends Thread{
         }
     }
 
+    public void startCorrection(){
+        this.correct = true;
+    }
+
     private void correct(){
         if (m_LineDetector.isLine()){
-            double xmod = x - (x % m_robot.tileLength) * m_robot.tileLength;
-            double ymod = y - (y % m_robot.tileLength) * m_robot.tileLength;
-            if (xmod<ymod){
-                //closer to x line
-                x = x - xmod - m_robot.lightSensorOffset;
+            if( Math.abs(Math.round(theta / 180.0) - (theta / 180.0)) < 0.1)
+            // if angle is close enough to +/- 180
+            {
+                //moving in the x line
+                x = Math.round( (x + m_robot.lightSensorOffset) / m_robot.tileLength) * m_robot.tileLength - m_robot.lightSensorOffset;
             }
-            else {
-                // closer to y line
-                y = y - ymod - m_robot.lightSensorOffset;
+            else
+            {
+                //moving in the y line
+                y = Math.round( (y + m_robot.lightSensorOffset) / m_robot.tileLength) * m_robot.tileLength - m_robot.lightSensorOffset;
             }
         }
     }
@@ -145,7 +160,7 @@ public class Odometer extends Thread{
      * compute the closest line to the distance provided
      * @param distance distance you have when crossing the line
      * @return position of the line you crossed
-     */
+     *
     //TODO: Verify the coordinate system to be compatible with the parameters and operations
     public double closestLine( double distance, double angle){
         if (Math.abs(angle) < 150) {
@@ -159,7 +174,7 @@ public class Odometer extends Thread{
         //sensor is closer to the origin than the center of the robot
         return Math.round(((distance - m_robot.lightSensorOffset - 15) / m_robot.tileLength)) * m_robot.tileLength + 15 + m_robot.lightSensorOffset;
     }
-
+*/
 	/**
 	 * Single point of entry to set
      * the position of the odometer
