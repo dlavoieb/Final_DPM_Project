@@ -18,7 +18,7 @@ import java.util.ArrayList;
 public class Navigation {
 
     private Odometer m_Odometer;
-	private Mapper mapper;
+	public Mapper mapper;
 
     private Robot m_robot;
 
@@ -33,6 +33,12 @@ public class Navigation {
         m_Odometer=odometer;
 
 	}
+
+    public Navigation(Robot robot, Odometer odometer, Mapper.MapID id){
+        m_robot = robot;
+        mapper = new Mapper(id);
+        m_Odometer=odometer;
+    }
 
     /**
      * perform the navigation planning to get to the desired coordinate
@@ -75,7 +81,7 @@ public class Navigation {
         }
 
         mapper.printDirections(reverseDirections);
-        //performMoves(reverseDirections);
+        performMoves(reverseDirections);
     }
 
     /**
@@ -83,7 +89,56 @@ public class Navigation {
      * @param directions the list of movements to follow
      */
     public void performMoves(ArrayList<Mapper.Node> directions) {
+        int index = 0;
+        while (directions.size()>1) {
+            Mapper.Node initial = directions.get(0);
+            Mapper.Node next = directions.get(1);
+            if (initial.getX() == next.getX()) {
+                //next has same x
+                while (index + 1< directions.size()) {
+                    if (directions.get(index).getX() == directions.get(index + 1).getX()) {
+                        index++;
+                    } else {
+                        break;
+                    }
+                }
+                removeBefore(directions, index);
 
+                //reset index to 0 since we remove everything before it.
+                index = 0;
+
+                // travelTo(directions.get(index).getCoordinate());
+                System.out.println("X: " + directions.get(index).getX() + ", Y: " + directions.get(index).getY());
+
+            } else if (initial.getY() == next.getY()) {
+                // next has same y
+                while (index + 1 < directions.size()) {
+                    if (directions.get(index).getY() == directions.get(index + 1).getY()) {
+                        index++;
+                    } else {
+                        break;
+                    }
+                }
+                removeBefore(directions, index);
+                //reset index to 0 since we remove everything before it.
+                index = 0;
+
+                //travelTo(directions.get(index).getCoordinate());
+                System.out.println("X: " + directions.get(index).getX() + ", Y: " + directions.get(index).getY());
+
+            } else
+                return;
+        }
+    }
+
+    private void removeBefore(ArrayList<?> list, int index){
+        for (int i = index - 1; i >= 0; i--) {
+            // remove all elements in the stack before the position we travel to
+            list.remove(i);
+        }
+    }
+
+/*
         Coordinate currentPosition = directions.remove(0).getCoordinate();
         Coordinate nextPosition;
         for (Mapper.Node node : directions) {
@@ -121,11 +176,14 @@ public class Navigation {
         //TODO: verify that this actually works.
         m_robot.setPositionOnGrid(directions.get(directions.size() - 1).getCoordinate());
     }
-
+*/
 	/**
 	 * method used to send the robot to a
      * predetermined absolute location
 	 *
+     * we assume that there is now no
+     * obstacles between us and our destination
+     *
 	 * @param x the x coordinate
 	 * @param y the y coordinate
 	 */
@@ -168,8 +226,6 @@ public class Navigation {
      */
     public void travelTo(Coordinate destination) {
         travelTo(destination.getX()* m_robot.tileLength + m_robot.tileLength/2.0 ,destination.getY()* m_robot.tileLength + m_robot.tileLength/2.0);
-
-        navigate(destination);
     }
 
     /**
