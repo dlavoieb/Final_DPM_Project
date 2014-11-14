@@ -2,6 +2,7 @@ package dpm.lejos.project;
 
 import dpm.lejos.orientation.Orienteering;
 import lejos.nxt.Button;
+import lejos.nxt.comm.RConsole;
 
 /**
  * High level mission planning.
@@ -76,9 +77,19 @@ public class MissionPlanner {
     }
 
     public void odometryTest(){
-        m_Navigation.floatMotors();
+        //m_Navigation.floatMotors();
         odometer.start();
         display.start();
+        m_Navigation.moveForward();
+        RConsole.println("I made it this far!");
+        m_Navigation.rotate90ClockWise();
+//        m_Navigation.moveForward();
+//        m_Navigation.rotate90ClockWise();
+//        m_Navigation.moveForward();
+//        m_Navigation.rotate90ClockWise();
+//        m_Navigation.moveForward();
+//        m_Navigation.rotate90ClockWise();
+        RConsole.println("I made it this far 2!");
 
         Button.waitForAnyPress();
         System.exit(0);

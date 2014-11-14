@@ -249,15 +249,19 @@ public class Navigation {
         //implementation of slide 13 in navigation tutorial
         double thetaCurrent = m_Odometer.getTheta();
 
-        double rotationAngle = computeOptimalRotationAngle(thetaCurrent,theta);
+        double rotationAngle = computeOptimalRotationAngle(thetaCurrent, theta);
+
+        RConsole.println("Angle to rotate! = " + Double.toString(rotationAngle));
 
         m_robot.motorLeft.setSpeed(m_robot.ROTATE_SPEED);
         m_robot.motorRight.setSpeed(m_robot.ROTATE_SPEED);
+
         int angle = Utils.robotRotationToMotorAngle(rotationAngle, m_robot);
+
+        RConsole.println("In Robot rotations! = " + Integer.toString(angle));
 
         m_robot.motorLeft.rotate(-angle, true);
         m_robot.motorRight.rotate(angle, false);
-
 
         if (!closeEnough(theta)){
             RConsole.println("Not close enough, redo!");
@@ -378,7 +382,7 @@ public class Navigation {
      * @return boolean true if in acceptable range
      * */
     public boolean closeEnough(double theta) {
-        return Math.abs(theta - m_Odometer.getTheta()) <= Math.toDegrees(m_robot.ACCEPTABLE_ANGLE);
+        return Math.abs(theta - Math.toDegrees(m_Odometer.getTheta())) <= m_robot.ACCEPTABLE_ANGLE;
     }
 
     /**
@@ -398,10 +402,13 @@ public class Navigation {
      */
     public static double computeOptimalRotationAngle(double currentTheta, double desiredTheta){
         //implementation of slide 13 in navigation tutorial
-        if (desiredTheta-currentTheta < -Math.PI){
-            return (desiredTheta-currentTheta)+2* Math.PI;
-        } else if (desiredTheta - currentTheta > Math.PI){
-            return desiredTheta - currentTheta - 2* Math.PI;
+
+        float pi = 180;
+
+        if (desiredTheta - currentTheta < - pi){
+            return (desiredTheta - currentTheta) + 2 * pi;
+        } else if (desiredTheta - currentTheta > pi){
+            return desiredTheta - currentTheta - 2 * pi;
         } else {
             return desiredTheta - currentTheta;
         }

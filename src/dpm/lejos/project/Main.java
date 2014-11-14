@@ -16,7 +16,7 @@ import lejos.nxt.comm.RConsole;
 public class Main {
 
     public static void main(String [] argv){
-        RConsole.openUSB(10000);
+        RConsole.openUSB(15000);
         Robot robot = new Robot();
 
         Odometer odometer = new Odometer(robot);
