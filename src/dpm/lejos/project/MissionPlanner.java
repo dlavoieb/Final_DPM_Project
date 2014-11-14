@@ -75,6 +75,14 @@ public class MissionPlanner {
         }
     }
 
+    public void odometryTest(){
+        m_Navigation.floatMotors();
+        odometer.start();
+        display.start();
+
+        Button.waitForAnyPress();
+        System.exit(0);
+    }
 
 
 }//end MissionPlanner

@@ -302,8 +302,8 @@ public class Navigation {
      * stop position regulation to allow free moving of the motors
      */
     public void floatMotors(){
-        m_robot.motorRight.flt(true);
-        m_robot.motorLeft.flt(true);
+        m_robot.motorRight.flt();
+        m_robot.motorLeft.flt();
     }
 
     /**

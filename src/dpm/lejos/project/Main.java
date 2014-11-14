@@ -26,7 +26,7 @@ public class Main {
         Grabber grabber = new Grabber(robot);
 
         MissionPlanner missionPlanner = new MissionPlanner(navigation, grabber, orienteering, odometer, display);
-        missionPlanner.demoMission();
+        missionPlanner.odometryTest();
 
         System.exit(0);
     }
