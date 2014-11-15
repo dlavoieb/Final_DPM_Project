@@ -80,6 +80,10 @@ public class Orienteering {
             hasWallRight = distanceRight < DISTANCE_THRESHOLD;
             hasWallAhead = distanceForward < DISTANCE_THRESHOLD;
 
+            RConsole.println( "ahead" + Boolean.toString(hasWallAhead) );
+            RConsole.println( "right" + Boolean.toString(hasWallRight) );
+            RConsole.println( "left" + Boolean.toString(hasWallLeft) );
+
             if (hasWallAhead) {
                 simulateOnAllTiles(motionTrace, plane, hasWallAhead, hasWallLeft, hasWallRight);
                 navigation.rotate90CounterClock();

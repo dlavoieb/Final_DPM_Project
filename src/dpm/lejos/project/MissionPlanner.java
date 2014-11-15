@@ -1,5 +1,6 @@
 package dpm.lejos.project;
 
+import dpm.lejos.orientation.Coordinate;
 import dpm.lejos.orientation.Orienteering;
 import lejos.nxt.Button;
 import lejos.nxt.comm.RConsole;
@@ -80,9 +81,16 @@ public class MissionPlanner {
         //m_Navigation.floatMotors();
         odometer.start();
         display.start();
-        m_Navigation.moveForward();
         RConsole.println("I made it this far!");
-        m_Navigation.rotate90ClockWise();
+        m_Navigation.moveForward();
+        m_Navigation.rotate90CounterClock();
+        m_Navigation.moveForward();
+        m_Navigation.rotate90CounterClock();
+        m_Navigation.moveForward();
+        m_Navigation.rotate90CounterClock();
+        m_Navigation.moveForward();
+        m_Navigation.rotate90CounterClock();
+//        m_Navigation.rotate90ClockWise();
 //        m_Navigation.moveForward();
 //        m_Navigation.rotate90ClockWise();
 //        m_Navigation.moveForward();
@@ -94,6 +102,26 @@ public class MissionPlanner {
         Button.waitForAnyPress();
         System.exit(0);
     }
+
+    public void localizationTest() {
+        odometer.start();
+        display.start();
+        RConsole.println("Initiated ODO and ODO Display");
+        orienteering.deterministicPositioning();
+    }
+
+    public void navigationTest(Robot robot) {
+        odometer.start();
+        display.start();
+        RConsole.println("Initiated ODO and ODO Display");
+        robot.setPositionOnGrid(new Coordinate(1, 0));
+        robot.setDirection(Orienteering.Direction.NORTH);
+        odometer.setX(45);
+        odometer.setY(15);
+        odometer.setTheta(0);
+        m_Navigation.navigate(new Coordinate(3,3));
+    }
+
 
 
 }//end MissionPlanner

@@ -134,7 +134,7 @@ public class Odometer extends Thread{
 
     public double getTheta(){
         synchronized (lock) {
-            return theta;
+            return Math.toDegrees(theta);
         }
     }
 
@@ -192,4 +192,16 @@ public class Odometer extends Thread{
             theta = position[2];
         }
 	}
+
+    public void setX(double x) {
+        this.x = x;
+    }
+
+    public void setY(double y) {
+        this.y = y;
+    }
+
+    public void setTheta(double theta) {
+        this.theta = theta;
+    }
 }//end Odometer
