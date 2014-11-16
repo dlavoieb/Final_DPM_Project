@@ -20,14 +20,16 @@ public class MissionPlanner {
     private final Navigation m_Navigation;
     private final Grabber m_Grabber;
     private final Orienteering orienteering;
+    private final BlockDetection blockDetection;
 
-	public MissionPlanner(Navigation navigation, Grabber grabber, Orienteering orienteering, Odometer odometer, OdometryDisplay display) {
+	public MissionPlanner(Navigation navigation, Grabber grabber, Orienteering orienteering, Odometer odometer, OdometryDisplay display, BlockDetection blockDetection) {
 
         this.m_Navigation = navigation;
         this.m_Grabber = grabber;
         this.orienteering = orienteering;
         this.odometer = odometer;
         this.display = display;
+        this.blockDetection = blockDetection;
     }
 
     /**
@@ -114,9 +116,9 @@ public class MissionPlanner {
         odometer.start();
         display.start();
         RConsole.println("Initiated ODO and ODO Display");
-        robot.setPositionOnGrid(new Coordinate(0, 1));
+        robot.setPositionOnGrid(new Coordinate(1, 1));
         robot.setDirection(Orienteering.Direction.WEST);
-        odometer.setX(15);
+        odometer.setX(45);
         odometer.setY(45);
         odometer.setThetaInDegrees(-90);
         m_Navigation.navigate(new Coordinate(3,3));
@@ -128,6 +130,33 @@ public class MissionPlanner {
         RConsole.println("Initiated ODO and ODO Display");
         orienteering.deterministicPositioning(odometer);
         m_Navigation.navigate(new Coordinate(3,3));
+    }
+
+    public void rotationTest() {
+        odometer.start();
+        display.start();
+        m_Navigation.rotate90ClockWise();
+        m_Navigation.rotate90ClockWise();
+        m_Navigation.rotate90CounterClock();
+        m_Navigation.rotate90CounterClock();
+    }
+
+    public void clawTest() {
+        display.start();
+        odometer.start();
+        m_Grabber.deployArms();
+        m_Grabber.lowerClaw();
+        Button.waitForAnyPress();
+        m_Grabber.closeClaw();
+        Button.waitForAnyPress();
+        m_Grabber.riseClaw();
+        Button.waitForAnyPress();
+    }
+
+    public void blockDetectionTest() {
+        odometer.start();
+        display.start();
+        blockDetection.lookForBlock(m_Grabber);
     }
 
 

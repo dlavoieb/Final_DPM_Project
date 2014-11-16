@@ -28,13 +28,17 @@ public class Main {
         Navigation navigation = new Navigation(robot, odometer, Mapper.MapID.LAB4);
         Orienteering orienteering = new Orienteering(robot, navigation);
         Grabber grabber = new Grabber(robot);
+        BlockDetection blockDetection = new BlockDetection(robot, odometer, navigation);
 
-        MissionPlanner missionPlanner = new MissionPlanner(navigation, grabber, orienteering, odometer, display);
+        MissionPlanner missionPlanner = new MissionPlanner(navigation, grabber, orienteering, odometer, display, blockDetection);
 
-        //missionPlanner.odometryTest();
-        //missionPlanner.localizationTest();
+//        missionPlanner.odometryTest();
+//        missionPlanner.localizationTest();
 //        missionPlanner.navigationTest(robot);
-        missionPlanner.localizationAndNavigationTest();
+//        missionPlanner.localizationAndNavigationTest();
+//        missionPlanner.rotationTest();
+//        missionPlanner.clawTest();
+        missionPlanner.blockDetectionTest();
 
         System.exit(0);
     }

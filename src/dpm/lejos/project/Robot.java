@@ -21,14 +21,15 @@ public class Robot {
 
 	public final int ACCELERATION = 500;
 	public final int CLAW_SPEED = 200;
-    //TODO: decide actual cruise speed - seems to slow
+    //TODO: decide actual cruise speed - seems too slow
     public final int CRUISE_SPEED = 250;
     public final int ROTATE_SPEED = 150;
 
-    public int clawLowerDistance = 540;
+    public int clawLowerDistance = 520;
 
     public double wheelBase = 19.3; //TODO : Continue to tweak
-    public double wheelRadius = 1.65;
+//    public double wheelRadius = 1.65;
+    public double wheelRadius = 1.45;
     public double lightSensorOffset = 5; //TODO : Get real value
 
 
@@ -44,17 +45,17 @@ public class Robot {
     private Node[][] planeGraph;
 
     public int LIGHT_THRESHOLD = 500;
-    public double tileLength = 30.5;
+    public double tileLength = 30;
     public int ODOMETER_PERIOD = 100;
 
     /**
      * motor for lifting and lowering the arms
      */
-    public NXTRegulatedMotor clawLift = Motor.C;
+    public NXTRegulatedMotor clawLift = Motor.A;
     /**
      * motor for opening and closing the grabbing mechanism
      */
-    public RemoteMotor clawClose;
+    public NXTRegulatedMotor clawClose = Motor.B;
 
     /**
      * color sensor on the grabbing mechanism

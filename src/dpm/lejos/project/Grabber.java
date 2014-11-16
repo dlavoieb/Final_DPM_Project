@@ -30,13 +30,26 @@ public class Grabber {
         robot.clawLift.rotate(robot.clawLowerDistance);
     }
 
-	/**
+	public void deployArms() {
+        robot.clawClose.setSpeed(robot.CLAW_SPEED);
+        robot.clawClose.rotate(-336);
+    }
+
+    public void closeClaw() {
+        robot.clawClose.setSpeed(robot.CLAW_SPEED);
+        robot.clawClose.rotate(-340);
+    }
+
+    /**
 	 * close claw,
 	 * check for touch contact
 	 * release perform again with repositionning
 	 */
-	public void grab(){
-
+	public void pickUpBlock(){
+        deployArms();
+        lowerClaw();
+        closeClaw();
+        riseClaw();
 	}
 
 	/**

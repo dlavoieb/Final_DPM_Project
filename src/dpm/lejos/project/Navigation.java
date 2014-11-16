@@ -204,6 +204,8 @@ public class Navigation {
             RConsole.println("Orientation: " + String.valueOf(Math.toDegrees(vector.getOrientation())));
             rotateTo(Math.toDegrees(vector.getOrientation()));
 
+            m_robot.motorLeft.setAcceleration(m_robot.ACCELERATION);
+            m_robot.motorRight.setAcceleration(m_robot.ACCELERATION);
             m_robot.motorLeft.setSpeed(m_robot.CRUISE_SPEED);
             m_robot.motorRight.setSpeed(m_robot.CRUISE_SPEED);
 
@@ -254,6 +256,16 @@ public class Navigation {
     }
 
     /**
+     * mov the robot forward half a tile
+     */
+    public void moveForwardHalfATile() {
+        m_robot.motorLeft.setSpeed(m_robot.CRUISE_SPEED);
+        m_robot.motorRight.setSpeed(m_robot.CRUISE_SPEED);
+        m_robot.motorLeft.rotate(Utils.robotDistanceToMotorAngle(m_robot.tileLength / 2, m_robot), true);
+        m_robot.motorRight.rotate(Utils.robotDistanceToMotorAngle(m_robot.tileLength / 2, m_robot), false);
+    }
+
+    /**
      * Rotates the robot to the desired angle using the optimal angle and direction
      *
      * Positive angle goes counterCW
@@ -270,6 +282,8 @@ public class Navigation {
 
         RConsole.println("Angle to rotate! = " + Double.toString(rotationAngle));
 
+        m_robot.motorLeft.setAcceleration(m_robot.ACCELERATION);
+        m_robot.motorRight.setAcceleration(m_robot.ACCELERATION);
         m_robot.motorLeft.setSpeed(m_robot.ROTATE_SPEED);
         m_robot.motorRight.setSpeed(m_robot.ROTATE_SPEED);
 
@@ -303,6 +317,10 @@ public class Navigation {
      */
     public void rotate90ClockWise() {
         rotateTo(m_Odometer.getThetaInDegrees() - 90);
+    }
+
+    public void rotate10ClockWise() {
+        rotateTo(m_Odometer.getThetaInDegrees() - 10);
     }
 
     /**
