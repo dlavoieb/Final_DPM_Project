@@ -44,7 +44,7 @@ public class MissionPlanner {
      */
     public void startMission(){
         while (true){
-            orienteering.deterministicPositioning();
+            orienteering.deterministicPositioning(odometer);
             m_Navigation.travelTo(2,2);
         }
     }
@@ -107,18 +107,26 @@ public class MissionPlanner {
         odometer.start();
         display.start();
         RConsole.println("Initiated ODO and ODO Display");
-        orienteering.deterministicPositioning();
+        orienteering.deterministicPositioning(odometer);
     }
 
     public void navigationTest(Robot robot) {
         odometer.start();
         display.start();
         RConsole.println("Initiated ODO and ODO Display");
-        robot.setPositionOnGrid(new Coordinate(1, 0));
-        robot.setDirection(Orienteering.Direction.NORTH);
-        odometer.setX(45);
-        odometer.setY(15);
-        odometer.setTheta(0);
+        robot.setPositionOnGrid(new Coordinate(0, 1));
+        robot.setDirection(Orienteering.Direction.WEST);
+        odometer.setX(15);
+        odometer.setY(45);
+        odometer.setThetaInDegrees(-90);
+        m_Navigation.navigate(new Coordinate(3,3));
+    }
+
+    public void localizationAndNavigationTest() {
+        odometer.start();
+        display.start();
+        RConsole.println("Initiated ODO and ODO Display");
+        orienteering.deterministicPositioning(odometer);
         m_Navigation.navigate(new Coordinate(3,3));
     }
 

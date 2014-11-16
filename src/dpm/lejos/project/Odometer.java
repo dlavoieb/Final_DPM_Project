@@ -20,6 +20,8 @@ public class Odometer extends Thread{
     private final Object lock;
     private static Robot m_robot;
 
+
+    //Odometer is encoded in radians!
     private double x, y, theta;
     private int prevTachoL, prevTachoR;
 
@@ -132,9 +134,15 @@ public class Odometer extends Thread{
         }
     }
 
-    public double getTheta(){
+    public double getThetaInDegrees(){
         synchronized (lock) {
             return Math.toDegrees(theta);
+        }
+    }
+
+    public double getTheta() {
+        synchronized (lock) {
+            return theta;
         }
     }
 
@@ -194,11 +202,19 @@ public class Odometer extends Thread{
 	}
 
     public void setX(double x) {
-        this.x = x;
+        synchronized (lock) {
+            this.x = x;
+        }
     }
 
     public void setY(double y) {
-        this.y = y;
+        synchronized (lock) {
+            this.y = y;
+        }
+    }
+
+    public void setThetaInDegrees(int theta) {
+        this.theta = Math.toRadians(theta);
     }
 
     public void setTheta(double theta) {

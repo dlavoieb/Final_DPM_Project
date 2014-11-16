@@ -2,6 +2,7 @@ package dpm.lejos.project;
 
 import dpm.lejos.orientation.Coordinate;
 import dpm.lejos.orientation.Mapper.Node;
+import dpm.lejos.orientation.Orienteering;
 import dpm.lejos.orientation.Orienteering.*;
 import dpm.lejos.orientation.Tile;
 import lejos.nxt.*;
@@ -188,6 +189,5 @@ public class Robot {
     public void setDirection(Direction direction) {
         this.direction = direction;
     }
-
 
 }//end Robot

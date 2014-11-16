@@ -17,7 +17,7 @@ import lejos.nxt.comm.RConsole;
 public class Main {
 
     public static void main(String [] argv){
-//        RConsole.openUSB(15000);
+        RConsole.openUSB(15000);
 
         Button.waitForAnyPress();
 
@@ -33,7 +33,8 @@ public class Main {
 
         //missionPlanner.odometryTest();
         //missionPlanner.localizationTest();
-        missionPlanner.navigationTest(robot);
+//        missionPlanner.navigationTest(robot);
+        missionPlanner.localizationAndNavigationTest();
 
         System.exit(0);
     }

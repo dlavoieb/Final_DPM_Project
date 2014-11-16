@@ -196,13 +196,13 @@ public class Navigation {
 
             RConsole.println("Current Pos X = " + Double.toString(currentPosition[0]));
             RConsole.println("Current Pos Y = " + Double.toString(currentPosition[1]));
-            RConsole.println("Current THETA = " + Double.toString(currentPosition[2]));
+            RConsole.println("Current THETA = " + Double.toString(Math.toDegrees(currentPosition[2])));
 
             Vector vector = vectorDisplacement(currentPosition, new double[]{ x, y });
 
             RConsole.println("Magnitude: " + String.valueOf(vector.getMagnitude()));
-            RConsole.println("Orientation: " + String.valueOf(vector.getOrientation()));
-            rotateTo(vector.getOrientation());
+            RConsole.println("Orientation: " + String.valueOf(Math.toDegrees(vector.getOrientation())));
+            rotateTo(Math.toDegrees(vector.getOrientation()));
 
             m_robot.motorLeft.setSpeed(m_robot.CRUISE_SPEED);
             m_robot.motorRight.setSpeed(m_robot.CRUISE_SPEED);
@@ -213,6 +213,12 @@ public class Navigation {
             while(isNavigating()){
                 Thread.sleep(10);
             }
+            RConsole.println("");
+            RConsole.println("travel X = " + Double.toString(x));
+            RConsole.println("travel y = " + Double.toString(y));
+            RConsole.println("Pos X before closeEnough = " + Double.toString(m_Odometer.getX()));
+            RConsole.println("Pos Y before closeEnough = " + Double.toString(m_Odometer.getY()));
+            RConsole.println("");
 
             if (!closeEnough(x, y)) {
                 RConsole.println("Not close enough, redo!");
@@ -255,8 +261,10 @@ public class Navigation {
      */
     public void rotateTo(double theta){
 
+        //Theta must be in degrees
+
         //implementation of slide 13 in navigation tutorial
-        double thetaCurrent = m_Odometer.getTheta();
+        double thetaCurrent = m_Odometer.getThetaInDegrees();
 
         double rotationAngle = computeOptimalRotationAngle(thetaCurrent, theta);
 
@@ -272,6 +280,11 @@ public class Navigation {
         m_robot.motorLeft.rotate(-angle, true);
         m_robot.motorRight.rotate(angle, false);
 
+        RConsole.println("");
+        RConsole.println("Theta destination closeEnough = " + Double.toString(theta));
+        RConsole.println("Theta before closeEnough = " + Double.toString(m_Odometer.getThetaInDegrees()));
+        RConsole.println("");
+
         if (!closeEnough(theta)){
             RConsole.println("Not close enough, redo!");
             rotateTo(theta);
@@ -282,14 +295,14 @@ public class Navigation {
      * rotate the physical robot 90 degrees counterclockwise
      */
     public void rotate90CounterClock() {
-        rotateTo(m_Odometer.getTheta() + 90);
+        rotateTo(m_Odometer.getThetaInDegrees() + 90);
     }
 
     /**
      * rotate the physical robot 90 degrees clockwise
      */
     public void rotate90ClockWise() {
-        rotateTo(m_Odometer.getTheta() - 90);
+        rotateTo(m_Odometer.getThetaInDegrees() - 90);
     }
 
     /**
@@ -391,7 +404,7 @@ public class Navigation {
      * @return boolean true if in acceptable range
      * */
     public boolean closeEnough(double theta) {
-        return Math.abs(theta - m_Odometer.getTheta()) <= m_robot.ACCEPTABLE_ANGLE;
+        return Math.abs(theta - m_Odometer.getThetaInDegrees()) <= m_robot.ACCEPTABLE_ANGLE;
     }
 
     /**
@@ -438,12 +451,14 @@ public class Navigation {
             double x = destination[0] - currentPosition[0];
             double y = destination[1] - currentPosition[1];
 
+
+            //Note: orientation is stored in radians!
             if (x>=0) {
-                vector.setOrientation(Math.toDegrees(Math.atan((y) / (x))));
+                vector.setOrientation(Math.atan((y) / (x)));
             } else if (x<0 && y>0){
-                vector.setOrientation(Math.toDegrees(Math.atan((y) / (x)) + Math.PI));
+                vector.setOrientation(Math.atan((y) / (x)) + Math.PI);
             } else if (x<0 && y<0){
-                vector.setOrientation(Math.toDegrees(Math.atan((y) / (x)) - Math.PI));
+                vector.setOrientation((Math.atan((y) / (x)) - Math.PI));
             }
         }
         return vector;
