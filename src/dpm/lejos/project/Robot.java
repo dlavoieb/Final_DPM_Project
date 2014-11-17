@@ -6,8 +6,14 @@ import dpm.lejos.orientation.Orienteering;
 import dpm.lejos.orientation.Orienteering.*;
 import dpm.lejos.orientation.Tile;
 import lejos.nxt.*;
+import lejos.nxt.comm.Bluetooth;
+import lejos.nxt.comm.NXTCommConnector;
+import lejos.nxt.comm.RS485;
 import lejos.nxt.remote.RemoteMotor;
 import lejos.nxt.remote.RemoteNXT;
+import lejos.util.Delay;
+
+import java.io.IOException;
 
 /**
  * Provides access to all the robots sensors and actuators
@@ -28,8 +34,7 @@ public class Robot {
     public int clawLowerDistance = 520;
 
     public double wheelBase = 19.3; //TODO : Continue to tweak
-//    public double wheelRadius = 1.65;
-    public double wheelRadius = 1.45;
+    public double wheelRadius = 2.01; //TODO: Still need to calibrate
     public double lightSensorOffset = 5; //TODO : Get real value
 
 
@@ -51,7 +56,7 @@ public class Robot {
     /**
      * motor for lifting and lowering the arms
      */
-    public NXTRegulatedMotor clawLift = Motor.A;
+    public RemoteMotor clawLift;
     /**
      * motor for opening and closing the grabbing mechanism
      */
@@ -98,10 +103,11 @@ public class Robot {
      * no parameters, all defaults should be initialized in this class
      */
     public Robot(){
-      /*  try {
+        try {
             LCD.clear();
             LCD.drawString("Connecting...",0,0);
-            slave = new RemoteNXT("TEAM08-2", RS485.getConnector());
+            NXTCommConnector connector = new Bluetooth.getConnector();
+            slave = new RemoteNXT("Bumblebee", connector);
             LCD.clear();
             LCD.drawString("Connected",0,1);
             Sound.systemSound(false, 1);
@@ -115,8 +121,8 @@ public class Robot {
         }
 
         clawLift = slave.A;
-        clawClose = slave.B;
-*/
+        clawClose = Motor.C;
+
         usFront = new UltrasonicSensor(SensorPort.S2);
         usLeft = new UltrasonicSensor(SensorPort.S1);
         usRight = new UltrasonicSensor(SensorPort.S3);

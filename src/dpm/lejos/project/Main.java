@@ -17,10 +17,6 @@ import lejos.nxt.comm.RConsole;
 public class Main {
 
     public static void main(String [] argv){
-        RConsole.openUSB(15000);
-
-        Button.waitForAnyPress();
-
         Robot robot = new Robot();
 
         Odometer odometer = new Odometer(robot);
@@ -30,15 +26,9 @@ public class Main {
         Grabber grabber = new Grabber(robot);
         BlockDetection blockDetection = new BlockDetection(robot, odometer, navigation);
 
-        MissionPlanner missionPlanner = new MissionPlanner(navigation, grabber, orienteering, odometer, display, blockDetection);
+        MissionPlanner missionPlanner = new MissionPlanner(navigation, grabber, orienteering, odometer, display, blockDetection, robot);
 
-//        missionPlanner.odometryTest();
-//        missionPlanner.localizationTest();
-//        missionPlanner.navigationTest(robot);
-//        missionPlanner.localizationAndNavigationTest();
-//        missionPlanner.rotationTest();
-//        missionPlanner.clawTest();
-        missionPlanner.blockDetectionTest();
+        missionPlanner.calibrateRadius();
 
         System.exit(0);
     }

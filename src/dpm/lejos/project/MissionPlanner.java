@@ -21,8 +21,9 @@ public class MissionPlanner {
     private final Grabber m_Grabber;
     private final Orienteering orienteering;
     private final BlockDetection blockDetection;
+    private Robot robot;
 
-	public MissionPlanner(Navigation navigation, Grabber grabber, Orienteering orienteering, Odometer odometer, OdometryDisplay display, BlockDetection blockDetection) {
+    public MissionPlanner(Navigation navigation, Grabber grabber, Orienteering orienteering, Odometer odometer, OdometryDisplay display, BlockDetection blockDetection, Robot robot) {
 
         this.m_Navigation = navigation;
         this.m_Grabber = grabber;
@@ -30,6 +31,7 @@ public class MissionPlanner {
         this.odometer = odometer;
         this.display = display;
         this.blockDetection = blockDetection;
+        this.robot = robot;
     }
 
     /**
@@ -79,6 +81,14 @@ public class MissionPlanner {
         }
     }
 
+    public void calibrateRadius(){
+        odometer.start();
+        display.start();
+        m_Navigation.travelTo(2 *robot.tileLength, 0);
+        System.exit(0);
+    }
+
+
     public void odometryTest(){
         //m_Navigation.floatMotors();
         odometer.start();
@@ -92,13 +102,6 @@ public class MissionPlanner {
         m_Navigation.rotate90CounterClock();
         m_Navigation.moveForward();
         m_Navigation.rotate90CounterClock();
-//        m_Navigation.rotate90ClockWise();
-//        m_Navigation.moveForward();
-//        m_Navigation.rotate90ClockWise();
-//        m_Navigation.moveForward();
-//        m_Navigation.rotate90ClockWise();
-//        m_Navigation.moveForward();
-//        m_Navigation.rotate90ClockWise();
         RConsole.println("I made it this far 2!");
 
         Button.waitForAnyPress();
