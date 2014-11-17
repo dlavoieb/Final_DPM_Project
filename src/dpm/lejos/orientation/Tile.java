@@ -161,6 +161,54 @@ public class Tile {
         this.isObstacle = isObstacle;
     }
 
+    public Orienteering.Direction setPossibilityToTrue(int x, int y, int tileX, int tileY) {
+
+        if (tileX == x) {
+            if (y > tileY) {
+                this.possibleE = true;
+                return Orienteering.Direction.EAST;
+            } else {
+                this.possibleW = true;
+                return Orienteering.Direction.WEST;
+            }
+        } else {
+            if (x > tileX) {
+                this.possibleS = true;
+                return Orienteering.Direction.SOUTH;
+            } else {
+                this.possibleN = true;
+                return Orienteering.Direction.NORTH;
+            }
+        }
+    }
+
+    public void generateMapFromGraph(ArrayList<Coordinate> coordinates, int tileX, int tileY) {
+
+        ArrayList<Orienteering.Direction> directionsChecked = new ArrayList<Orienteering.Direction>();
+
+        for (Coordinate coordinate: coordinates) {
+            directionsChecked.add(setPossibilityToTrue(coordinate.getX(), coordinate.getY(), tileX, tileY));
+        }
+
+        if (!directionsChecked.contains(Orienteering.Direction.EAST)) {
+            this.setObstacle(Orienteering.Direction.EAST, true);
+        }
+
+        if (!directionsChecked.contains(Orienteering.Direction.WEST)) {
+            this.setObstacle(Orienteering.Direction.WEST, true);
+        }
+
+        if (!directionsChecked.contains(Orienteering.Direction.NORTH)) {
+            this.setObstacle(Orienteering.Direction.NORTH, true);
+        }
+
+        if (!directionsChecked.contains(Orienteering.Direction.SOUTH)) {
+            this.setObstacle(Orienteering.Direction.SOUTH, true);
+        }
+
+
+    }
+
     /**
      * accessor for the state of the current tile
      * @return is the tile an obstacle

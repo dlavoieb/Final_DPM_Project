@@ -1,10 +1,7 @@
 package dpm.lejos.orientation;
 
-import dpm.lejos.project.Navigation;
-import dpm.lejos.project.Robot;
 import lejos.nxt.comm.RConsole;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -15,7 +12,7 @@ public class Mapper {
 
     private MapID mapID;
 
-    public enum MapID {LAB4, MAP1, MAP2}
+    public enum MapID {LAB4, MAP1, MAP2, BETA1, BETA2, BETA3}
 
     public Node[][] graphPlane;
 
@@ -549,6 +546,203 @@ public class Mapper {
                 r11c11.addNeighbours(new Node[] {r11c10});
 
                 break;
+            case BETA1:
+
+                //obstacles are r0c1, r0c2, r1c2, r1c7, r2c0, r2c3, r2c6, r3c2, r4c4, r4c7, r5c4, r5c6, r5c7, r6c4, r7c7
+
+
+                r0c0.addNeighbours(new Node[] {r1c0});
+                r0c3.addNeighbours(new Node[] {r1c3, r0c4});
+                r0c4.addNeighbours(new Node[] {r0c3, r1c4, r0c5});
+                r0c5.addNeighbours(new Node[] {r0c4, r1c5, r0c6});
+                r0c6.addNeighbours(new Node[] {r0c5, r1c6, r0c7});
+                r0c7.addNeighbours(new Node[] {r0c6});
+                r1c0.addNeighbours(new Node[] {r0c0, r1c1});
+                r1c1.addNeighbours(new Node[] {r1c0, r2c1});
+                r1c3.addNeighbours(new Node[] {r0c3, r1c4});
+                r1c4.addNeighbours(new Node[] {r1c3, r0c4, r2c4, r1c5});
+                r1c5.addNeighbours(new Node[] {r1c4, r0c5, r2c5, r1c6});
+                r1c6.addNeighbours(new Node[] {r1c5, r0c6});
+                r2c1.addNeighbours(new Node[] {r1c1, r3c1, r2c2});
+                r2c2.addNeighbours(new Node[] {r2c1});
+                r2c4.addNeighbours(new Node[] {r1c4, r3c4, r2c5});
+                r2c5.addNeighbours(new Node[] {r2c4, r1c5, r3c5});
+                r2c7.addNeighbours(new Node[] {r3c7});
+                r3c0.addNeighbours(new Node[] {r4c0, r3c1});
+                r3c1.addNeighbours(new Node[] {r3c0, r2c1, r4c1});
+                r3c3.addNeighbours(new Node[] {r4c3, r3c4});
+                r3c4.addNeighbours(new Node[] {r3c3, r2c4, r3c5});
+                r3c5.addNeighbours(new Node[] {r3c4, r2c5, r4c5, r3c6});
+                r3c6.addNeighbours(new Node[] {r3c5, r4c6, r3c7});
+                r3c7.addNeighbours(new Node[] {r3c6, r2c7});
+                r4c0.addNeighbours(new Node[] {r3c0, r5c0, r4c1});
+                r4c1.addNeighbours(new Node[] {r4c0, r3c1, r5c1, r4c2});
+                r4c2.addNeighbours(new Node[] {r4c1, r5c2, r4c3});
+                r4c3.addNeighbours(new Node[] {r4c2, r3c3, r5c3});
+                r4c5.addNeighbours(new Node[] {r3c5, r5c5, r4c6});
+                r4c6.addNeighbours(new Node[] {r4c5, r3c6});
+                r5c0.addNeighbours(new Node[] {r4c0, r6c0, r5c1});
+                r5c1.addNeighbours(new Node[] {r5c0, r4c1, r6c1, r5c2});
+                r5c2.addNeighbours(new Node[] {r5c1, r4c2, r6c2, r5c3});
+                r5c3.addNeighbours(new Node[] {r5c2, r4c3, r6c3});
+                r5c5.addNeighbours(new Node[] {r4c5, r6c5});
+                r6c0.addNeighbours(new Node[] {r5c0, r7c0, r6c1});
+                r6c1.addNeighbours(new Node[] {r6c0, r5c1, r7c1, r6c2});
+                r6c2.addNeighbours(new Node[] {r6c1, r5c2, r7c2, r6c3});
+                r6c3.addNeighbours(new Node[] {r6c2, r5c3, r7c3});
+                r6c5.addNeighbours(new Node[] {r5c5, r7c5, r6c6});
+                r6c6.addNeighbours(new Node[] {r6c5, r7c6, r6c7});
+                r6c7.addNeighbours(new Node[] {r6c6});
+                r7c0.addNeighbours(new Node[] {r6c0, r7c1});
+                r7c1.addNeighbours(new Node[] {r7c0, r6c1, r7c2});
+                r7c2.addNeighbours(new Node[] {r7c1, r6c2, r7c3});
+                r7c3.addNeighbours(new Node[] {r7c2, r6c3, r7c4});
+                r7c4.addNeighbours(new Node[] {r7c3, r7c5});
+                r7c5.addNeighbours(new Node[] {r7c4, r6c5, r7c6});
+                r7c6.addNeighbours(new Node[] {r7c5, r6c6});
+
+                graphPlane = new Node[][] {{r0c0,r0c1,r0c2,r0c3,r0c4,r0c5,r0c6,r0c7},
+                                           {r1c0,r1c1,r1c2,r1c3,r1c4,r1c5,r1c6,r1c7},
+                                           {r2c0,r2c1,r2c2,r2c3,r2c4,r2c5,r2c6,r2c7},
+                                           {r3c0,r3c1,r3c2,r3c3,r3c4,r3c5,r3c6,r3c7},
+                                           {r4c0,r4c1,r4c2,r4c3,r4c4,r4c5,r4c6,r4c7},
+                                           {r5c0,r5c1,r5c2,r5c3,r5c4,r5c5,r5c6,r5c7},
+                                           {r6c0,r6c1,r6c2,r6c3,r6c4,r6c5,r6c6,r6c7},
+                                           {r7c0,r7c1,r7c2,r7c3,r7c4,r7c5,r7c6,r7c7}};
+
+                return graphPlane;
+
+            case BETA2:
+
+                //obstacles are r0c3, r0c4, r0c7, r1c1, r1c4, r1c7, r2c0, r3c2, r3c4, r4c2, r6c3, r7c2, r7c5, r7c7
+
+                r0c0.addNeighbours(new Node[] {r1c0, r0c1});
+                r0c1.addNeighbours(new Node[] {r0c0, r0c2});
+                r0c2.addNeighbours(new Node[] {r0c1, r1c2});
+                r0c5.addNeighbours(new Node[] {r1c5, r0c6});
+                r0c6.addNeighbours(new Node[] {r0c5, r1c6});
+                r1c0.addNeighbours(new Node[] {r0c0});
+                r1c2.addNeighbours(new Node[] {r0c2, r2c2, r1c3});
+                r1c3.addNeighbours(new Node[] {r1c2, r2c3});
+                r1c5.addNeighbours(new Node[] {r0c5, r2c5, r1c6});
+                r1c6.addNeighbours(new Node[] {r1c5, r0c6, r2c6});
+                r2c1.addNeighbours(new Node[] {r3c1, r2c2});
+                r2c2.addNeighbours(new Node[] {r2c1, r1c2, r2c3});
+                r2c3.addNeighbours(new Node[] {r2c2, r1c3, r3c3, r2c4});
+                r2c4.addNeighbours(new Node[] {r2c3, r2c5});
+                r2c5.addNeighbours(new Node[] {r2c4, r1c5, r3c5, r2c6});
+                r2c6.addNeighbours(new Node[] {r2c5, r1c6, r3c6, r2c7});
+                r2c7.addNeighbours(new Node[] {r2c6, r3c7});
+                r3c0.addNeighbours(new Node[] {r4c0, r3c1});
+                r3c1.addNeighbours(new Node[] {r3c0, r2c1, r4c1});
+                r3c3.addNeighbours(new Node[] {r2c3, r4c3});
+                r3c5.addNeighbours(new Node[] {r2c5, r4c5, r3c6});
+                r3c6.addNeighbours(new Node[] {r3c5, r2c6, r4c6, r3c7});
+                r3c7.addNeighbours(new Node[] {r3c6, r2c7, r4c7});
+                r4c0.addNeighbours(new Node[] {r3c0, r5c0, r4c1});
+                r4c1.addNeighbours(new Node[] {r4c0, r3c1, r5c1});
+                r4c3.addNeighbours(new Node[] {r3c3, r5c3, r4c4});
+                r4c4.addNeighbours(new Node[] {r4c3, r5c4, r4c5});
+                r4c5.addNeighbours(new Node[] {r4c4, r3c5, r5c5, r4c6});
+                r4c6.addNeighbours(new Node[] {r4c5, r3c6, r5c6, r4c7});
+                r4c7.addNeighbours(new Node[] {r4c6, r3c7, r5c7});
+                r5c0.addNeighbours(new Node[] {r4c0, r6c0, r5c1});
+                r5c1.addNeighbours(new Node[] {r5c0, r4c1, r6c1, r5c2});
+                r5c2.addNeighbours(new Node[] {r5c1, r6c2, r5c3});
+                r5c3.addNeighbours(new Node[] {r5c2, r4c3, r5c4});
+                r5c4.addNeighbours(new Node[] {r5c3, r4c4, r6c4, r5c5});
+                r5c5.addNeighbours(new Node[] {r5c4, r4c5, r6c5, r5c6});
+                r5c6.addNeighbours(new Node[] {r5c5, r4c6, r6c6, r5c7});
+                r5c7.addNeighbours(new Node[] {r5c6, r4c7, r6c7});
+                r6c0.addNeighbours(new Node[] {r5c0, r7c0, r6c1});
+                r6c1.addNeighbours(new Node[] {r6c0, r5c1, r7c1, r6c2});
+                r6c2.addNeighbours(new Node[] {r6c1, r5c2});
+                r6c4.addNeighbours(new Node[] {r5c4, r7c4, r6c5});
+                r6c5.addNeighbours(new Node[] {r6c4, r5c5, r6c6});
+                r6c6.addNeighbours(new Node[] {r6c5, r5c6, r7c6, r6c7});
+                r6c7.addNeighbours(new Node[] {r6c6, r5c7});
+                r7c0.addNeighbours(new Node[] {r6c0, r7c1});
+                r7c1.addNeighbours(new Node[] {r7c0, r6c1});
+                r7c3.addNeighbours(new Node[] {r7c4});
+                r7c4.addNeighbours(new Node[] {r7c3, r6c4});
+                r7c6.addNeighbours(new Node[] {r6c6});
+
+                graphPlane = new Node[][] {{r0c0,r0c1,r0c2,r0c3,r0c4,r0c5,r0c6,r0c7},
+                        {r1c0,r1c1,r1c2,r1c3,r1c4,r1c5,r1c6,r1c7},
+                        {r2c0,r2c1,r2c2,r2c3,r2c4,r2c5,r2c6,r2c7},
+                        {r3c0,r3c1,r3c2,r3c3,r3c4,r3c5,r3c6,r3c7},
+                        {r4c0,r4c1,r4c2,r4c3,r4c4,r4c5,r4c6,r4c7},
+                        {r5c0,r5c1,r5c2,r5c3,r5c4,r5c5,r5c6,r5c7},
+                        {r6c0,r6c1,r6c2,r6c3,r6c4,r6c5,r6c6,r6c7},
+                        {r7c0,r7c1,r7c2,r7c3,r7c4,r7c5,r7c6,r7c7}};
+
+                return graphPlane;
+
+            case BETA3:
+
+                //obstacles are r0c0, r0c4, r1c2, r1c3, r1c7, r2c5, r3c3, r3c6, r3c7, r4c2, r4c3, r5c3, r7c4, r7c5, r7c7
+
+                r0c1.addNeighbours(new Node[] {r1c1, r0c2});
+                r0c2.addNeighbours(new Node[] {r0c1, r0c3});
+                r0c3.addNeighbours(new Node[] {r0c2});
+                r0c5.addNeighbours(new Node[] {r1c5, r0c6});
+                r0c6.addNeighbours(new Node[] {r0c5, r1c6, r0c7});
+                r0c7.addNeighbours(new Node[] {r0c6});
+                r1c0.addNeighbours(new Node[] {r2c0, r1c1});
+                r1c1.addNeighbours(new Node[] {r1c0, r0c1, r2c1});
+                r1c4.addNeighbours(new Node[] {r2c4, r1c5});
+                r1c5.addNeighbours(new Node[] {r1c4, r0c5, r1c6});
+                r1c6.addNeighbours(new Node[] {r1c5, r0c6, r2c6});
+                r2c0.addNeighbours(new Node[] {r1c0, r3c0, r2c1});
+                r2c1.addNeighbours(new Node[] {r2c0, r1c1, r3c1, r2c2});
+                r2c2.addNeighbours(new Node[] {r2c1, r3c2, r2c3});
+                r2c3.addNeighbours(new Node[] {r2c2, r2c4});
+                r2c4.addNeighbours(new Node[] {r2c3, r1c4, r3c4});
+                r2c6.addNeighbours(new Node[] {r1c6, r2c7});
+                r2c7.addNeighbours(new Node[] {r2c6});
+                r3c0.addNeighbours(new Node[] {r2c0, r4c0, r3c1});
+                r3c1.addNeighbours(new Node[] {r3c0, r2c1, r4c1, r3c2});
+                r3c2.addNeighbours(new Node[] {r3c1, r2c2});
+                r3c4.addNeighbours(new Node[] {r2c4, r4c4, r3c5});
+                r3c5.addNeighbours(new Node[] {r3c4, r4c5});
+                r4c0.addNeighbours(new Node[] {r3c0, r5c0, r4c1});
+                r4c1.addNeighbours(new Node[] {r4c0, r3c1, r5c1});
+                r4c4.addNeighbours(new Node[] {r3c4, r5c4, r4c5});
+                r4c5.addNeighbours(new Node[] {r4c4, r3c5, r5c5, r4c6});
+                r4c6.addNeighbours(new Node[] {r4c5, r5c6, r4c7});
+                r4c7.addNeighbours(new Node[] {r4c6, r5c7});
+                r5c0.addNeighbours(new Node[] {r4c0, r6c0, r5c1});
+                r5c1.addNeighbours(new Node[] {r5c0, r4c1, r6c1, r5c2});
+                r5c2.addNeighbours(new Node[] {r5c1, r6c2});
+                r5c4.addNeighbours(new Node[] {r4c4, r6c4, r5c5});
+                r5c5.addNeighbours(new Node[] {r5c4, r4c5, r6c5, r5c6});
+                r5c6.addNeighbours(new Node[] {r5c5, r4c6, r6c6, r5c7});
+                r5c7.addNeighbours(new Node[] {r5c6, r4c7, r6c7});
+                r6c0.addNeighbours(new Node[] {r5c0, r7c0, r6c1});
+                r6c1.addNeighbours(new Node[] {r6c0, r5c1, r7c1, r6c2});
+                r6c2.addNeighbours(new Node[] {r6c1, r5c2, r7c2, r6c3});
+                r6c3.addNeighbours(new Node[] {r6c2, r7c3, r6c4});
+                r6c4.addNeighbours(new Node[] {r6c3, r5c4, r6c5});
+                r6c5.addNeighbours(new Node[] {r6c4, r5c5, r6c6});
+                r6c6.addNeighbours(new Node[] {r6c5, r5c6, r7c6, r6c7});
+                r6c7.addNeighbours(new Node[] {r6c6, r5c7});
+                r7c0.addNeighbours(new Node[] {r6c0, r7c1});
+                r7c1.addNeighbours(new Node[] {r7c0, r6c1, r7c2});
+                r7c2.addNeighbours(new Node[] {r7c1, r6c2, r7c3});
+                r7c3.addNeighbours(new Node[] {r7c2, r6c3});
+                r7c6.addNeighbours(new Node[] {r6c6});
+
+                graphPlane = new Node[][] {{r0c0,r0c1,r0c2,r0c3,r0c4,r0c5,r0c6,r0c7},
+                        {r1c0,r1c1,r1c2,r1c3,r1c4,r1c5,r1c6,r1c7},
+                        {r2c0,r2c1,r2c2,r2c3,r2c4,r2c5,r2c6,r2c7},
+                        {r3c0,r3c1,r3c2,r3c3,r3c4,r3c5,r3c6,r3c7},
+                        {r4c0,r4c1,r4c2,r4c3,r4c4,r4c5,r4c6,r4c7},
+                        {r5c0,r5c1,r5c2,r5c3,r5c4,r5c5,r5c6,r5c7},
+                        {r6c0,r6c1,r6c2,r6c3,r6c4,r6c5,r6c6,r6c7},
+                        {r7c0,r7c1,r7c2,r7c3,r7c4,r7c5,r7c6,r7c7}};
+
+                return graphPlane;
+
             default:
                 graphPlane = null;
                 return graphPlane;
@@ -576,76 +770,4 @@ public class Mapper {
             RConsole.println("Coords = " + node.getX() + " " + node.getY());
     }
 
-    /**
-     * Class for layout representation
-     *
-     * Each <code>Node</code> represents a fixed tile of the playground
-     * so there should be 12x12 so 144 instances of these Nodes
-     * @author Daniel Macario
-     * @version 1.0
-     */
-    public class Node {
-
-        private Coordinate coordinate;
-        private ArrayList<Node> neighbours;
-        private boolean visited;
-        private Node previous;
-
-        public Node(Coordinate coordinate) {
-            this.coordinate = coordinate;
-            this.neighbours = new ArrayList<Node>();
-            this.visited = false;
-        }
-
-        public ArrayList<Node> getNeighbours() {
-            return neighbours;
-        }
-
-        public void setNeighbours(ArrayList<Node> neighbours) {
-            this.neighbours = neighbours;
-        }
-
-        public void addNeighbour(Node n) {
-            this.neighbours.add(n);
-        }
-
-        public void addNeighbours(Node[] n) {
-            for (Node node : n) {
-                neighbours.add(node);
-            }
-        }
-
-        public void setVisited(boolean visited) {
-            this.visited = visited;
-        }
-
-        public boolean getVisited() {
-            return this.visited;
-        }
-
-        public Coordinate getCoordinate() {
-            return coordinate;
-        }
-
-        public void setCoordinate(Coordinate coordinate) {
-            this.coordinate = coordinate;
-        }
-
-        public int getX() {
-            return this.coordinate.getX();
-        }
-
-        public int getY() {
-            return this.coordinate.getY();
-        }
-
-        public Node getPrevious() {
-            return this.previous;
-        }
-
-        public void setPrevious(Node previous) {
-            this.previous = previous;
-        }
-
-    }
 }
