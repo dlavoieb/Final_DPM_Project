@@ -9,7 +9,7 @@ public class OrienteeringTest {
     @Test
     public void testCreatePlaneFromGraph() throws Exception {
 
-        Orienteering or = new Orienteering(Mapper.MapID.LAB4);
+        Orienteering or = new Orienteering(Mapper.MapID.BETA1);
         or.printObstacles(or.getPlane());
 
         //or.printPlaneOptions(or.getPlane());

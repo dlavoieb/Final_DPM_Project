@@ -196,11 +196,21 @@ public class Orienteering {
             System.out.println(dir);
             for (Tile[] aPlane : plane) {
                 for (int j = 0; j < plane.length; j++) {
-                    System.out.print(aPlane[j].hasObstacle(dir) + "  ");
+                    System.out.print(aPlane[j].isObstacle() + "  ");
                 }
                 System.out.println();
             }
             System.out.println();
+            System.out.println();
+        }
+
+    }
+
+    public void printIfObstacle(Tile[][] plane) {
+        for (Tile[] aPlane : plane) {
+            for (int j = 0; j < plane.length; j++) {
+                System.out.print(aPlane[j].isObstacle() + "  ");
+            }
             System.out.println();
         }
     }
@@ -262,37 +272,6 @@ public class Orienteering {
             }
         }
     }
-
-    /**
-     * Prints the number of moves performed once we have
-     * reached the end of the entire motion
-     * @param motionTrace the stack of movements applied so far
-     */
-//    private void printGoodbye(ArrayList<Motion> motionTrace){
-//        LCD.drawString("Completed orienteering", 0,0);
-//        LCD.drawString("Number of moves:", 0,1);
-//        LCD.drawString(String.valueOf(motionTrace.size()),0,2);
-//
-//        Sound.twoBeeps();
-//    }
-
-    /**
-     * print the initial conditions to the LCD display
-     * @param startingPosition the initial position
-     *//*
-    private void printInitialConditions(Coordinate startingPosition){
-        LCD.clear();
-
-        //adjusting the coordinate frame to match the TA's expectations
-        int y=Math.abs(startingPosition.getY()-3)*30-15;
-        int x=startingPosition.getX()*30-15;
-
-        LCD.drawString("Figured out \ninitial position", 0,3);
-        LCD.drawString("X: "+ String.valueOf(x), 0,5);
-        LCD.drawString("Y: "+ String.valueOf(y), 0,6);
-        LCD.drawString("Dir: "+ String.valueOf(startingDir), 0,7);
-
-    }*/
 
     /**
      * Calculates the starting location and orientation of the robot
