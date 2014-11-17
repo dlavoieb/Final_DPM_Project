@@ -26,7 +26,7 @@ public class Mapper {
         this.graphPlane = generateGraph();
     }
 
-    //TODO: encode the 12x12 grid as a graph. We receive the data by bluetooth, then to traverse all we need to is set certain nodes to be obstacles
+
 
     /**
      * method encoding the course layout as an array of nodes

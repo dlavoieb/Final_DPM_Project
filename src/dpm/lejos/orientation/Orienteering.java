@@ -102,7 +102,6 @@ public class Orienteering {
                 motionTrace.add(Motion.FORWARD);
             }
 
-            //TODO: use printPlaneOptions(plane) for debugging purposes
             counter++;
         }
 
