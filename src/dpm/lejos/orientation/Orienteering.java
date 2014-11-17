@@ -57,7 +57,7 @@ public class Orienteering {
      * based on data obtained from its surroundings.
      *
      */
-    public void deterministicPositioning() {
+    public void deterministicPositioning(Odometer odometer) {
         this.plane = createPlane();
 
         ArrayList<Motion> motionTrace = new ArrayList<Motion>();
@@ -79,6 +79,10 @@ public class Orienteering {
             hasWallLeft = distanceLeft < DISTANCE_THRESHOLD;
             hasWallRight = distanceRight < DISTANCE_THRESHOLD;
             hasWallAhead = distanceForward < DISTANCE_THRESHOLD;
+
+            RConsole.println( "ahead" + Boolean.toString(hasWallAhead) );
+            RConsole.println( "right" + Boolean.toString(hasWallRight) );
+            RConsole.println( "left" + Boolean.toString(hasWallLeft) );
 
             if (hasWallAhead) {
                 simulateOnAllTiles(motionTrace, plane, hasWallAhead, hasWallLeft, hasWallRight);
@@ -106,8 +110,36 @@ public class Orienteering {
         robot.setPositionOnGrid(endingPosition);
         robot.setDirection(endingDir);
 
+
+        adjustOdometer(endingPosition, endingDir, odometer);
+        double x = endingPosition.getX() * robot.tileLength+ robot.tileLength/2.0;
+        double y = endingPosition.getY() * robot.tileLength+ robot.tileLength/2.0;
+        RConsole.println("new ODO X = " + Double.toString(x));
+        RConsole.println("new ODO Y = " + Double.toString(y));
+
         //Use for debugging purposes
         //printPlaneOptions(plane);
+    }
+
+    private void adjustOdometer(Coordinate endingPosition, Direction endingDir, Odometer odometer) {
+        odometer.setX(endingPosition.getX() * robot.tileLength+ robot.tileLength/2.0);
+        odometer.setY(endingPosition.getY() * robot.tileLength+ robot.tileLength/2.0);
+
+        switch (endingDir) {
+            case NORTH:
+                odometer.setThetaInDegrees(180);
+                break;
+            case SOUTH:
+                odometer.setThetaInDegrees(0);
+                break;
+            case EAST:
+                odometer.setThetaInDegrees(90);
+                break;
+            case WEST:
+                odometer.setThetaInDegrees(270);
+                break;
+        }
+
     }
 
     /**

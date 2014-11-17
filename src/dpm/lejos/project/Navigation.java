@@ -94,6 +94,7 @@ public class Navigation {
             Mapper.Node initial = directions.get(0);
             Mapper.Node next = directions.get(1);
             if (initial.getX() == next.getX()) {
+
                 //next has same x
                 while (index + 1< directions.size()) {
                     if (directions.get(index).getX() == directions.get(index + 1).getX()) {
@@ -107,8 +108,8 @@ public class Navigation {
                 //reset index to 0 since we remove everything before it.
                 index = 0;
 
-                // travelTo(directions.get(index).getCoordinate());
-                System.out.println("X: " + directions.get(index).getX() + ", Y: " + directions.get(index).getY());
+                RConsole.println("X: " + directions.get(index).getX() + ", Y: " + directions.get(index).getY());
+                travelTo(directions.get(index).getCoordinate());
 
             } else if (initial.getY() == next.getY()) {
                 // next has same y
@@ -123,11 +124,13 @@ public class Navigation {
                 //reset index to 0 since we remove everything before it.
                 index = 0;
 
-                //travelTo(directions.get(index).getCoordinate());
-                System.out.println("X: " + directions.get(index).getX() + ", Y: " + directions.get(index).getY());
+                RConsole.println("X: " + directions.get(index).getX() + ", Y: " + directions.get(index).getY());
+                travelTo(directions.get(index).getCoordinate());
 
-            } else
+            } else {
+                //unreachable code?
                 return;
+            }
         }
     }
 
@@ -138,7 +141,45 @@ public class Navigation {
         }
     }
 
+/*
+        Coordinate currentPosition = directions.remove(0).getCoordinate();
+        Coordinate nextPosition;
+        for (Mapper.Node node : directions) {
+            nextPosition = node.getCoordinate();
 
+            //Note that the robot can only move in one axis at a time
+            //So the new coordinate will either have a new X or a new Y
+            //TODO: discuss if we should adapt the coordinate system
+
+            if (currentPosition.getX() != nextPosition.getX()) {
+                //Robot is moving in the y-axis
+                if (currentPosition.getX() > nextPosition.getX()) {
+                    //Robot is moving north
+                    rotateToDirection(Direction.NORTH);
+                    moveForward();
+                } else if (currentPosition.getX() < nextPosition.getX()) {
+                    //robot is moving south
+                    rotateToDirection(Direction.SOUTH);
+                    moveForward();
+                }
+            } else if (currentPosition.getY() != nextPosition.getY()) {
+                //Robot is moving in the x-axis
+                if (currentPosition.getY() > nextPosition.getY()) {
+                    //Robot is moving west
+                    rotateToDirection(Direction.WEST);
+                    moveForward();
+                } else if (currentPosition.getY() < nextPosition.getY()) {
+                    //robot is moving east
+                    moveForward();
+                }
+            }
+        }
+
+        //set position of the robot to the last tile visited
+        //TODO: verify that this actually works.
+        m_robot.setPositionOnGrid(directions.get(directions.size() - 1).getCoordinate());
+    }
+*/
 	/**
 	 * method used to send the robot to a
      * predetermined absolute location
@@ -151,25 +192,35 @@ public class Navigation {
 	 */
     public void travelTo(double x, double y){
         try {
-
             double[] currentPosition = m_Odometer.getPosition();
 
-            Vector vector = vectorDisplacement(currentPosition, new double[]{x, y});
+            RConsole.println("Current Pos X = " + Double.toString(currentPosition[0]));
+            RConsole.println("Current Pos Y = " + Double.toString(currentPosition[1]));
+            RConsole.println("Current THETA = " + Double.toString(Math.toDegrees(currentPosition[2])));
+
+            Vector vector = vectorDisplacement(currentPosition, new double[]{ x, y });
 
             RConsole.println("Magnitude: " + String.valueOf(vector.getMagnitude()));
-            RConsole.println("Orientation: " + String.valueOf(vector.getOrientation()));
-            rotateTo(vector.getOrientation());
+            RConsole.println("Orientation: " + String.valueOf(Math.toDegrees(vector.getOrientation())));
+            rotateTo(Math.toDegrees(vector.getOrientation()));
 
+            m_robot.motorLeft.setAcceleration(m_robot.ACCELERATION);
+            m_robot.motorRight.setAcceleration(m_robot.ACCELERATION);
             m_robot.motorLeft.setSpeed(m_robot.CRUISE_SPEED);
             m_robot.motorRight.setSpeed(m_robot.CRUISE_SPEED);
 
-            m_robot.motorLeft.rotate(Utils.robotDistanceToMotorAngle(vector.getMagnitude(), m_robot));
-            m_robot.motorRight.rotate(Utils.robotDistanceToMotorAngle(vector.getMagnitude(), m_robot));
+            m_robot.motorLeft.rotate(Utils.robotDistanceToMotorAngle(vector.getMagnitude(), m_robot), true);
+            m_robot.motorRight.rotate(Utils.robotDistanceToMotorAngle(vector.getMagnitude(), m_robot), false);
 
             while(isNavigating()){
                 Thread.sleep(10);
             }
-
+            RConsole.println("");
+            RConsole.println("travel X = " + Double.toString(x));
+            RConsole.println("travel y = " + Double.toString(y));
+            RConsole.println("Pos X before closeEnough = " + Double.toString(m_Odometer.getX()));
+            RConsole.println("Pos Y before closeEnough = " + Double.toString(m_Odometer.getY()));
+            RConsole.println("");
 
             if (!closeEnough(x, y)) {
                 RConsole.println("Not close enough, redo!");
@@ -187,7 +238,11 @@ public class Navigation {
      * @param destination
      */
     public void travelTo(Coordinate destination) {
-        travelTo(destination.getX()* m_robot.tileLength + m_robot.tileLength/2.0 ,destination.getY()* m_robot.tileLength + m_robot.tileLength/2.0);
+
+        RConsole.println("COORDINATE X = " + Double.toString(destination.getX() * m_robot.tileLength + m_robot.tileLength/2.0));
+        RConsole.println("COORDINATE Y = " + Double.toString(destination.getY() *  m_robot.tileLength + m_robot.tileLength / 2.0));
+
+        travelTo(destination.getX() * m_robot.tileLength + m_robot.tileLength / 2.0, destination.getY() *  m_robot.tileLength + m_robot.tileLength / 2.0);
     }
 
     /**
@@ -201,6 +256,16 @@ public class Navigation {
     }
 
     /**
+     * mov the robot forward half a tile
+     */
+    public void moveForwardHalfATile() {
+        m_robot.motorLeft.setSpeed(m_robot.CRUISE_SPEED);
+        m_robot.motorRight.setSpeed(m_robot.CRUISE_SPEED);
+        m_robot.motorLeft.rotate(Utils.robotDistanceToMotorAngle(m_robot.tileLength / 2, m_robot), true);
+        m_robot.motorRight.rotate(Utils.robotDistanceToMotorAngle(m_robot.tileLength / 2, m_robot), false);
+    }
+
+    /**
      * Rotates the robot to the desired angle using the optimal angle and direction
      *
      * Positive angle goes counterCW
@@ -208,18 +273,31 @@ public class Navigation {
      */
     public void rotateTo(double theta){
 
+        //Theta must be in degrees
+
         //implementation of slide 13 in navigation tutorial
-        double thetaCurrent = m_Odometer.getTheta();
+        double thetaCurrent = m_Odometer.getThetaInDegrees();
 
-        double rotationAngle = computeOptimalRotationAngle(thetaCurrent,theta);
+        double rotationAngle = computeOptimalRotationAngle(thetaCurrent, theta);
 
+        RConsole.println("Angle to rotate! = " + Double.toString(rotationAngle));
+
+        m_robot.motorLeft.setAcceleration(m_robot.ACCELERATION);
+        m_robot.motorRight.setAcceleration(m_robot.ACCELERATION);
         m_robot.motorLeft.setSpeed(m_robot.ROTATE_SPEED);
         m_robot.motorRight.setSpeed(m_robot.ROTATE_SPEED);
+
         int angle = Utils.robotRotationToMotorAngle(rotationAngle, m_robot);
+
+        RConsole.println("In Robot rotations! = " + Integer.toString(angle));
 
         m_robot.motorLeft.rotate(-angle, true);
         m_robot.motorRight.rotate(angle, false);
 
+        RConsole.println("");
+        RConsole.println("Theta destination closeEnough = " + Double.toString(theta));
+        RConsole.println("Theta before closeEnough = " + Double.toString(m_Odometer.getThetaInDegrees()));
+        RConsole.println("");
 
         if (!closeEnough(theta)){
             RConsole.println("Not close enough, redo!");
@@ -231,16 +309,86 @@ public class Navigation {
      * rotate the physical robot 90 degrees counterclockwise
      */
     public void rotate90CounterClock() {
-        rotateTo(m_Odometer.getTheta() + 90);
+        rotateTo(m_Odometer.getThetaInDegrees() + 90);
     }
 
     /**
      * rotate the physical robot 90 degrees clockwise
      */
     public void rotate90ClockWise() {
-        rotateTo(m_Odometer.getTheta() - 90);
+        rotateTo(m_Odometer.getThetaInDegrees() - 90);
     }
 
+    public void rotate10ClockWise() {
+        rotateTo(m_Odometer.getThetaInDegrees() - 10);
+    }
+
+    /**
+    * position the robot facing north
+    * @param destinationDirection the current heading
+    */
+    //TODO: refactor to use rotateTo instead of multiple CW/CCW
+	public void rotateToDirection(Direction destinationDirection) {
+
+        Direction robotDirection = m_robot.getDirection();
+
+        if (robotDirection == Direction.NORTH) {
+            switch (destinationDirection) {
+                case SOUTH:
+                    rotate90CounterClock();
+                    rotate90CounterClock();
+                    break;
+                case EAST:
+                    rotate90ClockWise();
+                    break;
+                case WEST:
+                    rotate90CounterClock();
+                    break;
+            }
+        } else if (robotDirection == Direction.SOUTH) {
+            switch (destinationDirection) {
+                case NORTH:
+                    rotate90CounterClock();
+                    rotate90CounterClock();
+                    break;
+                case EAST:
+                    rotate90CounterClock();
+                    break;
+                case WEST:
+                    rotate90ClockWise();
+                    break;
+            }
+        } else if (robotDirection == Direction.EAST) {
+            switch (destinationDirection) {
+                case NORTH:
+                    rotate90CounterClock();
+                    break;
+                case SOUTH:
+                    rotate90ClockWise();
+                    break;
+                case WEST:
+                    rotate90CounterClock();
+                    rotate90CounterClock();
+                    break;
+            }
+        } else {
+            switch (destinationDirection) {
+                case NORTH:
+                    rotate90ClockWise();
+                    break;
+                case SOUTH:
+                    rotate90CounterClock();
+                    break;
+                case EAST:
+                    rotate90CounterClock();
+                    rotate90CounterClock();
+                    break;
+            }
+        }
+
+        m_robot.setDirection(destinationDirection);
+
+    }
 
     /**
      * Check if the robot is travelling
@@ -264,7 +412,7 @@ public class Navigation {
      * @param y target y coordinate
      * @return boolean true if in acceptable range
      */
-    private boolean closeEnough(double x, double y) {
+    public boolean closeEnough(double x, double y) {
         return Math.abs(x - m_Odometer.getX()) < m_robot.ACCEPTABLE_LINEAR && Math.abs(y - m_Odometer.getY()) < m_robot.ACCEPTABLE_LINEAR;
     }
 
@@ -273,8 +421,8 @@ public class Navigation {
      * @param theta target orientation
      * @return boolean true if in acceptable range
      * */
-    private boolean closeEnough(double theta) {
-        return Math.abs(theta - m_Odometer.getTheta()) <= Math.toDegrees(m_robot.ACCEPTABLE_ANGLE);
+    public boolean closeEnough(double theta) {
+        return Math.abs(theta - m_Odometer.getThetaInDegrees()) <= m_robot.ACCEPTABLE_ANGLE;
     }
 
     /**
@@ -282,7 +430,7 @@ public class Navigation {
      * @param coordinate the target coordinate
      * @return boolean true if in acceptable range
      */
-    private boolean closeEnough(Coordinate coordinate) {
+    public boolean closeEnough(Coordinate coordinate) {
         return Math.abs(coordinate.getX() - m_Odometer.getX()) < m_robot.ACCEPTABLE_LINEAR && Math.abs(coordinate.getY() - m_Odometer.getY()) < m_robot.ACCEPTABLE_LINEAR;
     }
 
@@ -292,12 +440,15 @@ public class Navigation {
      * @param desiredTheta desired heading
      * @return the signed number of degrees to rotate, sign indicated direction
      */
-    private static double computeOptimalRotationAngle(double currentTheta, double desiredTheta){
+    public static double computeOptimalRotationAngle(double currentTheta, double desiredTheta){
         //implementation of slide 13 in navigation tutorial
-        if (desiredTheta-currentTheta < -Math.PI){
-            return (desiredTheta-currentTheta)+2* Math.PI;
-        } else if (desiredTheta - currentTheta > Math.PI){
-            return desiredTheta - currentTheta - 2* Math.PI;
+
+        float pi = 180;
+
+        if (desiredTheta - currentTheta < - pi){
+            return (desiredTheta - currentTheta) + 2 * pi;
+        } else if (desiredTheta - currentTheta > pi){
+            return desiredTheta - currentTheta - 2 * pi;
         } else {
             return desiredTheta - currentTheta;
         }
@@ -309,21 +460,23 @@ public class Navigation {
      * @param destination array of 2 elements being (x, y)
      * @return Vector representing the displacement to happen (r, theta)
      */
-    private static Vector vectorDisplacement(double[] currentPosition, double[] destination){
+    public static Vector vectorDisplacement(double[] currentPosition, double[] destination){
         Vector vector = new Vector();
         if (currentPosition.length == 3 && destination.length == 2){
-            //expnaded pythagora
+            //Calcualte the magnitude of the vector using Pythagoras
             vector.setMagnitude(Math.sqrt(destination[0] * destination[0] - 2 * destination[0] * currentPosition[0] + currentPosition[0] * currentPosition[0] + destination[1] * destination[1] - 2 * destination[1] * currentPosition[1] + currentPosition[1] * currentPosition[1]));
 
             double x = destination[0] - currentPosition[0];
             double y = destination[1] - currentPosition[1];
 
+
+            //Note: orientation is stored in radians!
             if (x>=0) {
                 vector.setOrientation(Math.atan((y) / (x)));
             } else if (x<0 && y>0){
                 vector.setOrientation(Math.atan((y) / (x)) + Math.PI);
             } else if (x<0 && y<0){
-                vector.setOrientation(Math.atan((y) / (x))-Math.PI);
+                vector.setOrientation((Math.atan((y) / (x)) - Math.PI));
             }
         }
         return vector;

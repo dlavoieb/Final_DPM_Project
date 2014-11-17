@@ -1,0 +1,53 @@
+Console open
+Initiated ODO and ODO Display
+start x = 1 y = 0
+0
+Coords = 1 0
+Coords = 1 1
+Coords = 2 1
+Coords = 2 2
+Coords = 2 3
+Coords = 3 3
+X: 1, Y: 1
+COORDINATE X = 45.75
+COORDINATE Y = 45.75
+Current Pos X = 45.0
+Current Pos Y = 15.0
+Current THETA = 0.0
+Magnitude: 30.7591449816148
+Orientation: 88.6028189727036
+Angle to rotate! = 88.6028189727036
+In Robot rotations! = 521
+X: 2, Y: 1
+COORDINATE X = 76.25
+COORDINATE Y = 45.75
+Current Pos X = 45.496449892285
+Current Pos Y = 45.7628991796869
+Current THETA = 1.55628206021743
+Magnitude: 30.7535528129121
+Orientation: -0.0240319738473484
+Angle to rotate! = -89.1924257562308
+In Robot rotations! = -518
+X: 2, Y: 3
+COORDINATE X = 76.25
+COORDINATE Y = 106.75
+Current Pos X = 76.2218617736504
+Current Pos Y = 46.0263146968557
+Current THETA = 0.00895272517862385
+Magnitude: 60.7236918225093
+Orientation: 89.973450203337
+Angle to rotate! = 89.3750046074821
+In Robot rotations! = 526
+Not close enough, redo!
+Angle to rotate! = -0.562819226714808
+In Robot rotations! = 0
+X: 3, Y: 3
+COORDINATE X = 106.75
+COORDINATE Y = 106.75
+Current Pos X = 75.7432488729851
+Current Pos Y = 106.740160324088
+Current THETA = 1.58015599402709
+Magnitude: 31.0067526882752
+Orientation: 0.018182230065905
+Angle to rotate! = -90.5180871999859
+In Robot rotations! = -525

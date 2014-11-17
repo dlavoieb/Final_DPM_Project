@@ -1,6 +1,7 @@
 package dpm.lejos.project;
 
 import dpm.lejos.orientation.Coordinate;
+import dpm.lejos.orientation.Mapper;
 import dpm.lejos.orientation.Orienteering;
 import lejos.nxt.Button;
 import lejos.nxt.comm.RConsole;
@@ -16,17 +17,28 @@ import lejos.nxt.comm.RConsole;
 public class Main {
 
     public static void main(String [] argv){
-        RConsole.openUSB(10000);
+        RConsole.openUSB(15000);
+
+        Button.waitForAnyPress();
+
         Robot robot = new Robot();
 
         Odometer odometer = new Odometer(robot);
         OdometryDisplay display = new OdometryDisplay(odometer);
-        Navigation navigation = new Navigation(robot, odometer);
+        Navigation navigation = new Navigation(robot, odometer, Mapper.MapID.LAB4);
         Orienteering orienteering = new Orienteering(robot, navigation);
         Grabber grabber = new Grabber(robot);
+        BlockDetection blockDetection = new BlockDetection(robot, odometer, navigation);
 
-        MissionPlanner missionPlanner = new MissionPlanner(navigation, grabber, orienteering, odometer, display);
-        missionPlanner.odometryTest();
+        MissionPlanner missionPlanner = new MissionPlanner(navigation, grabber, orienteering, odometer, display, blockDetection);
+
+//        missionPlanner.odometryTest();
+//        missionPlanner.localizationTest();
+//        missionPlanner.navigationTest(robot);
+//        missionPlanner.localizationAndNavigationTest();
+//        missionPlanner.rotationTest();
+//        missionPlanner.clawTest();
+        missionPlanner.blockDetectionTest();
 
         System.exit(0);
     }
@@ -35,6 +47,5 @@ public class Main {
         robot.setPositionOnGrid(new Coordinate(1,0));
         nav.travelTo(new Coordinate(0,3));
     }
-
 
 }//end Main
