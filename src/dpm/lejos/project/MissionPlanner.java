@@ -84,7 +84,8 @@ public class MissionPlanner {
     public void calibrateRadius(){
         odometer.start();
         display.start();
-        m_Navigation.travelTo(2 *robot.tileLength, 0);
+        m_Navigation.travelTo(2 * robot.tileLength, 0);
+        m_Grabber.lowerClaw();
         System.exit(0);
     }
 

@@ -1,14 +1,12 @@
 package dpm.lejos.project;
 
 import dpm.lejos.orientation.Coordinate;
-import dpm.lejos.orientation.Mapper.Node;
-import dpm.lejos.orientation.Orienteering;
+import dpm.lejos.orientation.Node;
 import dpm.lejos.orientation.Orienteering.*;
 import dpm.lejos.orientation.Tile;
 import lejos.nxt.*;
 import lejos.nxt.comm.Bluetooth;
 import lejos.nxt.comm.NXTCommConnector;
-import lejos.nxt.comm.RS485;
 import lejos.nxt.remote.RemoteMotor;
 import lejos.nxt.remote.RemoteNXT;
 import lejos.util.Delay;
@@ -106,7 +104,7 @@ public class Robot {
         try {
             LCD.clear();
             LCD.drawString("Connecting...",0,0);
-            NXTCommConnector connector = new Bluetooth.getConnector();
+            NXTCommConnector connector = Bluetooth.getConnector();
             slave = new RemoteNXT("Bumblebee", connector);
             LCD.clear();
             LCD.drawString("Connected",0,1);
