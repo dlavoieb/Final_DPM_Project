@@ -2,6 +2,7 @@ package dpm.lejos.project;
 
 import dpm.lejos.orientation.Coordinate;
 import dpm.lejos.orientation.Mapper;
+import dpm.lejos.orientation.Node;
 import dpm.lejos.orientation.Orienteering.*;
 import lejos.nxt.comm.RConsole;
 
@@ -51,11 +52,11 @@ public class Navigation {
         Coordinate startingCoordinate = m_robot.getPositionOnGrid();
         RConsole.println("start x = " + Integer.toString(startingCoordinate.getX()) + " y = " + Integer.toString(startingCoordinate.getY()));
         //TODO: make sure that this is not BACKWARDS!!!!
-        Mapper.Node current = mapper.graphPlane[startingCoordinate.getX()][startingCoordinate.getY()];
-        Mapper.Node finish = mapper.graphPlane[endingCoordinate.getX()][endingCoordinate.getY()];
+        Node current = mapper.graphPlane[startingCoordinate.getX()][startingCoordinate.getY()];
+        Node finish = mapper.graphPlane[endingCoordinate.getX()][endingCoordinate.getY()];
 
-        ArrayList<Mapper.Node> reverseDirections = new ArrayList<Mapper.Node>();
-        ArrayList<Mapper.Node> queue = new ArrayList<Mapper.Node>();
+        ArrayList<Node> reverseDirections = new ArrayList<Node>();
+        ArrayList<Node> queue = new ArrayList<Node>();
         queue.add(current);
         current.setVisited(true);
 
@@ -64,7 +65,7 @@ public class Navigation {
             if (current.equals(finish)){
                 break;
             } else {
-                for(Mapper.Node node : current.getNeighbours()){
+                for(Node node : current.getNeighbours()){
                     if(!node.getVisited()){
                         queue.add(node);
                         node.setVisited(true);
@@ -76,7 +77,7 @@ public class Navigation {
 
         RConsole.println(Integer.toString(reverseDirections.size()));
 
-        for(Mapper.Node node = finish; node != null; node = node.getPrevious()) {
+        for(Node node = finish; node != null; node = node.getPrevious()) {
             reverseDirections.add(0, node);
         }
 
@@ -88,11 +89,11 @@ public class Navigation {
      * preform the list of movements
      * @param directions the list of movements to follow
      */
-    public void performMoves(ArrayList<Mapper.Node> directions) {
+    public void performMoves(ArrayList<Node> directions) {
         int index = 0;
         while (directions.size()>1) {
-            Mapper.Node initial = directions.get(0);
-            Mapper.Node next = directions.get(1);
+            Node initial = directions.get(0);
+            Node next = directions.get(1);
             if (initial.getX() == next.getX()) {
 
                 //next has same x

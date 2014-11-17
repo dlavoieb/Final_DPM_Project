@@ -25,10 +25,13 @@ public class Orienteering {
     private Navigation navigation;
     private Robot robot;
 
-    public Orienteering() {
-        this.plane = createPlane();
+    public Orienteering(Robot robot, Navigation navigation, Mapper.MapID mapId) {
+
+        Mapper mapper = new Mapper(mapId);
+        Node[][] graph = mapper.generateGraph();
+        this.plane = createPlaneFromGraph(graph);
         this.robot = new Robot();
-        this.navigation = new Navigation(robot, new Odometer(robot));
+        this.navigation = new Navigation(this.robot, new Odometer(this.robot));
     }
 
     public Orienteering(Robot robot, Navigation navigation) {
@@ -36,6 +39,12 @@ public class Orienteering {
         this.robot = robot;
         robot.setPlane(plane);
         this.navigation = navigation;
+    }
+
+    public Orienteering(Mapper.MapID mapId) {
+        Mapper mapper = new Mapper(mapId);
+        Node[][] graph = mapper.generateGraph();
+        this.plane = createPlaneFromGraph(graph);
     }
 
     //Grid encoding
@@ -58,7 +67,6 @@ public class Orienteering {
      *
      */
     public void deterministicPositioning(Odometer odometer) {
-        this.plane = createPlane();
 
         ArrayList<Motion> motionTrace = new ArrayList<Motion>();
 
@@ -156,10 +164,6 @@ public class Orienteering {
             }
         }
 
-        /*printPlaneOptions(plane);
-        System.out.println();
-        printPlaneOptions(newPlane);*/
-
         return newPlane;
     }
 
@@ -173,6 +177,7 @@ public class Orienteering {
         Direction[] dirs = {Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
 
         for (Direction dir : dirs) {
+            System.out.println(dir);
             for (Tile[] aPlane : plane) {
                 for (int j = 0; j < plane.length; j++) {
                     System.out.print(aPlane[j].isPossible(dir) + "  ");
@@ -180,6 +185,32 @@ public class Orienteering {
                 System.out.println();
             }
             System.out.println();
+            System.out.println();
+        }
+    }
+
+    public void printObstacles(Tile[][] plane) {
+        Direction[] dirs = {Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
+
+        for (Direction dir : dirs) {
+            System.out.println(dir);
+            for (Tile[] aPlane : plane) {
+                for (int j = 0; j < plane.length; j++) {
+                    System.out.print(aPlane[j].isObstacle() + "  ");
+                }
+                System.out.println();
+            }
+            System.out.println();
+            System.out.println();
+        }
+
+    }
+
+    public void printIfObstacle(Tile[][] plane) {
+        for (Tile[] aPlane : plane) {
+            for (int j = 0; j < plane.length; j++) {
+                System.out.print(aPlane[j].isObstacle() + "  ");
+            }
             System.out.println();
         }
     }
@@ -241,37 +272,6 @@ public class Orienteering {
             }
         }
     }
-
-    /**
-     * Prints the number of moves performed once we have
-     * reached the end of the entire motion
-     * @param motionTrace the stack of movements applied so far
-     */
-//    private void printGoodbye(ArrayList<Motion> motionTrace){
-//        LCD.drawString("Completed orienteering", 0,0);
-//        LCD.drawString("Number of moves:", 0,1);
-//        LCD.drawString(String.valueOf(motionTrace.size()),0,2);
-//
-//        Sound.twoBeeps();
-//    }
-
-    /**
-     * print the initial conditions to the LCD display
-     * @param startingPosition the initial position
-     *//*
-    private void printInitialConditions(Coordinate startingPosition){
-        LCD.clear();
-
-        //adjusting the coordinate frame to match the TA's expectations
-        int y=Math.abs(startingPosition.getY()-3)*30-15;
-        int x=startingPosition.getX()*30-15;
-
-        LCD.drawString("Figured out \ninitial position", 0,3);
-        LCD.drawString("X: "+ String.valueOf(x), 0,5);
-        LCD.drawString("Y: "+ String.valueOf(y), 0,6);
-        LCD.drawString("Dir: "+ String.valueOf(startingDir), 0,7);
-
-    }*/
 
     /**
      * Calculates the starting location and orientation of the robot
@@ -347,6 +347,45 @@ public class Orienteering {
         }
         return posCount;
     }
+
+
+    public Tile[][] createPlaneFromGraph(Node[][] graphPlane) {
+        Tile[][] plane = new Tile[graphPlane.length][graphPlane[0].length];
+
+        for (int i = 0; i < plane.length; i++) {
+            for (int j = 0; j < plane.length; j++) {
+                plane[i][j] = new Tile();
+            }
+        }
+
+        for (Node[] row : graphPlane) {
+            for (Node node : row) {
+
+                int nodeCoordinateX = node.getCoordinate().getX();
+                int nodeCoordinateY = node.getCoordinate().getY();
+                if (node.getNeighbours().isEmpty()) {
+                    System.out.println("Obstacle at X = " + nodeCoordinateX + " Y = " + nodeCoordinateY);
+                    plane[nodeCoordinateX][nodeCoordinateY].closeAllPossibilities();
+                    plane[nodeCoordinateX][nodeCoordinateY].setObstacle(true);
+                    continue;
+                }
+
+                ArrayList<Node> neighbors = node.getNeighbours();
+                ArrayList<Coordinate> neighborsCoordinates = new ArrayList<Coordinate>();
+
+                for (Node neighbor: neighbors) {
+                    int x = neighbor.getCoordinate().getX();
+                    int y = neighbor.getCoordinate().getY();
+                    neighborsCoordinates.add(new Coordinate(x,y));
+                }
+
+                plane[nodeCoordinateX][nodeCoordinateY].generateMapFromGraph(neighborsCoordinates, nodeCoordinateX, nodeCoordinateY);
+
+            }
+        }
+        return plane;
+    }
+
 
     /**
      * Create the Tile array with the walls
