@@ -138,45 +138,7 @@ public class Navigation {
         }
     }
 
-/*
-        Coordinate currentPosition = directions.remove(0).getCoordinate();
-        Coordinate nextPosition;
-        for (Mapper.Node node : directions) {
-            nextPosition = node.getCoordinate();
 
-            //Note that the robot can only move in one axis at a time
-            //So the new coordinate will either have a new X or a new Y
-            //TODO: discuss if we should adapt the coordinate system
-
-            if (currentPosition.getX() != nextPosition.getX()) {
-                //Robot is moving in the y-axis
-                if (currentPosition.getX() > nextPosition.getX()) {
-                    //Robot is moving north
-                    rotateToDirection(Direction.NORTH);
-                    moveForward();
-                } else if (currentPosition.getX() < nextPosition.getX()) {
-                    //robot is moving south
-                    rotateToDirection(Direction.SOUTH);
-                    moveForward();
-                }
-            } else if (currentPosition.getY() != nextPosition.getY()) {
-                //Robot is moving in the x-axis
-                if (currentPosition.getY() > nextPosition.getY()) {
-                    //Robot is moving west
-                    rotateToDirection(Direction.WEST);
-                    moveForward();
-                } else if (currentPosition.getY() < nextPosition.getY()) {
-                    //robot is moving east
-                    moveForward();
-                }
-            }
-        }
-
-        //set position of the robot to the last tile visited
-        //TODO: verify that this actually works.
-        m_robot.setPositionOnGrid(directions.get(directions.size() - 1).getCoordinate());
-    }
-*/
 	/**
 	 * method used to send the robot to a
      * predetermined absolute location
@@ -279,72 +241,6 @@ public class Navigation {
         rotateTo(m_Odometer.getTheta() - 90);
     }
 
-    /**
-    * position the robot facing north
-    * @param destinationDirection the current heading
-    */
-    //TODO: refactor to use rotateTo instead of multiple CW/CCW
-	public void rotateToDirection(Direction destinationDirection) {
-
-        Direction robotDirection = m_robot.getDirection();
-
-        if (robotDirection == Direction.NORTH) {
-            switch (destinationDirection) {
-                case SOUTH:
-                    rotate90CounterClock();
-                    rotate90CounterClock();
-                    break;
-                case EAST:
-                    rotate90ClockWise();
-                    break;
-                case WEST:
-                    rotate90CounterClock();
-                    break;
-            }
-        } else if (robotDirection == Direction.SOUTH) {
-            switch (destinationDirection) {
-                case NORTH:
-                    rotate90CounterClock();
-                    rotate90CounterClock();
-                    break;
-                case EAST:
-                    rotate90CounterClock();
-                    break;
-                case WEST:
-                    rotate90ClockWise();
-                    break;
-            }
-        } else if (robotDirection == Direction.EAST) {
-            switch (destinationDirection) {
-                case NORTH:
-                    rotate90CounterClock();
-                    break;
-                case SOUTH:
-                    rotate90ClockWise();
-                    break;
-                case WEST:
-                    rotate90CounterClock();
-                    rotate90CounterClock();
-                    break;
-            }
-        } else {
-            switch (destinationDirection) {
-                case NORTH:
-                    rotate90ClockWise();
-                    break;
-                case SOUTH:
-                    rotate90CounterClock();
-                    break;
-                case EAST:
-                    rotate90CounterClock();
-                    rotate90CounterClock();
-                    break;
-            }
-        }
-
-        m_robot.setDirection(destinationDirection);
-
-    }
 
     /**
      * Check if the robot is travelling
@@ -368,7 +264,7 @@ public class Navigation {
      * @param y target y coordinate
      * @return boolean true if in acceptable range
      */
-    public boolean closeEnough(double x, double y) {
+    private boolean closeEnough(double x, double y) {
         return Math.abs(x - m_Odometer.getX()) < m_robot.ACCEPTABLE_LINEAR && Math.abs(y - m_Odometer.getY()) < m_robot.ACCEPTABLE_LINEAR;
     }
 
@@ -377,7 +273,7 @@ public class Navigation {
      * @param theta target orientation
      * @return boolean true if in acceptable range
      * */
-    public boolean closeEnough(double theta) {
+    private boolean closeEnough(double theta) {
         return Math.abs(theta - m_Odometer.getTheta()) <= Math.toDegrees(m_robot.ACCEPTABLE_ANGLE);
     }
 
@@ -386,7 +282,7 @@ public class Navigation {
      * @param coordinate the target coordinate
      * @return boolean true if in acceptable range
      */
-    public boolean closeEnough(Coordinate coordinate) {
+    private boolean closeEnough(Coordinate coordinate) {
         return Math.abs(coordinate.getX() - m_Odometer.getX()) < m_robot.ACCEPTABLE_LINEAR && Math.abs(coordinate.getY() - m_Odometer.getY()) < m_robot.ACCEPTABLE_LINEAR;
     }
 
@@ -396,7 +292,7 @@ public class Navigation {
      * @param desiredTheta desired heading
      * @return the signed number of degrees to rotate, sign indicated direction
      */
-    public static double computeOptimalRotationAngle(double currentTheta, double desiredTheta){
+    private static double computeOptimalRotationAngle(double currentTheta, double desiredTheta){
         //implementation of slide 13 in navigation tutorial
         if (desiredTheta-currentTheta < -Math.PI){
             return (desiredTheta-currentTheta)+2* Math.PI;
@@ -413,7 +309,7 @@ public class Navigation {
      * @param destination array of 2 elements being (x, y)
      * @return Vector representing the displacement to happen (r, theta)
      */
-    public static Vector vectorDisplacement(double[] currentPosition, double[] destination){
+    private static Vector vectorDisplacement(double[] currentPosition, double[] destination){
         Vector vector = new Vector();
         if (currentPosition.length == 3 && destination.length == 2){
             //expnaded pythagora

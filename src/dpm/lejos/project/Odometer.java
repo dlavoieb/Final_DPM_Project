@@ -156,25 +156,6 @@ public class Odometer extends Thread{
         }
     }
 
-    /**
-     * compute the closest line to the distance provided
-     * @param distance distance you have when crossing the line
-     * @return position of the line you crossed
-     *
-    //TODO: Verify the coordinate system to be compatible with the parameters and operations
-    public double closestLine( double distance, double angle){
-        if (Math.abs(angle) < 150) {
-            if (distance < m_robot.tileLength) {
-                //we know it is the first line we cross in that direction
-                return 15 - m_robot.lightSensorOffset;
-            }
-            //sensor is farther from the origin than the center of the robot
-            return Math.round(((distance + m_robot.lightSensorOffset - 15) / m_robot.tileLength)) * m_robot.tileLength + 15 - m_robot.lightSensorOffset;
-        }
-        //sensor is closer to the origin than the center of the robot
-        return Math.round(((distance - m_robot.lightSensorOffset - 15) / m_robot.tileLength)) * m_robot.tileLength + 15 + m_robot.lightSensorOffset;
-    }
-*/
 	/**
 	 * Single point of entry to set
      * the position of the odometer
