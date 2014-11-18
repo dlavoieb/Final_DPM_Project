@@ -12,7 +12,7 @@ public class Mapper {
 
     private MapID mapID;
 
-    public enum MapID {LAB4, MAP1, MAP2, BETA1, BETA2, BETA3}
+    public enum MapID {LAB5, MAP1, MAP2, BETA1, BETA2, BETA3}
 
     public Node[][] graphPlane;
 
@@ -195,7 +195,7 @@ public class Mapper {
 
         switch (mapID){
 
-            case LAB4:
+            case LAB5:
 
                 /*
                 0,0    0,1    0,2   0,3

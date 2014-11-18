@@ -47,7 +47,7 @@ public class MissionPlanner {
      * 6- repeat from 2 onwards
      */
     public void startMission(){
-        clawTest();
+        localizationAndNavigationTest();
     }
 
     public void demoMission(){
@@ -128,7 +128,9 @@ public class MissionPlanner {
         odometer.start();
         display.start();
         RConsole.println("Initiated ODO and ODO Display");
+        Button.waitForAnyPress();
         orienteering.deterministicPositioning(odometer);
+        Button.waitForAnyPress();
         m_Navigation.navigate(new Coordinate(3,3));
     }
 

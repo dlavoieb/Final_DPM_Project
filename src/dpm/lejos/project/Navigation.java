@@ -30,7 +30,7 @@ public class Navigation {
      */
 	public Navigation(Robot robot, Odometer odometer){
         m_robot = robot;
-        mapper = new Mapper(Mapper.MapID.LAB4);
+        mapper = new Mapper(Mapper.MapID.LAB5);
         m_Odometer=odometer;
 
 	}
