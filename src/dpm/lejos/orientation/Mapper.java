@@ -36,25 +36,22 @@ public class Mapper {
 
             case Lab5:
                 return LAB5.createMap();
-
             case Map1:
-                return MAP1.createMap();
+                //return MAP1.createMap();
 
             case Map2:
-                return MAP2.createMap();
+                //return MAP2.createMap();
 
             case Beta1:
-               return BETA1.createMap();
+                //return MAP8x8.createMap1();
 
             case Beta2:
-              return BETA2.createMap();
+                //return MAP8x8.createMap2();
 
             case Beta3:
-              return BETA3.createMap();
-
+                //return MAP8x8.createMap3();
             default:
-                graphPlane = null;
-                return graphPlane;
+                return null;
             }
     }
 
