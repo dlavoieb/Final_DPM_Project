@@ -47,7 +47,7 @@ public class MissionPlanner {
      * 6- repeat from 2 onwards
      */
     public void startMission(){
-        calibrateRadius();
+        localizationAndNavigationTest();
     }
 
     public void demoMission(){
@@ -84,7 +84,7 @@ public class MissionPlanner {
         m_Navigation.travelTo(2 * robot.tileLength, 0);
         System.exit(0);
     }
-    
+
     public void calibrateBase(){
         odometer.start();
         display.start();
@@ -102,14 +102,7 @@ public class MissionPlanner {
         odometer.start();
         display.start();
         RConsole.println("I made it this far!");
-        m_Navigation.moveForward();
-        m_Navigation.rotate90CounterClock();
-        m_Navigation.moveForward();
-        m_Navigation.rotate90CounterClock();
-        m_Navigation.moveForward();
-        m_Navigation.rotate90CounterClock();
-        m_Navigation.moveForward();
-        m_Navigation.rotate90CounterClock();
+        m_Navigation.rotateTo(2);
         RConsole.println("I made it this far 2!");
 
         Button.waitForAnyPress();

@@ -102,7 +102,7 @@ public class Robot {
      * no parameters, all defaults should be initialized in this class
      */
     public Robot(){
-         try {
+         /*try {
             LCD.clear();
             LCD.drawString("Connecting...",0,0);
             NXTCommConnector connector = Bluetooth.getConnector();
@@ -119,7 +119,7 @@ public class Robot {
             System.exit(1);
         }
 
-        clawLift = slave.A;
+        clawLift = slave.A;*/
         clawClose = Motor.C;
 
         usFront = new UltrasonicSensor(SensorPort.S2);

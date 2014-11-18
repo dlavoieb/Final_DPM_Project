@@ -30,8 +30,8 @@ public class Orienteering {
         Mapper mapper = new Mapper(mapId);
         Node[][] graph = mapper.generateGraph();
         this.plane = createPlaneFromGraph(graph);
-        this.robot = new Robot();
-        this.navigation = new Navigation(this.robot, new Odometer(this.robot));
+        this.robot = robot;
+        this.navigation = navigation;
     }
 
     public Orienteering(Robot robot, Navigation navigation) {
@@ -144,7 +144,7 @@ public class Orienteering {
                 odometer.setThetaInDegrees(90);
                 break;
             case WEST:
-                odometer.setThetaInDegrees(270);
+                odometer.setThetaInDegrees(-90);
                 break;
         }
 
@@ -185,32 +185,6 @@ public class Orienteering {
                 System.out.println();
             }
             System.out.println();
-            System.out.println();
-        }
-    }
-
-    public void printObstacles(Tile[][] plane) {
-        Direction[] dirs = {Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
-
-        for (Direction dir : dirs) {
-            System.out.println(dir);
-            for (Tile[] aPlane : plane) {
-                for (int j = 0; j < plane.length; j++) {
-                    System.out.print(aPlane[j].isObstacle() + "  ");
-                }
-                System.out.println();
-            }
-            System.out.println();
-            System.out.println();
-        }
-
-    }
-
-    public void printIfObstacle(Tile[][] plane) {
-        for (Tile[] aPlane : plane) {
-            for (int j = 0; j < plane.length; j++) {
-                System.out.print(aPlane[j].isObstacle() + "  ");
-            }
             System.out.println();
         }
     }
@@ -324,7 +298,7 @@ public class Orienteering {
             }
         }
 		this.endingDir = vr.getDir();
-        //TODO: make sure coords are not backwards
+
         return new Coordinate(vr.getX(), vr.getY());
     }
 

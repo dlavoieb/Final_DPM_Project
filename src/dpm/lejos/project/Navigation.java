@@ -142,45 +142,6 @@ public class Navigation {
         }
     }
 
-/*
-        Coordinate currentPosition = directions.remove(0).getCoordinate();
-        Coordinate nextPosition;
-        for (Mapper.Node node : directions) {
-            nextPosition = node.getCoordinate();
-
-            //Note that the robot can only move in one axis at a time
-            //So the new coordinate will either have a new X or a new Y
-            //TODO: discuss if we should adapt the coordinate system
-
-            if (currentPosition.getX() != nextPosition.getX()) {
-                //Robot is moving in the y-axis
-                if (currentPosition.getX() > nextPosition.getX()) {
-                    //Robot is moving north
-                    rotateToDirection(Direction.NORTH);
-                    moveForward();
-                } else if (currentPosition.getX() < nextPosition.getX()) {
-                    //robot is moving south
-                    rotateToDirection(Direction.SOUTH);
-                    moveForward();
-                }
-            } else if (currentPosition.getY() != nextPosition.getY()) {
-                //Robot is moving in the x-axis
-                if (currentPosition.getY() > nextPosition.getY()) {
-                    //Robot is moving west
-                    rotateToDirection(Direction.WEST);
-                    moveForward();
-                } else if (currentPosition.getY() < nextPosition.getY()) {
-                    //robot is moving east
-                    moveForward();
-                }
-            }
-        }
-
-        //set position of the robot to the last tile visited
-        //TODO: verify that this actually works.
-        m_robot.setPositionOnGrid(directions.get(directions.size() - 1).getCoordinate());
-    }
-*/
 	/**
 	 * method used to send the robot to a
      * predetermined absolute location
@@ -288,17 +249,20 @@ public class Navigation {
         m_robot.motorLeft.setSpeed(m_robot.ROTATE_SPEED);
         m_robot.motorRight.setSpeed(m_robot.ROTATE_SPEED);
 
-        int angle = Utils.robotRotationToMotorAngle(rotationAngle, m_robot);
+        if (Math.abs(rotationAngle) < 3) {
+            m_robot.motorLeft.rotate((rotationAngle > 0 ? -3 : 3), true);
+            m_robot.motorRight.rotate((rotationAngle > 0 ? 3 : -3), false);
+        }
+        else {
+            int angle = Utils.robotRotationToMotorAngle(rotationAngle, m_robot);
 
-        RConsole.println("In Robot rotations! = " + Integer.toString(angle));
 
-        m_robot.motorLeft.rotate(-angle, true);
-        m_robot.motorRight.rotate(angle, false);
+            m_robot.motorLeft.rotate(-angle, true);
+            m_robot.motorRight.rotate(angle, false);
+        }
+        RConsole.println("\nTheta destination = " + Double.toString(theta));
+        RConsole.println("Theta current = " + Double.toString(m_Odometer.getThetaInDegrees()));
 
-        RConsole.println("");
-        RConsole.println("Theta destination closeEnough = " + Double.toString(theta));
-        RConsole.println("Theta before closeEnough = " + Double.toString(m_Odometer.getThetaInDegrees()));
-        RConsole.println("");
 
         if (!closeEnough(theta)){
             RConsole.println("Not close enough, redo!");
@@ -423,7 +387,7 @@ public class Navigation {
      * @return boolean true if in acceptable range
      * */
     public boolean closeEnough(double theta) {
-        return Math.abs(theta - m_Odometer.getThetaInDegrees()) <= m_robot.ACCEPTABLE_ANGLE;
+        return Math.abs((theta > -10 ? theta : (theta + 360) % 360) - m_Odometer.getThetaInDegrees()) <= m_robot.ACCEPTABLE_ANGLE;
     }
 
     /**
