@@ -1,9 +1,5 @@
 package dpm.lejos.project;
 
-import lejos.nxt.TouchSensor;
-
-import java.util.LinkedList;
-
 /**
  * Class managing the grabbing mechanism
  *
@@ -11,10 +7,6 @@ import java.util.LinkedList;
  * @version 1.0
  */
 public class Grabber {
-
-	public boolean hasObject = false;
-	private TouchSensor touchSensor;
-
     private Robot robot;
 	public Grabber(Robot robot){
         this.robot = robot;
@@ -32,12 +24,12 @@ public class Grabber {
 
 	public void deployArms() {
         robot.clawClose.setSpeed(robot.CLAW_SPEED);
-        robot.clawClose.rotate(-336);
+        robot.clawClose.rotate(robot.clawPrepare);
     }
 
     public void closeClaw() {
         robot.clawClose.setSpeed(robot.CLAW_SPEED);
-        robot.clawClose.rotate(-340);
+        robot.clawClose.rotate(robot.clawCloseAngle);
     }
 
     /**
@@ -52,10 +44,4 @@ public class Grabber {
         riseClaw();
 	}
 
-	/**
-	 * store block in bucket or smth
-	 */
-	public void store(){
-
-	}
 }//end Grabber

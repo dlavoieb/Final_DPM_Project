@@ -29,10 +29,11 @@ public class Robot {
     public final int CRUISE_SPEED = 250;
     public final int ROTATE_SPEED = 150;
 
-    public int clawLowerDistance = 520;
-
+    public int clawLowerDistance = 470;
+    public int clawPrepare = -360;
+    public int clawCloseAngle = -250;
     public double wheelBase = 19.3; //TODO : Continue to tweak
-    public double wheelRadius = 2.01; //TODO: Still need to calibrate
+    public double wheelRadius = 2.06; //TODO: Still need to calibrate
     public double lightSensorOffset = 5; //TODO : Get real value
 
 
@@ -101,11 +102,11 @@ public class Robot {
      * no parameters, all defaults should be initialized in this class
      */
     public Robot(){
-        try {
+         try {
             LCD.clear();
             LCD.drawString("Connecting...",0,0);
             NXTCommConnector connector = Bluetooth.getConnector();
-            slave = new RemoteNXT("Bumblebee", connector);
+            slave = new RemoteNXT("Optimus", connector);
             LCD.clear();
             LCD.drawString("Connected",0,1);
             Sound.systemSound(false, 1);

@@ -28,7 +28,7 @@ public class Main {
 
         MissionPlanner missionPlanner = new MissionPlanner(navigation, grabber, orienteering, odometer, display, blockDetection, robot);
 
-        missionPlanner.calibrateRadius();
+        missionPlanner.startMission();
 
         System.exit(0);
     }

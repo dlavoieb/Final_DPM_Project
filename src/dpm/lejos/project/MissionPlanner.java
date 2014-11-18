@@ -47,10 +47,7 @@ public class MissionPlanner {
      * 6- repeat from 2 onwards
      */
     public void startMission(){
-        while (true){
-            orienteering.deterministicPositioning(odometer);
-            m_Navigation.travelTo(2,2);
-        }
+        clawTest();
     }
 
     public void demoMission(){
@@ -85,7 +82,6 @@ public class MissionPlanner {
         odometer.start();
         display.start();
         m_Navigation.travelTo(2 * robot.tileLength, 0);
-        m_Grabber.lowerClaw();
         System.exit(0);
     }
 
