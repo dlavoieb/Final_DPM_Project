@@ -32,8 +32,8 @@ public class Robot {
     public int clawLowerDistance = 470;
     public int clawPrepare = -360;
     public int clawCloseAngle = -250;
-    public double wheelBase = 19.3; //TODO : Continue to tweak
-    public double wheelRadius = 2.06; //TODO: Still need to calibrate
+    public double wheelBase = 12.5; //TODO : Continue to tweak
+    public double wheelRadius = 2.02; //TODO: Still need to calibrate
     public double lightSensorOffset = 5; //TODO : Get real value
 
 

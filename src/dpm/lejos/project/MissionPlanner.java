@@ -47,7 +47,7 @@ public class MissionPlanner {
      * 6- repeat from 2 onwards
      */
     public void startMission(){
-        localizationAndNavigationTest();
+        calibrateRadius();
     }
 
     public void demoMission(){
@@ -82,6 +82,17 @@ public class MissionPlanner {
         odometer.start();
         display.start();
         m_Navigation.travelTo(2 * robot.tileLength, 0);
+        System.exit(0);
+    }
+    
+    public void calibrateBase(){
+        odometer.start();
+        display.start();
+        m_Navigation.rotateTo(180);
+        m_Navigation.rotateTo(0);
+        m_Navigation.rotateTo(180);
+        m_Navigation.rotateTo(0);
+        Button.waitForAnyPress();
         System.exit(0);
     }
 
