@@ -13,7 +13,7 @@ public class Mapper {
 
     private MapID mapID;
 
-    public enum MapID {LAB5, MAP1, MAP2, BETA1, BETA2, BETA3}
+    public enum MapID {Lab5, Map1, Map2, Beta1, Beta2, Beta3}
 
     public Node[][] graphPlane;
 
@@ -34,22 +34,22 @@ public class Mapper {
     public Node[][] generateGraph() {
         switch (mapID){
 
-            case LAB5:
+            case Lab5:
                 return LAB5.createMap();
 
-            case MAP1:
+            case Map1:
                 return MAP1.createMap();
 
-            case MAP2:
+            case Map2:
                 return MAP2.createMap();
 
-            case BETA1:
+            case Beta1:
                return BETA1.createMap();
 
-            case BETA2:
+            case Beta2:
               return BETA2.createMap();
 
-            case BETA3:
+            case Beta3:
               return BETA3.createMap();
 
             default:
