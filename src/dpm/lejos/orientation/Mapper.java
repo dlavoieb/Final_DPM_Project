@@ -43,7 +43,7 @@ public class Mapper {
                 //return MAP2.createMap();
 
             case Beta1:
-                //return MAP8x8.createMap1();
+                return MAP8x8.createMap1();
 
             case Beta2:
                 //return MAP8x8.createMap2();

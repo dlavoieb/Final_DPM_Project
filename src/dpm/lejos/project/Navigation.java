@@ -244,30 +244,27 @@ public class Navigation {
 
         RConsole.println("Angle to rotate! = " + Double.toString(rotationAngle));
 
-        m_robot.motorLeft.setAcceleration(m_robot.ACCELERATION);
-        m_robot.motorRight.setAcceleration(m_robot.ACCELERATION);
+        m_robot.motorLeft.setAcceleration(5000);
+        m_robot.motorRight.setAcceleration(5000);
         m_robot.motorLeft.setSpeed(m_robot.ROTATE_SPEED);
         m_robot.motorRight.setSpeed(m_robot.ROTATE_SPEED);
 
         if (Math.abs(rotationAngle) < 3) {
             m_robot.motorLeft.rotate((rotationAngle > 0 ? -3 : 3), true);
             m_robot.motorRight.rotate((rotationAngle > 0 ? 3 : -3), false);
-        }
-        else {
+        } else {
             int angle = Utils.robotRotationToMotorAngle(rotationAngle, m_robot);
-
-
             m_robot.motorLeft.rotate(-angle, true);
             m_robot.motorRight.rotate(angle, false);
         }
+
         RConsole.println("\nTheta destination = " + Double.toString(theta));
         RConsole.println("Theta current = " + Double.toString(m_Odometer.getThetaInDegrees()));
 
-
-        if (!closeEnough(theta)){
-            RConsole.println("Not close enough, redo!");
-            rotateTo(theta);
-        }
+//        if (!closeEnough(theta)){
+//            RConsole.println("Not close enough, redo!");
+//            rotateTo(theta);
+//        }
     }
 
     /**
@@ -387,7 +384,7 @@ public class Navigation {
      * @return boolean true if in acceptable range
      * */
     public boolean closeEnough(double theta) {
-        return Math.abs((theta > -10 ? theta : (theta + 360) % 360) - m_Odometer.getThetaInDegrees()) <= m_robot.ACCEPTABLE_ANGLE;
+        return Math.abs((theta > - 10 ? theta : (theta + 360) % 360) - m_Odometer.getThetaInDegrees()) <= m_robot.ACCEPTABLE_ANGLE;
     }
 
     /**

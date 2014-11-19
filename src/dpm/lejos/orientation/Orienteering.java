@@ -180,7 +180,7 @@ public class Orienteering {
             System.out.println(dir);
             for (Tile[] aPlane : plane) {
                 for (int j = 0; j < plane.length; j++) {
-                    System.out.print(aPlane[j].isPossible(dir) + "  ");
+                    System.out.print(aPlane[j].hasObstacle(dir) + "  ");
                 }
                 System.out.println();
             }
@@ -347,7 +347,7 @@ public class Orienteering {
                 ArrayList<Node> neighbors = node.getNeighbours();
                 ArrayList<Coordinate> neighborsCoordinates = new ArrayList<Coordinate>();
 
-                for (Node neighbor: neighbors) {
+                for (Node neighbor : neighbors) {
                     int x = neighbor.getCoordinate().getX();
                     int y = neighbor.getCoordinate().getY();
                     neighborsCoordinates.add(new Coordinate(x,y));
@@ -357,6 +357,15 @@ public class Orienteering {
 
             }
         }
+
+        for (int i = 0; i < plane.length; i++) {
+            plane[0][i].setObstacle(Direction.NORTH, true);
+            plane[plane.length - 1][i].setObstacle(Direction.SOUTH, true);
+            plane[i][0].setObstacle(Direction.WEST, true);
+            plane[i][plane.length - 1].setObstacle(Direction.EAST, true);
+        }
+
+        printPlaneOptions(plane);
         return plane;
     }
 

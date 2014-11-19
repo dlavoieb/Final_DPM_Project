@@ -3,6 +3,7 @@ package dpm.lejos.project;
 import dpm.lejos.orientation.Coordinate;
 import dpm.lejos.orientation.Orienteering;
 import lejos.nxt.Button;
+import lejos.nxt.Sound;
 import lejos.nxt.comm.RConsole;
 
 /**
@@ -48,6 +49,10 @@ public class MissionPlanner {
      */
     public void startMission(){
         localizationAndNavigationTest();
+//        navigationTest(robot);
+        //clawTest();
+//        calibrateBase();
+//        localizationTest();
     }
 
     public void demoMission(){
@@ -110,6 +115,7 @@ public class MissionPlanner {
     }
 
     public void localizationTest() {
+        Button.waitForAnyPress();
         odometer.start();
         display.start();
         RConsole.println("Initiated ODO and ODO Display");
@@ -120,12 +126,12 @@ public class MissionPlanner {
         odometer.start();
         display.start();
         RConsole.println("Initiated ODO and ODO Display");
-        robot.setPositionOnGrid(new Coordinate(1, 1));
-        robot.setDirection(Orienteering.Direction.WEST);
-        odometer.setX(45);
-        odometer.setY(45);
-        odometer.setThetaInDegrees(-90);
-        m_Navigation.navigate(new Coordinate(3,3));
+        robot.setPositionOnGrid(new Coordinate(0, 0));
+        robot.setDirection(Orienteering.Direction.NORTH);
+        odometer.setX(15);
+        odometer.setY(15);
+        odometer.setThetaInDegrees(180);
+        m_Navigation.navigate(new Coordinate(7,0));
     }
 
     public void localizationAndNavigationTest() {
@@ -134,8 +140,9 @@ public class MissionPlanner {
         RConsole.println("Initiated ODO and ODO Display");
         Button.waitForAnyPress();
         orienteering.deterministicPositioning(odometer);
+        Sound.beep();
         Button.waitForAnyPress();
-        m_Navigation.navigate(new Coordinate(3,3));
+        m_Navigation.navigate(new Coordinate(7,0));
     }
 
     public void rotationTest() {

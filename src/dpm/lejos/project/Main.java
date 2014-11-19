@@ -16,13 +16,13 @@ import lejos.nxt.comm.RConsole;
 public class Main {
 
     public static void main(String [] argv){
-        RConsole.openUSB(10000);
+        RConsole.openUSB(15000);
         Robot robot = new Robot();
 
         Odometer odometer = new Odometer(robot);
         OdometryDisplay display = new OdometryDisplay(odometer);
-        Navigation navigation = new Navigation(robot, odometer, Mapper.MapID.Lab5);
-        Orienteering orienteering = new Orienteering(robot, navigation);
+        Navigation navigation = new Navigation(robot, odometer, Mapper.MapID.Beta1);
+        Orienteering orienteering = new Orienteering(robot, navigation, Mapper.MapID.Beta1);
         Grabber grabber = new Grabber(robot);
         BlockDetection blockDetection = new BlockDetection(robot, odometer, navigation);
 

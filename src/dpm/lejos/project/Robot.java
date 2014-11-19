@@ -102,24 +102,24 @@ public class Robot {
      * no parameters, all defaults should be initialized in this class
      */
     public Robot(){
-         /*try {
-            LCD.clear();
-            LCD.drawString("Connecting...",0,0);
-            NXTCommConnector connector = Bluetooth.getConnector();
-            slave = new RemoteNXT("Optimus", connector);
-            LCD.clear();
-            LCD.drawString("Connected",0,1);
-            Sound.systemSound(false, 1);
-            Delay.msDelay(500);
-        } catch (IOException e) {
-            LCD.clear();
-            LCD.drawString("Failed",0,0);
-            Sound.systemSound(false, 4);
-            Delay.msDelay(2000);
-            System.exit(1);
-        }
-
-        clawLift = slave.A;*/
+//         try {
+//            LCD.clear();
+//            LCD.drawString("Connecting...",0,0);
+//            NXTCommConnector connector = Bluetooth.getConnector();
+//            slave = new RemoteNXT("Optimus", connector);
+//            LCD.clear();
+//            LCD.drawString("Connected",0,1);
+//            Sound.systemSound(false, 1);
+//            Delay.msDelay(500);
+//        } catch (IOException e) {
+//            LCD.clear();
+//            LCD.drawString("Failed",0,0);
+//            Sound.systemSound(false, 4);
+//            Delay.msDelay(2000);
+//            System.exit(1);
+//        }
+//
+//        clawLift = slave.A;
         clawClose = Motor.C;
 
         usFront = new UltrasonicSensor(SensorPort.S2);

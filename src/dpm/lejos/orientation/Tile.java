@@ -206,7 +206,6 @@ public class Tile {
             this.setObstacle(Orienteering.Direction.SOUTH, true);
         }
 
-
     }
 
     /**
