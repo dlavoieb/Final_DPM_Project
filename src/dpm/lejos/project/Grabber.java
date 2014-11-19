@@ -18,7 +18,7 @@ public class Grabber {
     }
 
     public void riseClaw(){
-        robot.clawLift.setSpeed(robot.CLAW_SPEED);
+        robot.clawLift.setSpeed(robot.CLAW_SPEED - 75);
         robot.clawLift.rotate(robot.clawLowerDistance);
     }
 

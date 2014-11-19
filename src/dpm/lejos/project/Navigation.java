@@ -166,9 +166,12 @@ public class Navigation {
             RConsole.println("Orientation: " + String.valueOf(Math.toDegrees(vector.getOrientation())));
             rotateTo(Math.toDegrees(vector.getOrientation()));
 
-            m_robot.motorLeft.setAcceleration(m_robot.ACCELERATION);
-            m_robot.motorRight.setAcceleration(m_robot.ACCELERATION);
-            m_robot.motorLeft.setSpeed(m_robot.CRUISE_SPEED);
+//            m_robot.motorLeft.setAcceleration(m_robot.ACCELERATION);
+//            m_robot.motorRight.setAcceleration(m_robot.ACCELERATION);
+            m_robot.motorLeft.setAcceleration(2500);
+            m_robot.motorRight.setAcceleration(2500);
+
+            m_robot.motorLeft.setSpeed(m_robot.CRUISE_SPEED + 5);
             m_robot.motorRight.setSpeed(m_robot.CRUISE_SPEED);
 
             m_robot.motorLeft.rotate(Utils.robotDistanceToMotorAngle(vector.getMagnitude(), m_robot), true);
@@ -184,12 +187,30 @@ public class Navigation {
             RConsole.println("Pos Y before closeEnough = " + Double.toString(m_Odometer.getY()));
             RConsole.println("");
 
-            if (!closeEnough(x, y)) {
-                RConsole.println("Not close enough, redo!");
-                travelTo(x, y);
-            }
+//            if (!closeEnough(x, y)) {
+//                RConsole.println("Not close enough, redo!");
+//                travelTo(x, y);
+//            }
         }
         catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public void rotateToCoordinate(double x, double y) {
+        try {
+            double[] currentPosition = m_Odometer.getPosition();
+
+            RConsole.println("Current Pos X = " + Double.toString(currentPosition[0]));
+            RConsole.println("Current Pos Y = " + Double.toString(currentPosition[1]));
+            RConsole.println("Current THETA = " + Double.toString(Math.toDegrees(currentPosition[2])));
+
+            Vector vector = vectorDisplacement(currentPosition, new double[]{x, y});
+
+            RConsole.println("Magnitude: " + String.valueOf(vector.getMagnitude()));
+            RConsole.println("Orientation: " + String.valueOf(Math.toDegrees(vector.getOrientation())));
+            rotateTo(Math.toDegrees(vector.getOrientation()));
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -227,6 +248,13 @@ public class Navigation {
         m_robot.motorRight.rotate(Utils.robotDistanceToMotorAngle(m_robot.tileLength / 2, m_robot), false);
     }
 
+    public void moveForwardQuarterOfATile() {
+        m_robot.motorLeft.setSpeed(m_robot.CRUISE_SPEED);
+        m_robot.motorRight.setSpeed(m_robot.CRUISE_SPEED);
+        m_robot.motorLeft.rotate(Utils.robotDistanceToMotorAngle(m_robot.tileLength / 4, m_robot), true);
+        m_robot.motorRight.rotate(Utils.robotDistanceToMotorAngle(m_robot.tileLength / 4, m_robot), false);
+    }
+
     /**
      * Rotates the robot to the desired angle using the optimal angle and direction
      *
@@ -244,10 +272,10 @@ public class Navigation {
 
         RConsole.println("Angle to rotate! = " + Double.toString(rotationAngle));
 
-        m_robot.motorLeft.setAcceleration(5000);
-        m_robot.motorRight.setAcceleration(5000);
-        m_robot.motorLeft.setSpeed(m_robot.ROTATE_SPEED);
-        m_robot.motorRight.setSpeed(m_robot.ROTATE_SPEED);
+        m_robot.motorLeft.setAcceleration(4000);
+        m_robot.motorRight.setAcceleration(4000);
+        m_robot.motorLeft.setSpeed(m_robot.ROTATE_SPEED + 150);
+        m_robot.motorRight.setSpeed(m_robot.ROTATE_SPEED + 155);
 
         if (Math.abs(rotationAngle) < 3) {
             m_robot.motorLeft.rotate((rotationAngle > 0 ? -3 : 3), true);

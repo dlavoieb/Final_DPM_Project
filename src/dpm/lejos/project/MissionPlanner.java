@@ -48,11 +48,14 @@ public class MissionPlanner {
      * 6- repeat from 2 onwards
      */
     public void startMission(){
-        localizationAndNavigationTest();
+//        localizationAndNavigationTest();
 //        navigationTest(robot);
-        //clawTest();
+//        clawTest();
 //        calibrateBase();
 //        localizationTest();
+//        pickBlockTest();
+        fullTest();
+//        pickBlockTest();
     }
 
     public void demoMission(){
@@ -94,9 +97,12 @@ public class MissionPlanner {
         odometer.start();
         display.start();
         m_Navigation.rotateTo(180);
-        m_Navigation.rotateTo(0);
+        m_Navigation.moveForward();
+        m_Navigation.moveForward();
         m_Navigation.rotateTo(180);
-        m_Navigation.rotateTo(0);
+//        m_Navigation.rotateTo(0);
+//        m_Navigation.rotateTo(180);
+//        m_Navigation.rotateTo(0);
         Button.waitForAnyPress();
         System.exit(0);
     }
@@ -138,11 +144,25 @@ public class MissionPlanner {
         odometer.start();
         display.start();
         RConsole.println("Initiated ODO and ODO Display");
-        Button.waitForAnyPress();
+//        Button.waitForAnyPress();
         orienteering.deterministicPositioning(odometer);
         Sound.beep();
-        Button.waitForAnyPress();
-        m_Navigation.navigate(new Coordinate(7,0));
+//        Button.waitForAnyPress();
+        m_Navigation.navigate(new Coordinate(5,1));
+    }
+
+    public void fullTest() {
+        odometer.start();
+        display.start();
+        RConsole.println("Initiated ODO and ODO Display");
+        orienteering.deterministicPositioning(odometer);
+        Sound.beep();
+        m_Navigation.navigate(new Coordinate(5,1));
+        double x = 6 * 30 + 30 / 2.0;
+        double y = 1 *  30 + 30 / 2.0;
+        m_Navigation.rotateToCoordinate(x,y);
+        blockDetection.lookForBlock(m_Grabber);
+
     }
 
     public void rotationTest() {
@@ -167,6 +187,12 @@ public class MissionPlanner {
     }
 
     public void blockDetectionTest() {
+        odometer.start();
+        display.start();
+        blockDetection.lookForBlock(m_Grabber);
+    }
+
+    public void pickBlockTest() {
         odometer.start();
         display.start();
         blockDetection.lookForBlock(m_Grabber);

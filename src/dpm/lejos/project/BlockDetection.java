@@ -26,25 +26,30 @@ public class BlockDetection {
     }
 
     public void lookForBlock(Grabber grabber) {
-//        navigation.moveForwardHalfATile();
-        int i = 0;
-        int distanceRecorded = 0;
-        boolean blockDetected = false;
-        while (i < 90) {
-            distanceRecorded = getFilteredData(m_robot.usFront);
-            RConsole.println("Distance to block = " + Integer.toString(distanceRecorded));
-            if (distanceRecorded >= 10 && distanceRecorded <= 15) {
-                blockDetected = true;
-                break;
-            }
-            i += 10;
-            navigation.rotate10ClockWise();
-        }
-
-        if (blockDetected) {
-            grabber.pickUpBlock();
-        }
-        lookForBlock(grabber);
+        grabber.deployArms();
+        grabber.lowerClaw();
+        navigation.moveForward();
+        grabber.closeClaw();
+        grabber.riseClaw();
+//
+//        int i = 0;
+//        int distanceRecorded = 0;
+//        boolean blockDetected = false;
+//        while (i < 90) {
+//            distanceRecorded = getFilteredData(m_robot.usFront);
+//            RConsole.println("Distance to block = " + Integer.toString(distanceRecorded));
+//            if (distanceRecorded >= 10 && distanceRecorded <= 15) {
+//                blockDetected = true;
+//                break;
+//            }
+//            i += 10;
+//            navigation.rotate10ClockWise();
+//        }
+//
+//        if (blockDetected) {
+//            grabber.pickUpBlock();
+//        }
+//        lookForBlock(grabber);
     }
 
     /**
