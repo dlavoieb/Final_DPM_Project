@@ -166,17 +166,17 @@ public class Navigation {
             RConsole.println("Orientation: " + String.valueOf(Math.toDegrees(vector.getOrientation())));
             rotateTo(Math.toDegrees(vector.getOrientation()));
 
-//            m_robot.motorLeft.setAcceleration(m_robot.ACCELERATION);
-//            m_robot.motorRight.setAcceleration(m_robot.ACCELERATION);
-            m_robot.motorLeft.setAcceleration(2500);
-            m_robot.motorRight.setAcceleration(2500);
+            movingForward = true;
+            m_robot.motorLeft.setAcceleration(m_robot.ACCELERATION);
+            m_robot.motorRight.setAcceleration(m_robot.ACCELERATION);
 
-            m_robot.motorLeft.setSpeed(m_robot.CRUISE_SPEED + 5);
+            m_robot.motorLeft.setSpeed(m_robot.CRUISE_SPEED);
             m_robot.motorRight.setSpeed(m_robot.CRUISE_SPEED);
 
             m_robot.motorLeft.rotate(Utils.robotDistanceToMotorAngle(vector.getMagnitude(), m_robot), true);
             m_robot.motorRight.rotate(Utils.robotDistanceToMotorAngle(vector.getMagnitude(), m_robot), false);
 
+            movingForward = false;
             while(isNavigating()){
                 Thread.sleep(10);
             }

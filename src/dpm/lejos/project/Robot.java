@@ -41,7 +41,7 @@ import java.io.IOException;
  */
 public class Robot {
 
-	public final int ACCELERATION = 500;
+	public final int ACCELERATION = 2500;
 	public final int CLAW_SPEED = 200;
     //TODO: decide actual cruise speed - seems too slow
     public final int CRUISE_SPEED = 250;
@@ -66,7 +66,7 @@ public class Robot {
     //the plane graph is used for navigation
     private Node[][] planeGraph;
 
-    public int LIGHT_THRESHOLD = 500;
+    public int LIGHT_THRESHOLD = 75;
     public double tileLength = 30;
     public int ODOMETER_PERIOD = 100;
 
