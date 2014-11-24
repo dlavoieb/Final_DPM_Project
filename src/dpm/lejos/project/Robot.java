@@ -18,6 +18,24 @@ import java.io.IOException;
  *
  * Holds all the parameters and constants relevant to the whole system
  *
+ * Port Mapping:
+ * Master: |   A   |   B   |   C   |
+ *           left    right   claw
+ *           wheel   wheel   close
+ *
+ *         |   1   |  2   |  3   |  4  |
+ *          color  color    us    us
+ *          left   right   left  right
+ *
+ *
+ * Slave: |   A   |   B   |   C   |
+ *           claw
+ *           lift
+ *
+ *        |  1   |   2   |  3   |  4  |
+ *          us      touch
+ *          front   claw
+ *
  * @author David Lavoie-Boutin
  * @version 1.0
  */
@@ -59,19 +77,15 @@ public class Robot {
     /**
      * motor for opening and closing the grabbing mechanism
      */
-    public NXTRegulatedMotor clawClose = Motor.B;
+    public NXTRegulatedMotor clawClose;
 
-    /**
-     * color sensor on the grabbing mechanism
-     */
-	public ColorSensor clawColor = new ColorSensor(SensorPort.S3);
     /**
      * touch sensor on the grabbing mechanism
      */
-	public TouchSensor clawTouch = new TouchSensor(SensorPort.S1);
+	public TouchSensor clawTouch;
 
-    public NXTRegulatedMotor motorLeft = Motor.A; //   <---
-	public NXTRegulatedMotor motorRight = Motor.B; //   <---
+    public NXTRegulatedMotor motorLeft;
+	public NXTRegulatedMotor motorRight;
 
     /**
      * Secondary nxt providing additional I/O ports
@@ -94,7 +108,8 @@ public class Robot {
 	/**
 	 * Color sensor facing down for odometry correction
 	 */
-	public ColorSensor colorSensor = new ColorSensor(SensorPort.S2);
+    public ColorSensor colorSensorLeft;
+    public ColorSensor colorSensorRight;
 
     /**
      * default constructor
@@ -121,11 +136,17 @@ public class Robot {
 
         clawLift = slave.A;
         clawClose = Motor.C;
+        clawTouch = new TouchSensor(slave.S2);
 
-        usFront = new UltrasonicSensor(SensorPort.S2);
-        usLeft = new UltrasonicSensor(SensorPort.S1);
-        usRight = new UltrasonicSensor(SensorPort.S3);
+        usFront = new UltrasonicSensor(slave.S1);
+        usLeft = new UltrasonicSensor(SensorPort.S3);
+        usRight = new UltrasonicSensor(SensorPort.S4);
+        colorSensorLeft = new ColorSensor(SensorPort.S1);
+        colorSensorRight = new ColorSensor(SensorPort.S2);
 
+        motorLeft = Motor.A;
+        motorRight = Motor.B;
+        clawClose = Motor.B;
     }
 
     /**
