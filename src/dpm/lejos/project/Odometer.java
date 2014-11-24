@@ -70,8 +70,8 @@ public class Odometer extends Thread{
 
         while (true) {
             updateStart = System.currentTimeMillis();
-            // put (some of) your odometer code here
-            //Get variation tacho
+
+            // Get variation in the tacho counts
             int tachoDeltaL = leftMotor.getTachoCount() - prevTachoL;
             int tachoDeltaR = rightMotor.getTachoCount() - prevTachoR;
 
@@ -118,7 +118,19 @@ public class Odometer extends Thread{
   	 */
 	public double [] getPosition(){
         synchronized (lock) {
-            return new double[]{x, y, theta};
+            return new double[]{x, y, getThetaNormalized()};
+        }
+    }
+
+    public double getThetaNormalized() {
+        synchronized (lock) {
+            if (theta < -Math.PI){
+                return theta + ( 2 * Math.PI);
+            } else if (theta > Math.PI){
+                return theta - ( 2 * Math.PI);
+            } else {
+                return theta;
+            }
         }
     }
 
@@ -136,11 +148,11 @@ public class Odometer extends Thread{
 
     public double getThetaInDegrees(){
         synchronized (lock) {
-            return Math.toDegrees(theta);
+            return Math.toDegrees(getThetaNormalized());
         }
     }
 
-    public double getTheta() {
+    public double getThetaRaw() {
         synchronized (lock) {
             return theta;
         }
@@ -171,7 +183,7 @@ public class Odometer extends Thread{
      * the position of the odometer
 	 *
      * @param position array containing the position
-     *                 of the robot
+     *                 of the robot [x,y,theta]
 	 */
 	public void setPosition(double[] position){
         if (position.length != 3) return;
