@@ -12,8 +12,8 @@ import lejos.nxt.NXTRegulatedMotor;
  */
 public class Odometer extends Thread{
 
-	private final NXTRegulatedMotor leftMotor;
-	private final NXTRegulatedMotor rightMotor;
+	private NXTRegulatedMotor leftMotor;
+	private NXTRegulatedMotor rightMotor;
     private boolean correct = false;
     private LineDetector m_LineDetector;
 
@@ -25,7 +25,13 @@ public class Odometer extends Thread{
     private double x, y, theta;
     private int prevTachoL, prevTachoR;
 
-
+    /**
+     * default constructor for unit tests
+     *
+     */
+    public Odometer (){
+        this.lock = new Object();
+    }
 
     /**
      * constructor for the odometer
@@ -211,6 +217,6 @@ public class Odometer extends Thread{
     }
 
     public void setTheta(double theta) {
-        this.theta = theta;
+        this.theta = theta % (2 * Math.PI);
     }
 }//end Odometer
