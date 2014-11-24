@@ -23,6 +23,7 @@ public class Navigation {
 
     private Robot m_robot;
 
+    private boolean movingForward = false;
     /**
      * default constructor
      *
@@ -32,13 +33,14 @@ public class Navigation {
         m_robot = robot;
         mapper = new Mapper(Mapper.MapID.Lab5);
         m_Odometer=odometer;
-
+        m_Odometer.setNavigation(this);
 	}
 
     public Navigation(Robot robot, Odometer odometer, Mapper.MapID id){
         m_robot = robot;
         mapper = new Mapper(id);
         m_Odometer=odometer;
+        m_Odometer.setNavigation(this);
     }
 
     /**
@@ -388,6 +390,10 @@ public class Navigation {
         return m_robot.motorLeft.isMoving() || m_robot.motorRight.isMoving();
     }
 
+    public boolean isMovingForward() {
+        return movingForward;
+    }
+
     /**
      * stop position regulation to allow free moving of the motors
      */
@@ -412,7 +418,7 @@ public class Navigation {
      * @return boolean true if in acceptable range
      * */
     public boolean closeEnough(double theta) {
-        return Math.abs((theta > - 10 ? theta : (theta + 360) % 360) - m_Odometer.getThetaInDegrees()) <= m_robot.ACCEPTABLE_ANGLE;
+        return Math.abs(theta - m_Odometer.getThetaInDegrees()) <= m_robot.ACCEPTABLE_ANGLE;
     }
 
     /**

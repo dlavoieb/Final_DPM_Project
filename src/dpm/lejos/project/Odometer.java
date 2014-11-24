@@ -11,15 +11,18 @@ import lejos.nxt.NXTRegulatedMotor;
  * @version 1.0
  */
 public class Odometer extends Thread{
+    private Navigation navigation;
 
 	private NXTRegulatedMotor leftMotor;
 	private NXTRegulatedMotor rightMotor;
+
     private boolean correct = false;
-    private LineDetector m_LineDetector;
+
+    private LineDetector lineDetectorLeft;
+    private LineDetector lineDetectorRight;
 
     private final Object lock;
     private static Robot m_robot;
-
 
     //Odometer is encoded in radians!
     private double x, y, theta;
@@ -47,14 +50,14 @@ public class Odometer extends Thread{
         leftMotor.resetTachoCount();
         rightMotor.resetTachoCount();
 
-
         theta = 0;
         x = 0;
         y = 0;
 
         prevTachoL = 0;
         prevTachoR = 0;
-        m_LineDetector = new LineDetector(m_robot, true);
+        lineDetectorLeft = new LineDetector(m_robot.colorSensorLeft, m_robot.LIGHT_THRESHOLD, true);
+        lineDetectorRight = new LineDetector(m_robot.colorSensorRight, m_robot.LIGHT_THRESHOLD, true);
 
     }
 
@@ -169,19 +172,45 @@ public class Odometer extends Thread{
     }
 
     private void correct(){
-        if (m_LineDetector.isLine()){
+        //logical XOR
+        //correction only viable during linear travel
+        if (navigation.isMovingForward() && (lineDetectorLeft.isLine() ^ lineDetectorRight.isLine())){
+            //one sensor is on the line
+            if (lineDetectorLeft.isLine()) {
+                //left sensor on the line
+                int speed = m_robot.motorLeft.getSpeed();
+                while (!lineDetectorRight.isLine()){
+                    //stop left wheel until other sensor reaches the line
+                    //speed is 1 to fake the stop so the regulation thread does not erase the rotate command
+                    m_robot.motorLeft.setSpeed(1);
+                }
+                m_robot.motorLeft.setSpeed(speed);
+            }
+            else {
+                int speed = m_robot.motorRight.getSpeed();
+                //right sensor on the line
+                while (!lineDetectorLeft.isLine()){
+                    //stop right wheel until other sensor reaches the line
+                    //speed is 1 to fake the stop so the regulation thread does not erase the rotate command
+                    m_robot.motorRight.setSpeed(1);
+                }
+                m_robot.motorRight.setSpeed(speed);
+            }
+
             if( Math.abs(Math.round(theta / 180.0) - (theta / 180.0)) < 0.1)
             // if angle is close enough to +/- 180
             {
                 //moving in the x line
-                x = Math.round( (x + m_robot.lightSensorOffset) / m_robot.tileLength) * m_robot.tileLength - m_robot.lightSensorOffset;
-            }
-            else
-            {
+                x = Math.round((x + m_robot.lightSensorOffset) / m_robot.tileLength) * m_robot.tileLength - m_robot.lightSensorOffset;
+            } else {
                 //moving in the y line
                 y = Math.round( (y + m_robot.lightSensorOffset) / m_robot.tileLength) * m_robot.tileLength - m_robot.lightSensorOffset;
             }
         }
+    }
+
+    public void setNavigation(Navigation navigation){
+        this.navigation = navigation;
     }
 
 	/**
