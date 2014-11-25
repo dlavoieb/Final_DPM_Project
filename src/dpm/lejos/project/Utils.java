@@ -1,5 +1,7 @@
 package dpm.lejos.project;
 
+import java.util.LinkedList;
+
 /**
  * Conversion utilities
  *
@@ -27,4 +29,16 @@ public class Utils {
 	public static int robotRotationToMotorAngle(double angle, Robot robot){
         return robotDistanceToMotorAngle(Math.PI * robot.wheelBase * angle / 360.0 + 0.1, robot);
 	}
+
+    public static float averageList(LinkedList<Integer> list){
+        int sum = 0;
+        for (Integer aList : list) {
+            sum += aList;
+        }
+        return sum/(float)list.size();
+    }
+
+    public static int medianList(LinkedList<Integer> list){
+        return list.get(list.size()/2);
+    }
 }//end Utils
