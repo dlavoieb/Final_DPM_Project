@@ -4,6 +4,7 @@ import dpm.lejos.orientation.Coordinate;
 import dpm.lejos.orientation.Node;
 import dpm.lejos.orientation.Orienteering.*;
 import dpm.lejos.orientation.Tile;
+import dpm.lejos.Sensors.SuperColorSensor;
 import lejos.nxt.*;
 import lejos.nxt.comm.Bluetooth;
 import lejos.nxt.comm.NXTCommConnector;
@@ -66,7 +67,7 @@ public class Robot {
     //the plane graph is used for navigation
     private Node[][] planeGraph;
 
-    public int LIGHT_THRESHOLD = 75;
+    public int LIGHT_THRESHOLD = 10;
     public double tileLength = 30;
     public int ODOMETER_PERIOD = 100;
 
@@ -108,8 +109,8 @@ public class Robot {
 	/**
 	 * Color sensor facing down for odometry correction
 	 */
-    public ColorSensor colorSensorLeft;
-    public ColorSensor colorSensorRight;
+    public SuperColorSensor colorSensorLeft;
+    public SuperColorSensor colorSensorRight;
 
     /**
      * default constructor
@@ -117,7 +118,7 @@ public class Robot {
      * no parameters, all defaults should be initialized in this class
      */
     public Robot(){
-         try {
+       /*  try {
             LCD.clear();
             LCD.drawString("Connecting...",0,0);
             NXTCommConnector connector = Bluetooth.getConnector();
@@ -132,17 +133,17 @@ public class Robot {
             Sound.systemSound(false, 4);
             Delay.msDelay(2000);
             System.exit(1);
-        }
+        }*/
 
-        clawLift = slave.A;
+      //  clawLift = slave.A;
         clawClose = Motor.C;
-        clawTouch = new TouchSensor(slave.S2);
+     //   clawTouch = new TouchSensor(slave.S2);
 
-        usFront = new UltrasonicSensor(slave.S1);
+    //    usFront = new UltrasonicSensor(slave.S1);
         usLeft = new UltrasonicSensor(SensorPort.S3);
         usRight = new UltrasonicSensor(SensorPort.S4);
-        colorSensorLeft = new ColorSensor(SensorPort.S1);
-        colorSensorRight = new ColorSensor(SensorPort.S2);
+        colorSensorLeft = new SuperColorSensor(SensorPort.S1);
+        colorSensorRight = new SuperColorSensor(SensorPort.S2);
 
         motorLeft = Motor.A;
         motorRight = Motor.B;

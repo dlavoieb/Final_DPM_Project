@@ -1,6 +1,7 @@
 package dpm.lejos.project;
 
 import lejos.nxt.NXTRegulatedMotor;
+import lejos.nxt.comm.RConsole;
 
 /**
  * Odometer class polls the tachometers from
@@ -167,6 +168,22 @@ public class Odometer extends Thread{
         }
     }
 
+    public int getLeftLight(){
+        return lineDetectorLeft.getPastLightValue();
+    }
+
+    public int getRightLight(){
+        return lineDetectorRight.getPastLightValue();
+    }
+
+    public boolean isLeftLine() {
+        return lineDetectorLeft.isLine();
+    }
+
+    public boolean isRightLine(){
+        return lineDetectorRight.isLine();
+    }
+
     public void startCorrection(){
         this.correct = true;
     }
@@ -175,25 +192,32 @@ public class Odometer extends Thread{
         //logical XOR
         //correction only viable during linear travel
         if (navigation.isMovingForward() && (lineDetectorLeft.isLine() ^ lineDetectorRight.isLine())){
+            RConsole.println("Correcting, one sensor not on line");
             //one sensor is on the line
             if (lineDetectorLeft.isLine()) {
+                RConsole.println("Left on line");
                 //left sensor on the line
                 int speed = m_robot.motorLeft.getSpeed();
                 while (!lineDetectorRight.isLine()){
+                    RConsole.println("stop left");
                     //stop left wheel until other sensor reaches the line
                     //speed is 1 to fake the stop so the regulation thread does not erase the rotate command
                     m_robot.motorLeft.setSpeed(1);
                 }
+                RConsole.println("start left");
                 m_robot.motorLeft.setSpeed(speed);
             }
             else {
+                RConsole.println("Right on line");
                 int speed = m_robot.motorRight.getSpeed();
                 //right sensor on the line
                 while (!lineDetectorLeft.isLine()){
+                    RConsole.println("stop right");
                     //stop right wheel until other sensor reaches the line
                     //speed is 1 to fake the stop so the regulation thread does not erase the rotate command
                     m_robot.motorRight.setSpeed(1);
                 }
+                RConsole.println("start right");
                 m_robot.motorRight.setSpeed(speed);
             }
 

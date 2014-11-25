@@ -1,4 +1,4 @@
-package dpm.lejos.test;
+package dpm.test;
 
 import dpm.lejos.project.Odometer;
 
@@ -18,15 +18,6 @@ public class OdometerTest {
     @Test
     public void normalisationTest(){
         double pi = Math.PI;
-
-        odometer.setTheta(2 * pi);
-        Assert.assertEquals( 0, odometer.getThetaNormalized(), 0.000001);
-
-        odometer.setTheta(-2 * pi);
-        Assert.assertEquals(0, odometer.getThetaNormalized(), 0.000001);
-
-        odometer.setTheta(-3 * pi);
-        Assert.assertEquals(-pi, odometer.getThetaNormalized(), 0.000001);
 
         for (double i = -pi; i<= pi;i+=0.001){
             odometer.setTheta(i);

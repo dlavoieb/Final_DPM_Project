@@ -365,7 +365,7 @@ public class Orienteering {
             plane[i][plane.length - 1].setObstacle(Direction.EAST, true);
         }
 
-        printPlaneOptions(plane);
+        //printPlaneOptions(plane);
         return plane;
     }
 

@@ -48,14 +48,15 @@ public class MissionPlanner {
      * 6- repeat from 2 onwards
      */
     public void startMission(){
-//        localizationAndNavigationTest();
-//        navigationTest(robot);
-//        clawTest();
-//        calibrateBase();
-//        localizationTest();
-//        pickBlockTest();
-        fullTest();
-//        pickBlockTest();
+        odoCorrectionTest();
+    }
+
+    public void odoCorrectionTest(){
+        odometer.startCorrection();
+        odometer.start();
+        display.start();
+        m_Navigation.travelTo(60,0);
+        Button.waitForAnyPress();
     }
 
     public void demoMission(){
@@ -159,7 +160,7 @@ public class MissionPlanner {
         Sound.beep();
         m_Navigation.navigate(new Coordinate(5,1));
         double x = 6 * 30 + 30 / 2.0;
-        double y = 1 *  30 + 30 / 2.0;
+        double y = 30 + 30 / 2.0;
         m_Navigation.rotateToCoordinate(x,y);
         blockDetection.lookForBlock(m_Grabber);
 

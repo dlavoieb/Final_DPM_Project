@@ -30,12 +30,17 @@ public class Utils {
         return robotDistanceToMotorAngle(Math.PI * robot.wheelBase * angle / 360.0 + 0.1, robot);
 	}
 
-    public static float averageList(LinkedList<Integer> list){
-        int sum = 0;
-        for (Integer aList : list) {
-            sum += aList;
+    public static double averageList(LinkedList<Integer> list, double[] coefs){
+        if (coefs.length < list.size()){
+            throw new ArrayIndexOutOfBoundsException();
         }
-        return sum/(float)list.size();
+
+        double sum = 0;
+        for (int i = 0; i<list.size(); i++){
+            sum += list.get(i)*coefs[i];
+        }
+
+        return sum;
     }
 
     public static int medianList(LinkedList<Integer> list){

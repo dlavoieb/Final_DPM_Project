@@ -13,17 +13,17 @@ import java.util.LinkedList;
  * @author David Lavoie-Boutin
  * @version 1.0
  */
-public class LineDetector implements TimerListener {
+public class LineDetector extends Thread {
 
     private static final int DEFAULT_PERIOD = 50;
-    private static final int DEFAULT_WINDOW = 10;
-    private Timer timer;
+    private static final int DEFAULT_WINDOW = 4;
     private boolean isLine;
     private SuperColorSensor colorSensor;
     private int LIGHT_THRESHOLD;
 
+    private double[] coeffs = new double[] {1/2.0,-1/6.0, -1/6.0, -1/6.0};
+
     private LinkedList<Integer> list = new LinkedList<Integer>();
-    private int pastLightValue;
 
     /**
      * default constructor
@@ -32,37 +32,22 @@ public class LineDetector implements TimerListener {
      * @param start boolean to start the timer right away
      */
     public LineDetector(SuperColorSensor colorSensor, int lightThreshold, boolean start){
-        this(colorSensor, lightThreshold, DEFAULT_PERIOD, DEFAULT_WINDOW, start);
+        this(colorSensor, lightThreshold, DEFAULT_WINDOW, start);
     }
 
     /**
      * constructor with added period adjustment capability
      * @param colorSensor requires the object light sensor
-     * @param period the period of the timer
      * @param start boolean to start the timer right away
      */
-     public LineDetector(SuperColorSensor colorSensor, int lightThreshold, int period, int window, boolean start) {
+     public LineDetector(SuperColorSensor colorSensor, int lightThreshold, int window, boolean start) {
          LIGHT_THRESHOLD = lightThreshold;
-         timer = new Timer(period, this);
          this.colorSensor = colorSensor;
-         pastLightValue = colorSensor.getNormalizedLightValue();
          colorSensor.setFloodlight(true);
-
          for (int i = 0; i < window; i++){
-
-             int value1 = colorSensor.getNormalizedLightValue();
-             try {
-                 Thread.sleep(2);
-             } catch (InterruptedException e) {
-                 e.printStackTrace();
-             }
-             int value2 = colorSensor.getNormalizedLightValue();
-
-             list.add(Math.abs(value1-value2));
+             list.add(colorSensor.getNormalizedLightValue());
          }
-         pastLightValue = Utils.medianList(list);
-
-         if(start) timer.start();
+         if(start) this.start();
 
      }
 
@@ -72,40 +57,26 @@ public class LineDetector implements TimerListener {
      * checks the change in the value of the read light
      * and compares with the set threshold
      */
-    public void timedOut(){
+    public void run(){
 
-        int value1 = colorSensor.getNormalizedLightValue();
-        try {
-            Thread.sleep(2);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        int value2 = colorSensor.getNormalizedLightValue();
+        while(true) {
 
-        list.add(Math.abs(value1-value2));
-        list.remove(0);
+            list.add(colorSensor.getNormalizedLightValue());
+            list.remove(0);
+            double diff = Utils.averageList(list, coeffs);
 
-        float currentLightValue = Utils.medianList(list);
-
-      //  float currentLightValue = colorSensor.getNormalizedLightValue();
-        RConsole.println(String.valueOf(currentLightValue));
-        float diff = pastLightValue - currentLightValue;
-        if (Math.abs(diff) > LIGHT_THRESHOLD){
-            RConsole.println("Detected a line edge on sensor " + String.valueOf(colorSensor.getSensorPort().getId()));
-            //we detected a significant change
+            if (Math.abs(diff) > LIGHT_THRESHOLD) {
+                //we detected a significant change
                 isLine = diff >= 0;
+            }
+
+            try {
+                Thread.sleep(DEFAULT_PERIOD);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
-
-        pastLightValue = (int) currentLightValue;
 	}
-
-    /*
-    get 2 value
-    abs (1-2)
-    store in array
-    take median
-    compare with threshold
-     */
 
     /**
      * get if the robot is over a line
@@ -120,10 +91,10 @@ public class LineDetector implements TimerListener {
      * manual start of the timer
      */
     public void startTimer(){
-        timer.start();
+        this.start();
     }
 
     public int getPastLightValue(){
-        return pastLightValue;
+        return (int) Utils.averageList(list,coeffs);
     }
 }//end LineDetector
