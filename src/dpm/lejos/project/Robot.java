@@ -37,7 +37,7 @@ import java.io.IOException;
  *          front   claw
  *
  * @author David Lavoie-Boutin
- * @version 1.0
+ * @version 1.5
  */
 public class Robot {
 
