@@ -248,10 +248,10 @@
             <pathelement location="junit-4.10.jar" />
             <pathelement location="build/classes" />
         </classpath>
-        <formatter type="xml"  usefile="false"/>
+        <formatter type="xml"  usefile="true"/>
 
-        <test name="dpm.lejos.test.UtilsTest" haltonfailure="no"/>
-        <test name="dpm.lejos.test.OdometerTest" haltonfailure="no"/>
+        <test name="dpm.lejos.test.UtilsTest" haltonfailure="no" outfile="Utils"/>
+        <test name="dpm.lejos.test.OdometerTest" haltonfailure="no" outfile="Odo"/>
 
     </junit>
     </target>
