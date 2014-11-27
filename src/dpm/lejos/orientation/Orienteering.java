@@ -3,6 +3,7 @@ package dpm.lejos.orientation;
 import dpm.lejos.project.Navigation;
 import dpm.lejos.project.Odometer;
 import dpm.lejos.project.Robot;
+import lejos.nxt.LCD;
 import lejos.nxt.UltrasonicSensor;
 import lejos.nxt.comm.RConsole;
 
@@ -74,6 +75,9 @@ public class Orienteering {
         boolean hasWallLeft;
         boolean hasWallRight;
         boolean hasWallAhead;
+
+        double timeStart = System.nanoTime();
+
         while(countPossibilities(this.plane) > 1) {
             int distanceLeft = getFilteredData(robot.usLeft);
             int distanceRight = getFilteredData(robot.usRight);
@@ -105,14 +109,21 @@ public class Orienteering {
             counter++;
         }
 
+        double endTime = System.nanoTime();
+
         RConsole.println(Integer.toString(counter));
 
         Coordinate startingPosition = findStartingPosition();
         Coordinate endingPosition = findEndingPosition(motionTrace, startingPosition);
-        RConsole.println("Start X = " + startingPosition.getX() + " Y = " + startingPosition.getY());
-        RConsole.println("Starting dir = " + startingDir);
-        RConsole.println("X = " + endingPosition.getX() + " Y = " + endingPosition.getY());
-        RConsole.println("Ending dir = " + endingDir);
+
+        LCD.clear();
+        LCD.drawString("Start X = " + String.valueOf(startingPosition.getX()),0,0);
+        LCD.drawString("Start Y = " + String.valueOf(startingPosition.getY()),0,1);
+        LCD.drawString(String.valueOf((endTime - timeStart)/(Math.pow(10,9))),0 , 2);
+//        RConsole.println("Start X = " + startingPosition.getX() + " Y = " + startingPosition.getY());
+//        RConsole.println("Starting dir = " + startingDir);
+//        RConsole.println("X = " + endingPosition.getX() + " Y = " + endingPosition.getY());
+//        RConsole.println("Ending dir = " + endingDir);
 
         //Set the attributes used to know the position of the robot on the grid
         robot.setPositionOnGrid(endingPosition);
@@ -337,7 +348,7 @@ public class Orienteering {
 
                 int nodeCoordinateX = node.getCoordinate().getX();
                 int nodeCoordinateY = node.getCoordinate().getY();
-                if (node.getNeighbours().isEmpty()) {
+                if (node.isObstacle()) {
                     System.out.println("Obstacle at X = " + nodeCoordinateX + " Y = " + nodeCoordinateY);
                     plane[nodeCoordinateX][nodeCoordinateY].closeAllPossibilities();
                     plane[nodeCoordinateX][nodeCoordinateY].setObstacle(true);
@@ -348,9 +359,12 @@ public class Orienteering {
                 ArrayList<Coordinate> neighborsCoordinates = new ArrayList<Coordinate>();
 
                 for (Node neighbor : neighbors) {
-                    int x = neighbor.getCoordinate().getX();
-                    int y = neighbor.getCoordinate().getY();
-                    neighborsCoordinates.add(new Coordinate(x,y));
+
+                    if (!neighbor.isObstacle()) {
+                        int x = neighbor.getCoordinate().getX();
+                        int y = neighbor.getCoordinate().getY();
+                        neighborsCoordinates.add(new Coordinate(x,y));
+                    }
                 }
 
                 plane[nodeCoordinateX][nodeCoordinateY].generateMapFromGraph(neighborsCoordinates, nodeCoordinateX, nodeCoordinateY);

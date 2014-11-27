@@ -66,7 +66,7 @@ public class Navigation {
                 break;
             } else {
                 for(Node node : current.getNeighbours()){
-                    if(!node.getVisited()){
+                    if(!node.getVisited() && !node.isObstacle()){
                         queue.add(node);
                         node.setVisited(true);
                         node.setPrevious(current);
@@ -171,11 +171,11 @@ public class Navigation {
             m_robot.motorLeft.setAcceleration(2500);
             m_robot.motorRight.setAcceleration(2500);
 
-            m_robot.motorLeft.setSpeed(m_robot.CRUISE_SPEED + 5);
+            m_robot.motorLeft.setSpeed(m_robot.CRUISE_SPEED + 8);
             m_robot.motorRight.setSpeed(m_robot.CRUISE_SPEED);
 
-            m_robot.motorLeft.rotate(Utils.robotDistanceToMotorAngle(vector.getMagnitude(), m_robot), true);
-            m_robot.motorRight.rotate(Utils.robotDistanceToMotorAngle(vector.getMagnitude(), m_robot), false);
+            m_robot.motorLeft.rotate(Utils.robotDistanceToMotorAngle(vector.getMagnitude() - 1, m_robot), true);
+            m_robot.motorRight.rotate(Utils.robotDistanceToMotorAngle(vector.getMagnitude() - 1, m_robot), false);
 
             while(isNavigating()){
                 Thread.sleep(10);

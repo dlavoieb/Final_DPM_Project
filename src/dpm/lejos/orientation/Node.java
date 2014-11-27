@@ -15,6 +15,7 @@ public class Node {
     private Coordinate coordinate;
     private ArrayList<Node> neighbours;
     private boolean visited;
+    private boolean isObstacle;
     private Node previous;
 
     public Node(Coordinate coordinate) {
@@ -73,4 +74,11 @@ public class Node {
         this.previous = previous;
     }
 
+    public boolean isObstacle() {
+        return isObstacle;
+    }
+
+    public void setObstacle(boolean isObstacle) {
+        this.isObstacle = isObstacle;
+    }
 }
