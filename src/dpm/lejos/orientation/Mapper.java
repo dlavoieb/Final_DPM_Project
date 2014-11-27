@@ -3,6 +3,7 @@ package dpm.lejos.orientation;
 import dpm.lejos.Map.*;
 import lejos.nxt.comm.RConsole;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -35,7 +36,15 @@ public class Mapper {
         switch (mapID){
 
             case Lab5:
-                return LAB5.createMap();
+
+                ArrayList<Coordinate> obstacles = new ArrayList<Coordinate>();
+                obstacles.add(new Coordinate(0,0));
+                obstacles.add(new Coordinate(1,2));
+                obstacles.add(new Coordinate(1,3));
+                obstacles.add(new Coordinate(3,1));
+
+                return MAP4x4.createMap(obstacles);
+
             case Map1:
                 //return MAP1.createMap();
 
@@ -43,7 +52,7 @@ public class Mapper {
                 //return MAP2.createMap();
 
             case Beta1:
-                return MAP8x8.createMap1();
+                //return MAP8x8.createMap1();
 
             case Beta2:
                 //return MAP8x8.createMap2();
