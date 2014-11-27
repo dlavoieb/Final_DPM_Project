@@ -1,4 +1,4 @@
-package dpm.test;
+package dpm.lejos.test;
 
 import dpm.lejos.project.Odometer;
 

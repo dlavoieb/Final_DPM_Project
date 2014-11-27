@@ -1,11 +1,10 @@
-package dpm.test;
+package dpm.lejos.test;
 
 import dpm.lejos.project.Utils;
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.LinkedList;
-
-import static org.junit.Assert.*;
 
 public class UtilsTest {
 
@@ -16,6 +15,6 @@ public class UtilsTest {
         for (int i = 0; i < 10; i++){
             list.add(i);
         }
-        System.out.println(Utils.medianList(list));
+        Assert.assertEquals(5, Utils.medianList(list));
     }
 }

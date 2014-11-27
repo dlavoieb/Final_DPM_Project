@@ -24,7 +24,13 @@
 			<include name="**/*.jar" />
 		</fileset>
 	</path>
-	
+
+    <path id="junit">
+        <fileset dir="./">
+            <include name="*.jar" />
+        </fileset>
+    </path>
+
 	<condition property="d32Flag" value="-d32" else="-Dblank.dummy.arg=">
 		<and>
 			<os family="mac" />
@@ -53,6 +59,7 @@
 			verbose="false"
 		>
 			<bootclasspath refid="lejos.nxt" />
+            <bootclasspath refid="junit" />
 			<!-- enable warnings -->
 			<compilerarg value="-Xlint:${source.warn}" />
 			<!--
@@ -234,4 +241,18 @@
 			<exclude name=".classpath" />
 		</zip>
 	</target>
+
+    <target name="runTests" description="Run JUnit tests">
+    <junit printsummary="yes" dir="${build.dir}" fork="true">
+        <classpath>
+            <pathelement location="junit-4.10.jar" />
+            <pathelement location="build/classes" />
+        </classpath>
+        <formatter type="xml"  usefile="false"/>
+
+        <test name="dpm.lejos.test.UtilsTest" haltonfailure="no"/>
+        <test name="dpm.lejos.test.OdometerTest" haltonfailure="no"/>
+
+    </junit>
+    </target>
 </project>
