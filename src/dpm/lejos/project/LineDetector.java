@@ -65,10 +65,21 @@ public class LineDetector extends Thread {
             list.remove(0);
             double diff = Utils.averageList(list, coeffs);
 
+
+            if (colorSensor.getSensorPort().getId() == 0) {
+            //    RConsole.println(String.valueOf(diff));
+            } else {
+              //  RConsole.println("\t" + String.valueOf(diff));
+            }
+
             if (Math.abs(diff) > LIGHT_THRESHOLD) {
+               // RConsole.println("Detected a line edge on sensor " + String.valueOf(colorSensor.getSensorPort().getId()));
                 //we detected a significant change
                 isLine = diff >= 0;
             }
+
+            if (isLine) RConsole.println("Sensor " + String.valueOf(colorSensor.getSensorPort().getId()) + " on line");
+
 
             try {
                 Thread.sleep(DEFAULT_PERIOD);

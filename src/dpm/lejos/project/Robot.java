@@ -42,10 +42,10 @@ import java.io.IOException;
  */
 public class Robot {
 
-	public final int ACCELERATION = 2500;
+	public final int ACCELERATION = 6500;
 	public final int CLAW_SPEED = 200;
     //TODO: decide actual cruise speed - seems too slow
-    public final int CRUISE_SPEED = 250;
+    public final int CRUISE_SPEED = 200;
     public final int ROTATE_SPEED = 150;
 
     public int clawLowerDistance = 470;
