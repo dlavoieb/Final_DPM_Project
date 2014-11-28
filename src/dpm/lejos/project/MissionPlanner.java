@@ -17,14 +17,14 @@ import lejos.nxt.comm.RConsole;
 public class MissionPlanner {
 
     private final Odometer odometer;
-    private final OdometryDisplay display;
+    private final SystemDisplay display;
     private final Navigation m_Navigation;
     private final Grabber m_Grabber;
     private final Orienteering orienteering;
     private final BlockDetection blockDetection;
     private Robot robot;
 
-    public MissionPlanner(Navigation navigation, Grabber grabber, Orienteering orienteering, Odometer odometer, OdometryDisplay display, BlockDetection blockDetection, Robot robot) {
+    public MissionPlanner(Navigation navigation, Grabber grabber, Orienteering orienteering, Odometer odometer, SystemDisplay display, BlockDetection blockDetection, Robot robot) {
 
         this.m_Navigation = navigation;
         this.m_Grabber = grabber;

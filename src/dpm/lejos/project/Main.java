@@ -18,7 +18,7 @@ public class Main {
         RConsole.openUSB(15000);
         Robot robot = new Robot();
         Odometer odometer = new Odometer(robot);
-        OdometryDisplay display = new OdometryDisplay(odometer);
+        SystemDisplay display = new SystemDisplay(odometer);
         Navigation navigation = new Navigation(robot, odometer, Mapper.MapID.Beta1);
         Orienteering orienteering = new Orienteering(robot, navigation, Mapper.MapID.Beta1);
         Grabber grabber = new Grabber(robot);

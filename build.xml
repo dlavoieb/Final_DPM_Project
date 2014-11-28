@@ -256,6 +256,7 @@
         <test name="dpm.lejos.test.OdometerTest" haltonfailure="no" outfile="Odo"/>
         <test name="dpm.lejos.test.VectorTest" haltonfailure="no" outfile="Vector"/>
         <test name="dpm.lejos.test.NavigationTest" haltonfailure="no" outfile="Navigation"/>
+        <test name="dpm.lejos.test.SystemDisplayTest" haltonfailure="no" outfile="Display"/>
 
     </junit>
     </target>

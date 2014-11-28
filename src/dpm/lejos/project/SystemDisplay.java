@@ -9,11 +9,11 @@ import lejos.nxt.comm.RConsole;
 /**
  * Class displaying the current telemetry to the LCD screen
  */
-public class OdometryDisplay extends Thread {
+public class SystemDisplay extends Thread {
 	private static final long DISPLAY_PERIOD = 250;
 	private Odometer odometer;
 
-    public OdometryDisplay(Odometer odometer) {
+    public SystemDisplay(Odometer odometer) {
         this.odometer = odometer;
     }
 
@@ -46,9 +46,9 @@ public class OdometryDisplay extends Thread {
 			}
             LCD.drawString(formattedDoubleToString(Math.toDegrees(position[2]), 2), 3, 2);
 
-           // LCD.drawString("L: " + String.valueOf(odometer.getLeftLight()) + "   R: " + String.valueOf(odometer.getRightLight()),0,6);
-           // if (odometer.isLeftLine()) LCD.drawString("LEFT", 0,7); else LCD.drawString("    ", 0,7);
-           // if (odometer.isRightLine()) LCD.drawString("RIGHT", 6,7); else LCD.drawString("     ", 6,7);
+            LCD.drawString("L: " + String.valueOf(odometer.getLeftLight()) + "   R: " + String.valueOf(odometer.getRightLight()),0,6);
+            if (odometer.isLeftLine()) LCD.drawString("LEFT", 0,7); else LCD.drawString("    ", 0,7);
+            if (odometer.isRightLine()) LCD.drawString("RIGHT", 6,7); else LCD.drawString("     ", 6,7);
 
 
             // throttle the OdometryDisplay
@@ -71,7 +71,7 @@ public class OdometryDisplay extends Thread {
      * @param places the number of trailling digits
      * @return the double as a string with the correct number of digits
      */
-	private static String formattedDoubleToString(double x, int places) {
+	public static String formattedDoubleToString(double x, int places) {
 		String result = "";
 		String stack = "";
 		long t;
