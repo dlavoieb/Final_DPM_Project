@@ -47,7 +47,7 @@ public class Navigation {
     /**
      * perform the navigation planning to get to the desired coordinate
      *
-     * call to <code>performMoves</code> that will move the robot
+     * call to <code>computeMoveList</code> that will move the robot
      * @param endingCoordinate the desired finish point
      */
     public void navigate(Coordinate endingCoordinate){
@@ -85,14 +85,17 @@ public class Navigation {
         }
 
         mapper.printDirections(reverseDirections);
-        performMoves(reverseDirections);
+        ArrayList<Coordinate> moveList = computeMoveList(reverseDirections);
+        performMoves(moveList);
     }
 
     /**
      * preform the list of movements
      * @param directions the list of movements to follow
      */
-    public void performMoves(ArrayList<Node> directions) {
+    public ArrayList<Coordinate> computeMoveList(ArrayList<Node> directions) {
+
+        ArrayList<Coordinate> coorList = new ArrayList<Coordinate>();
         int index = 0;
         while (directions.size()>1) {
             Node initial = directions.get(0);
@@ -113,7 +116,7 @@ public class Navigation {
                 index = 0;
 
                 RConsole.println("X: " + directions.get(index).getX() + ", Y: " + directions.get(index).getY());
-                travelTo(directions.get(index).getCoordinate());
+                coorList.add(directions.get(index).getCoordinate());
 
             } else if (initial.getY() == next.getY()) {
                 // next has same y
@@ -129,12 +132,15 @@ public class Navigation {
                 index = 0;
 
                 RConsole.println("X: " + directions.get(index).getX() + ", Y: " + directions.get(index).getY());
-                travelTo(directions.get(index).getCoordinate());
-
-            } else {
-                //unreachable code?
-                return;
+                coorList.add(directions.get(index).getCoordinate());
             }
+        }
+        return coorList;
+    }
+
+    public void performMoves(ArrayList <Coordinate> coordinates){
+        for (Coordinate coordinate : coordinates) {
+            travelTo(coordinate);
         }
     }
 
