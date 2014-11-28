@@ -6,6 +6,9 @@ documentation
 *.nxd
 out
 
+#junit reports#
+reports
+
 # Project #
 ###########
 .classpath

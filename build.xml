@@ -243,7 +243,10 @@
 	</target>
 
     <target name="runTests" depends="compile" description="Run JUnit tests">
-    <junit printsummary="yes" dir="${build.dir}" fork="true">
+        <delete dir="reports" />
+        <mkdir dir="reports" />
+
+        <junit printsummary="yes" dir="${build.dir}" fork="true">
         <classpath>
             <pathelement location="junit-4.10.jar" />
             <pathelement location="build/classes" />
@@ -252,11 +255,11 @@
         <classpath refid="lejos.nxt" />
         <formatter type="xml"  usefile="true"/>
 
-        <test name="dpm.lejos.test.UtilsTest" haltonfailure="no" outfile="Utils"/>
-        <test name="dpm.lejos.test.OdometerTest" haltonfailure="no" outfile="Odo"/>
-        <test name="dpm.lejos.test.VectorTest" haltonfailure="no" outfile="Vector"/>
-        <test name="dpm.lejos.test.NavigationTest" haltonfailure="no" outfile="Navigation"/>
-        <test name="dpm.lejos.test.SystemDisplayTest" haltonfailure="no" outfile="Display"/>
+        <test name="dpm.lejos.test.UtilsTest" haltonfailure="no" outfile="reports/Utils"/>
+        <test name="dpm.lejos.test.OdometerTest" haltonfailure="no" outfile="reports/Odo"/>
+        <test name="dpm.lejos.test.VectorTest" haltonfailure="no" outfile="reports/Vector"/>
+        <test name="dpm.lejos.test.NavigationTest" haltonfailure="no" outfile="reports/Navigation"/>
+        <test name="dpm.lejos.test.SystemDisplayTest" haltonfailure="no" outfile="reports/Display"/>
 
     </junit>
     </target>
