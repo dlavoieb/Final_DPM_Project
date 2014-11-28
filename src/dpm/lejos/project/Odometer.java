@@ -13,6 +13,7 @@ import lejos.nxt.comm.RConsole;
  */
 public class Odometer extends Thread{
     private Navigation navigation;
+    private OdometryCorrection odometryCorrection;
 
 	private NXTRegulatedMotor leftMotor;
 	private NXTRegulatedMotor rightMotor;
@@ -59,12 +60,8 @@ public class Odometer extends Thread{
         prevTachoR = 0;
         lineDetectorLeft = new LineDetector(m_robot.colorSensorLeft, m_robot.LIGHT_THRESHOLD, true);
         lineDetectorRight = new LineDetector(m_robot.colorSensorRight, m_robot.LIGHT_THRESHOLD, true);
-
-    }
-
-    public Odometer (Robot robot, boolean correct){
-        this(robot);
-        this.correct = correct;
+        odometryCorrection = new OdometryCorrection(this);
+        odometryCorrection.start();
     }
 
     /**
