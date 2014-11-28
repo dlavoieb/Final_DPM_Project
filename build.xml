@@ -204,6 +204,7 @@
             private="false"
 		>
 			<bootclasspath refid="lejos.nxt" />
+            <bootclasspath refid="junit" />
 			<!--
 				Without this, there are some JDK jars in the classpath.
 				Set verbose=true to check that the classpath is really clean.
@@ -211,9 +212,8 @@
     		<arg value="-extdirs" />
     		<arg value="" />
 			
-			<packageset	dir="${source.dir}"
-				includes="${source.include}"
-				excludes="${source.exclude}"
+			<packageset dir="${source.dir}"
+    			includes="${source.include}"
 			/>
 		</javadoc>
 	</target>

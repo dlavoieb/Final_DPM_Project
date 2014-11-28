@@ -28,6 +28,7 @@ public class Navigation {
      * default constructor
      *
      * @param robot the robot object
+     * @param odometer the odometer object reference
      */
 	public Navigation(Robot robot, Odometer odometer){
         m_robot = robot;
@@ -199,6 +200,7 @@ public class Navigation {
         }
     }
 
+
     public void rotateToCoordinate(double x, double y) {
         try {
             double[] currentPosition = m_Odometer.getPosition();
@@ -220,7 +222,7 @@ public class Navigation {
     /**
      * moves the robot to the specified coordinate
      * See the plane encoding in the orienteering or navigator classes
-     * @param destination
+     * @param destination the coordinate reference for the destination
      */
     public void travelTo(Coordinate destination) {
 

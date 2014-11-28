@@ -152,7 +152,7 @@ public class Robot {
 
     /**
      * returns the graph used for navigation
-     * @return
+     * @return the node table
      */
     public Node[][] getPlaneGraph() {
         return planeGraph;
@@ -160,7 +160,7 @@ public class Robot {
 
     /**
      * sets the graph used for navigation
-     * @param planeGraph
+     * @param planeGraph the new node table
      */
     public void setPlaneGraph(Node[][] planeGraph) {
         this.planeGraph = planeGraph;
@@ -169,7 +169,7 @@ public class Robot {
     /**
      * returns the plane object used for localization
      * and navigation purposes
-     * @return
+     * @return the tile table
      */
     public Tile[][] getPlane() {
         return plane;
@@ -178,7 +178,7 @@ public class Robot {
     /**
      * Sets the plane object used for localization
      * and navigation purposes
-     * @param plane
+     * @param plane the new tile table
      */
     public void setPlane(Tile[][] plane) {
         this.plane = plane;
@@ -187,7 +187,7 @@ public class Robot {
     /**
      * returns the coordinate represeting the position of the robot
      * on the grid
-     * @return
+     * @return the current coordinate on the grid
      */
     public Coordinate getPositionOnGrid() {
         return positionOnGrid;
@@ -196,7 +196,7 @@ public class Robot {
     /**
      * sets the coordinate representing the position of the robot
      * on the grid
-     * @param positionOnGrid
+     * @param positionOnGrid the new coordinate on the grid
      */
     public void setPositionOnGrid(Coordinate positionOnGrid) {
         this.positionOnGrid = positionOnGrid;
@@ -204,7 +204,7 @@ public class Robot {
 
     /**
      * get the current direction the robot is looking at
-     * @return
+     * @return the current cardinal direction
      */
     public Direction getDirection() {
         return direction;
@@ -212,7 +212,7 @@ public class Robot {
 
     /**
      * Modify the direction the robot is looking at
-     * @param direction
+     * @param direction the new cardinal direction
      */
     public void setDirection(Direction direction) {
         this.direction = direction;

@@ -122,6 +122,8 @@ public class Odometer extends Thread{
 	/**
 	 * This method is the single entry point
      * to get the position of the robot.
+     *
+     * @return position array [x,y,theta]
   	 */
 	public double [] getPosition(){
         synchronized (lock) {

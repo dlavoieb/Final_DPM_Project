@@ -66,6 +66,7 @@ public class Orienteering {
      * Determines the initial location and orientation of the robot
      * based on data obtained from its surroundings.
      *
+     * @param odometer the odometer object used for position estimation
      */
     public void deterministicPositioning(Odometer odometer) {
 

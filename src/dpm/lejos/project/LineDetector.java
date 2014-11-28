@@ -39,6 +39,8 @@ public class LineDetector extends Thread {
      * constructor with added period adjustment capability
      * @param colorSensor requires the object light sensor
      * @param start boolean to start the timer right away
+     * @param lightThreshold the threshold for line detection
+     * @param window the size of the sampling window if different from default
      */
      public LineDetector(SuperColorSensor colorSensor, int lightThreshold, int window, boolean start) {
          LIGHT_THRESHOLD = lightThreshold;
