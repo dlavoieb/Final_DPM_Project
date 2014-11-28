@@ -118,7 +118,7 @@ public class Robot {
      * no parameters, all defaults should be initialized in this class
      */
     public Robot(){
-       /*  try {
+         try {
             LCD.clear();
             LCD.drawString("Connecting...",0,0);
             NXTCommConnector connector = Bluetooth.getConnector();
@@ -133,13 +133,13 @@ public class Robot {
             Sound.systemSound(false, 4);
             Delay.msDelay(2000);
             System.exit(1);
-        }*/
+        }
 
-      //  clawLift = slave.A;
+        clawLift = slave.A;
         clawClose = Motor.C;
-     //   clawTouch = new TouchSensor(slave.S2);
+        clawTouch = new TouchSensor(slave.S2);
 
-    //    usFront = new UltrasonicSensor(slave.S1);
+        usFront = new UltrasonicSensor(slave.S1);
         usLeft = new UltrasonicSensor(SensorPort.S3);
         usRight = new UltrasonicSensor(SensorPort.S4);
         colorSensorLeft = new SuperColorSensor(SensorPort.S1);
@@ -150,6 +150,7 @@ public class Robot {
         clawClose = Motor.B;
     }
 
+    public  Robot (boolean test){}
     /**
      * returns the graph used for navigation
      * @return the node table
