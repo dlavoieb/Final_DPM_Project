@@ -63,6 +63,8 @@ public class Tile {
 
     /**
      * Add tile to neighbour tiles array
+     *
+     * @param tiles the tile array
      */
     public void addNeighbourTiles(Tile[] tiles) {
         for (Tile tile : tiles) {

@@ -7,7 +7,6 @@ import dpm.lejos.orientation.Tile;
 import lejos.nxt.*;
 import lejos.nxt.comm.Bluetooth;
 import lejos.nxt.comm.NXTCommConnector;
-import lejos.nxt.comm.RConsole;
 import lejos.nxt.remote.RemoteMotor;
 import lejos.nxt.remote.RemoteNXT;
 import lejos.util.Delay;
@@ -38,26 +37,28 @@ import java.io.IOException;
  *          front   claw
  *
  * @author David Lavoie-Boutin
- * @version 1.0
+ * @version 1.5
  */
 public class Robot {
 
-	public final int ACCELERATION = 500;
-	public final int CLAW_SPEED = 200;
+    public static int CORRECTION_THRESHOLD = 5;
+    public static int ACCELERATION = 6500;
+    public static int CLAW_SPEED = 200;
     //TODO: decide actual cruise speed - seems too slow
-    public final int CRUISE_SPEED = 250;
-    public final int ROTATE_SPEED = 150;
+    public static int CRUISE_SPEED = 200;
+    public static int ROTATE_SPEED = 150;
 
-    public int clawLowerDistance = 470;
-    public int clawPrepare = -360;
-    public int clawCloseAngle = -250;
-    public double wheelBase = 12.5; //TODO : Continue to tweak
-    public double wheelRadius = 2.02; //TODO: Still need to calibrate
-    public double lightSensorOffset = 5; //TODO : Get real value
+    public static int clawLowerDistance = 470;
+    public static int clawPrepare = -360;
+    public static int clawCloseAngle = -250;
+    public static double wheelBase = 12.5; //TODO : Continue to tweak
+    public static double wheelRadius = 2.02; //TODO: Still need to calibrate
+    public static double lightSensorOffset = 5; //TODO : Get real value
+    public static double lsDistance = 12.7;
 
-
-    public final double ACCEPTABLE_ANGLE = 1.00;
-    public final double ACCEPTABLE_LINEAR = 1.00;
+    public static double ACCEPTABLE_ANGLE = 1.00;
+    public static double ACCEPTABLE_LINEAR = 1.00;
+    static int acceptableSideError = 3;
 
     private Direction direction = null;
     private Coordinate positionOnGrid;
@@ -67,9 +68,9 @@ public class Robot {
     //the plane graph is used for navigation
     private Node[][] planeGraph;
 
-    public int LIGHT_THRESHOLD = 500;
-    public double tileLength = 30;
-    public int ODOMETER_PERIOD = 100;
+    public static int LIGHT_THRESHOLD = 10;
+    public static double tileLength = 30;
+    public static int ODOMETER_PERIOD = 100;
 
     /**
      * motor for lifting and lowering the arms
@@ -118,24 +119,24 @@ public class Robot {
      * no parameters, all defaults should be initialized in this class
      */
     public Robot(){
-//         try {
-//            LCD.clear();
-//            LCD.drawString("Connecting...",0,0);
-//            NXTCommConnector connector = Bluetooth.getConnector();
-//            slave = new RemoteNXT("Optimus", connector);
-//            LCD.clear();
-//            LCD.drawString("Connected",0,1);
-//            Sound.systemSound(false, 1);
-//            Delay.msDelay(500);
-//        } catch (IOException e) {
-//            LCD.clear();
-//            LCD.drawString("Failed",0,0);
-//            Sound.systemSound(false, 4);
-//            Delay.msDelay(2000);
-//            System.exit(1);
-//        }
-//
-//        clawLift = slave.A;
+         try {
+            LCD.clear();
+            LCD.drawString("Connecting...",0,0);
+            NXTCommConnector connector = Bluetooth.getConnector();
+            slave = new RemoteNXT("Optimus", connector);
+            LCD.clear();
+            LCD.drawString("Connected",0,1);
+            Sound.systemSound(false, 1);
+            Delay.msDelay(500);
+        } catch (IOException e) {
+            LCD.clear();
+            LCD.drawString("Failed",0,0);
+            Sound.systemSound(false, 4);
+            Delay.msDelay(2000);
+            System.exit(1);
+        }
+
+        clawLift = slave.A;
         clawClose = Motor.C;
         clawTouch = new TouchSensor(slave.S2);
 
@@ -150,9 +151,10 @@ public class Robot {
         motorRight = Motor.B;
     }
 
+    public  Robot (boolean test){}
     /**
      * returns the graph used for navigation
-     * @return
+     * @return the node table
      */
     public Node[][] getPlaneGraph() {
         return planeGraph;
@@ -160,7 +162,7 @@ public class Robot {
 
     /**
      * sets the graph used for navigation
-     * @param planeGraph
+     * @param planeGraph the new node table
      */
     public void setPlaneGraph(Node[][] planeGraph) {
         this.planeGraph = planeGraph;
@@ -169,7 +171,7 @@ public class Robot {
     /**
      * returns the plane object used for localization
      * and navigation purposes
-     * @return
+     * @return the tile table
      */
     public Tile[][] getPlane() {
         return plane;
@@ -178,7 +180,7 @@ public class Robot {
     /**
      * Sets the plane object used for localization
      * and navigation purposes
-     * @param plane
+     * @param plane the new tile table
      */
     public void setPlane(Tile[][] plane) {
         this.plane = plane;
@@ -187,7 +189,7 @@ public class Robot {
     /**
      * returns the coordinate represeting the position of the robot
      * on the grid
-     * @return
+     * @return the current coordinate on the grid
      */
     public Coordinate getPositionOnGrid() {
         return positionOnGrid;
@@ -196,7 +198,7 @@ public class Robot {
     /**
      * sets the coordinate representing the position of the robot
      * on the grid
-     * @param positionOnGrid
+     * @param positionOnGrid the new coordinate on the grid
      */
     public void setPositionOnGrid(Coordinate positionOnGrid) {
         this.positionOnGrid = positionOnGrid;
@@ -204,7 +206,7 @@ public class Robot {
 
     /**
      * get the current direction the robot is looking at
-     * @return
+     * @return the current cardinal direction
      */
     public Direction getDirection() {
         return direction;
@@ -212,7 +214,7 @@ public class Robot {
 
     /**
      * Modify the direction the robot is looking at
-     * @param direction
+     * @param direction the new cardinal direction
      */
     public void setDirection(Direction direction) {
         this.direction = direction;

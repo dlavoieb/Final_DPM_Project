@@ -3,7 +3,6 @@ package dpm.lejos.project;
 import dpm.lejos.orientation.Coordinate;
 import dpm.lejos.orientation.Mapper;
 import dpm.lejos.orientation.Node;
-import dpm.lejos.orientation.Orienteering.*;
 import lejos.nxt.comm.RConsole;
 
 import java.util.ArrayList;
@@ -23,28 +22,33 @@ public class Navigation {
 
     private Robot m_robot;
 
+    private boolean movingForward = false;
+
     /**
      * default constructor
      *
      * @param robot the robot object
+     * @param odometer the odometer object reference
      */
 	public Navigation(Robot robot, Odometer odometer){
         m_robot = robot;
         mapper = new Mapper(Mapper.MapID.Lab5);
         m_Odometer=odometer;
-
+        m_Odometer.setNavigation(this);
 	}
 
     public Navigation(Robot robot, Odometer odometer, Mapper.MapID id){
         m_robot = robot;
         mapper = new Mapper(id);
         m_Odometer=odometer;
+        m_Odometer.setNavigation(this);
+        m_Odometer.startCorrection();
     }
 
     /**
      * perform the navigation planning to get to the desired coordinate
      *
-     * call to <code>performMoves</code> that will move the robot
+     * call to <code>computeMoveList</code> that will move the robot
      * @param endingCoordinate the desired finish point
      */
     public void navigate(Coordinate endingCoordinate){
@@ -66,7 +70,7 @@ public class Navigation {
                 break;
             } else {
                 for(Node node : current.getNeighbours()){
-                    if(!node.getVisited() && !node.isObstacle()){
+                    if(!node.getVisited()){
                         queue.add(node);
                         node.setVisited(true);
                         node.setPrevious(current);
@@ -82,14 +86,17 @@ public class Navigation {
         }
 
         mapper.printDirections(reverseDirections);
-        performMoves(reverseDirections);
+        ArrayList<Coordinate> moveList = computeMoveList(reverseDirections);
+        performMoves(moveList);
     }
 
     /**
      * preform the list of movements
      * @param directions the list of movements to follow
      */
-    public void performMoves(ArrayList<Node> directions) {
+    public ArrayList<Coordinate> computeMoveList(ArrayList<Node> directions) {
+
+        ArrayList<Coordinate> coorList = new ArrayList<Coordinate>();
         int index = 0;
         while (directions.size()>1) {
             Node initial = directions.get(0);
@@ -110,7 +117,7 @@ public class Navigation {
                 index = 0;
 
                 RConsole.println("X: " + directions.get(index).getX() + ", Y: " + directions.get(index).getY());
-                travelTo(directions.get(index).getCoordinate());
+                coorList.add(directions.get(index).getCoordinate());
 
             } else if (initial.getY() == next.getY()) {
                 // next has same y
@@ -126,12 +133,15 @@ public class Navigation {
                 index = 0;
 
                 RConsole.println("X: " + directions.get(index).getX() + ", Y: " + directions.get(index).getY());
-                travelTo(directions.get(index).getCoordinate());
-
-            } else {
-                //unreachable code?
-                return;
+                coorList.add(directions.get(index).getCoordinate());
             }
+        }
+        return coorList;
+    }
+
+    public void performMoves(ArrayList <Coordinate> coordinates){
+        for (Coordinate coordinate : coordinates) {
+            travelTo(coordinate);
         }
     }
 
@@ -166,20 +176,22 @@ public class Navigation {
             RConsole.println("Orientation: " + String.valueOf(Math.toDegrees(vector.getOrientation())));
             rotateTo(Math.toDegrees(vector.getOrientation()));
 
-//            m_robot.motorLeft.setAcceleration(m_robot.ACCELERATION);
-//            m_robot.motorRight.setAcceleration(m_robot.ACCELERATION);
-            m_robot.motorLeft.setAcceleration(2500);
-            m_robot.motorRight.setAcceleration(2500);
+            movingForward = true;
+            m_robot.motorLeft.setAcceleration(Robot.ACCELERATION);
+            m_robot.motorRight.setAcceleration(Robot.ACCELERATION);
 
-            m_robot.motorLeft.setSpeed(m_robot.CRUISE_SPEED + 8);
-            m_robot.motorRight.setSpeed(m_robot.CRUISE_SPEED);
+            m_robot.motorLeft.setSpeed(Robot.CRUISE_SPEED);
+            m_robot.motorRight.setSpeed(Robot.CRUISE_SPEED);
 
-            m_robot.motorLeft.rotate(Utils.robotDistanceToMotorAngle(vector.getMagnitude() - 1, m_robot), true);
-            m_robot.motorRight.rotate(Utils.robotDistanceToMotorAngle(vector.getMagnitude() - 1, m_robot), false);
+            m_robot.motorLeft.rotate(Utils.robotDistanceToMotorAngle(vector.getMagnitude(), m_robot), true);
+            m_robot.motorRight.rotate(Utils.robotDistanceToMotorAngle(vector.getMagnitude(), m_robot), true);
+
 
             while(isNavigating()){
                 Thread.sleep(10);
             }
+            movingForward = false;
+
             RConsole.println("");
             RConsole.println("travel X = " + Double.toString(x));
             RConsole.println("travel y = " + Double.toString(y));
@@ -187,15 +199,16 @@ public class Navigation {
             RConsole.println("Pos Y before closeEnough = " + Double.toString(m_Odometer.getY()));
             RConsole.println("");
 
-//            if (!closeEnough(x, y)) {
-//                RConsole.println("Not close enough, redo!");
-//                travelTo(x, y);
-//            }
+            if (!closeEnough(x, y)) {
+                RConsole.println("Not close enough, redo!");
+                travelTo(x, y);
+            }
         }
         catch (Exception e){
             e.printStackTrace();
         }
     }
+
 
     public void rotateToCoordinate(double x, double y) {
         try {
@@ -218,41 +231,41 @@ public class Navigation {
     /**
      * moves the robot to the specified coordinate
      * See the plane encoding in the orienteering or navigator classes
-     * @param destination
+     * @param destination the coordinate reference for the destination
      */
     public void travelTo(Coordinate destination) {
 
-        RConsole.println("COORDINATE X = " + Double.toString(destination.getX() * m_robot.tileLength + m_robot.tileLength/2.0));
-        RConsole.println("COORDINATE Y = " + Double.toString(destination.getY() *  m_robot.tileLength + m_robot.tileLength / 2.0));
+        RConsole.println("COORDINATE X = " + Double.toString(destination.getX() * Robot.tileLength + Robot.tileLength /2.0));
+        RConsole.println("COORDINATE Y = " + Double.toString(destination.getY() * Robot.tileLength + Robot.tileLength / 2.0));
 
-        travelTo(destination.getX() * m_robot.tileLength + m_robot.tileLength / 2.0, destination.getY() *  m_robot.tileLength + m_robot.tileLength / 2.0);
+        travelTo(destination.getX() * Robot.tileLength + Robot.tileLength / 2.0, destination.getY() * Robot.tileLength + Robot.tileLength / 2.0);
     }
 
     /**
      * move the robot one tile forward
      */
     public void moveForward() {
-        m_robot.motorLeft.setSpeed(m_robot.CRUISE_SPEED);
-        m_robot.motorRight.setSpeed(m_robot.CRUISE_SPEED);
-        m_robot.motorLeft.rotate(Utils.robotDistanceToMotorAngle(m_robot.tileLength, m_robot), true);
-        m_robot.motorRight.rotate(Utils.robotDistanceToMotorAngle(m_robot.tileLength, m_robot), false);
+        m_robot.motorLeft.setSpeed(Robot.CRUISE_SPEED);
+        m_robot.motorRight.setSpeed(Robot.CRUISE_SPEED);
+        m_robot.motorLeft.rotate(Utils.robotDistanceToMotorAngle(Robot.tileLength, m_robot), true);
+        m_robot.motorRight.rotate(Utils.robotDistanceToMotorAngle(Robot.tileLength, m_robot), false);
     }
 
     /**
      * mov the robot forward half a tile
      */
     public void moveForwardHalfATile() {
-        m_robot.motorLeft.setSpeed(m_robot.CRUISE_SPEED);
-        m_robot.motorRight.setSpeed(m_robot.CRUISE_SPEED);
-        m_robot.motorLeft.rotate(Utils.robotDistanceToMotorAngle(m_robot.tileLength / 2, m_robot), true);
-        m_robot.motorRight.rotate(Utils.robotDistanceToMotorAngle(m_robot.tileLength / 2, m_robot), false);
+        m_robot.motorLeft.setSpeed(Robot.CRUISE_SPEED);
+        m_robot.motorRight.setSpeed(Robot.CRUISE_SPEED);
+        m_robot.motorLeft.rotate(Utils.robotDistanceToMotorAngle(Robot.tileLength / 2, m_robot), true);
+        m_robot.motorRight.rotate(Utils.robotDistanceToMotorAngle(Robot.tileLength / 2, m_robot), false);
     }
 
     public void moveForwardQuarterOfATile() {
-        m_robot.motorLeft.setSpeed(m_robot.CRUISE_SPEED);
-        m_robot.motorRight.setSpeed(m_robot.CRUISE_SPEED);
-        m_robot.motorLeft.rotate(Utils.robotDistanceToMotorAngle(m_robot.tileLength / 4, m_robot), true);
-        m_robot.motorRight.rotate(Utils.robotDistanceToMotorAngle(m_robot.tileLength / 4, m_robot), false);
+        m_robot.motorLeft.setSpeed(Robot.CRUISE_SPEED);
+        m_robot.motorRight.setSpeed(Robot.CRUISE_SPEED);
+        m_robot.motorLeft.rotate(Utils.robotDistanceToMotorAngle(Robot.tileLength / 4, m_robot), true);
+        m_robot.motorRight.rotate(Utils.robotDistanceToMotorAngle(Robot.tileLength / 4, m_robot), false);
     }
 
     /**
@@ -274,8 +287,8 @@ public class Navigation {
 
         m_robot.motorLeft.setAcceleration(4000);
         m_robot.motorRight.setAcceleration(4000);
-        m_robot.motorLeft.setSpeed(m_robot.ROTATE_SPEED + 150);
-        m_robot.motorRight.setSpeed(m_robot.ROTATE_SPEED + 155);
+        m_robot.motorLeft.setSpeed(Robot.ROTATE_SPEED + 150);
+        m_robot.motorRight.setSpeed(Robot.ROTATE_SPEED + 155);
 
         if (Math.abs(rotationAngle) < 3) {
             m_robot.motorLeft.rotate((rotationAngle > 0 ? -3 : 3), true);
@@ -289,10 +302,10 @@ public class Navigation {
         RConsole.println("\nTheta destination = " + Double.toString(theta));
         RConsole.println("Theta current = " + Double.toString(m_Odometer.getThetaInDegrees()));
 
-//        if (!closeEnough(theta)){
-//            RConsole.println("Not close enough, redo!");
-//            rotateTo(theta);
-//        }
+        if (!closeEnough(theta)){
+            RConsole.println("Not close enough, redo!");
+            rotateTo(theta);
+        }
     }
 
     /**
@@ -314,78 +327,15 @@ public class Navigation {
     }
 
     /**
-    * position the robot facing north
-    * @param destinationDirection the current heading
-    */
-    //TODO: refactor to use rotateTo instead of multiple CW/CCW
-	public void rotateToDirection(Direction destinationDirection) {
-
-        Direction robotDirection = m_robot.getDirection();
-
-        if (robotDirection == Direction.NORTH) {
-            switch (destinationDirection) {
-                case SOUTH:
-                    rotate90CounterClock();
-                    rotate90CounterClock();
-                    break;
-                case EAST:
-                    rotate90ClockWise();
-                    break;
-                case WEST:
-                    rotate90CounterClock();
-                    break;
-            }
-        } else if (robotDirection == Direction.SOUTH) {
-            switch (destinationDirection) {
-                case NORTH:
-                    rotate90CounterClock();
-                    rotate90CounterClock();
-                    break;
-                case EAST:
-                    rotate90CounterClock();
-                    break;
-                case WEST:
-                    rotate90ClockWise();
-                    break;
-            }
-        } else if (robotDirection == Direction.EAST) {
-            switch (destinationDirection) {
-                case NORTH:
-                    rotate90CounterClock();
-                    break;
-                case SOUTH:
-                    rotate90ClockWise();
-                    break;
-                case WEST:
-                    rotate90CounterClock();
-                    rotate90CounterClock();
-                    break;
-            }
-        } else {
-            switch (destinationDirection) {
-                case NORTH:
-                    rotate90ClockWise();
-                    break;
-                case SOUTH:
-                    rotate90CounterClock();
-                    break;
-                case EAST:
-                    rotate90CounterClock();
-                    rotate90CounterClock();
-                    break;
-            }
-        }
-
-        m_robot.setDirection(destinationDirection);
-
-    }
-
-    /**
      * Check if the robot is travelling
      * @return is the robot travelling
      */
     public boolean isNavigating(){
         return m_robot.motorLeft.isMoving() || m_robot.motorRight.isMoving();
+    }
+
+    public boolean isMovingForward() {
+        return movingForward;
     }
 
     /**
@@ -403,7 +353,8 @@ public class Navigation {
      * @return boolean true if in acceptable range
      */
     public boolean closeEnough(double x, double y) {
-        return Math.abs(x - m_Odometer.getX()) < m_robot.ACCEPTABLE_LINEAR && Math.abs(y - m_Odometer.getY()) < m_robot.ACCEPTABLE_LINEAR;
+        RConsole.println("Entering close enough x,y");
+        return Math.abs(x - m_Odometer.getX()) < Robot.ACCEPTABLE_LINEAR && Math.abs(y - m_Odometer.getY()) < Robot.ACCEPTABLE_LINEAR;
     }
 
     /**
@@ -412,7 +363,7 @@ public class Navigation {
      * @return boolean true if in acceptable range
      * */
     public boolean closeEnough(double theta) {
-        return Math.abs((theta > - 10 ? theta : (theta + 360) % 360) - m_Odometer.getThetaInDegrees()) <= m_robot.ACCEPTABLE_ANGLE;
+        return Math.abs(theta - m_Odometer.getThetaInDegrees()) <= Robot.ACCEPTABLE_ANGLE;
     }
 
     /**
@@ -421,7 +372,7 @@ public class Navigation {
      * @return boolean true if in acceptable range
      */
     public boolean closeEnough(Coordinate coordinate) {
-        return Math.abs(coordinate.getX() - m_Odometer.getX()) < m_robot.ACCEPTABLE_LINEAR && Math.abs(coordinate.getY() - m_Odometer.getY()) < m_robot.ACCEPTABLE_LINEAR;
+        return Math.abs(coordinate.getX() - m_Odometer.getX()) < Robot.ACCEPTABLE_LINEAR && Math.abs(coordinate.getY() - m_Odometer.getY()) < Robot.ACCEPTABLE_LINEAR;
     }
 
     /**

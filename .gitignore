@@ -1,10 +1,13 @@
-
+documentation
 # Compiled # 
 ############
 *.class
 *.nxj
 *.nxd
 out
+
+#junit reports#
+reports
 
 # Project #
 ###########

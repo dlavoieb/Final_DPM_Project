@@ -1,8 +1,9 @@
 package dpm.lejos.project;
 
 import lejos.nxt.ColorSensor;
-import lejos.util.Timer;
-import lejos.util.TimerListener;
+import lejos.nxt.comm.RConsole;
+
+import java.util.LinkedList;
 
 /**
  * Class that polls the down facing light sensor to detect floor lines
@@ -10,15 +11,19 @@ import lejos.util.TimerListener;
  * @author David Lavoie-Boutin
  * @version 1.0
  */
-public class LineDetector implements TimerListener {
+public class LineDetector extends Thread {
 
     private static final int DEFAULT_PERIOD = 25;
-    private Timer timer;
+    private static final int DEFAULT_WINDOW = 4;
     private boolean isLine;
     private ColorSensor colorSensor;
     private int LIGHT_THRESHOLD;
 
-    private int pastLightValue;
+    private double[] coeffs = new double[] {1/2.0,-1/6.0, -1/6.0, -1/6.0};
+
+    private LinkedList<Integer> list = new LinkedList<Integer>();
+
+    private double pastLight = 0;
 
     /**
      * default constructor
@@ -27,22 +32,26 @@ public class LineDetector implements TimerListener {
      * @param start boolean to start the timer right away
      */
     public LineDetector(ColorSensor colorSensor, int lightThreshold, boolean start){
-        this(colorSensor, lightThreshold, DEFAULT_PERIOD, start);
+        this(colorSensor, lightThreshold, DEFAULT_WINDOW, start);
     }
 
     /**
      * constructor with added period adjustment capability
      * @param colorSensor requires the object light sensor
-     * @param period the period of the timer
      * @param start boolean to start the timer right away
+     * @param lightThreshold the threshold for line detection
+     * @param window the size of the sampling window if different from default
      */
-     public LineDetector(ColorSensor colorSensor, int lightThreshold, int period, boolean start) {
+     public LineDetector(ColorSensor colorSensor, int lightThreshold, int window, boolean start) {
          LIGHT_THRESHOLD = lightThreshold;
-         timer = new Timer(period, this);
          this.colorSensor = colorSensor;
-         if(start) timer.start();
-         pastLightValue = colorSensor.getNormalizedLightValue();
-    }
+         colorSensor.setFloodlight(true);
+         for (int i = 0; i < window; i++){
+             list.add(colorSensor.getNormalizedLightValue());
+         }
+         if(start) this.start();
+
+     }
 
     /**
      * callback for the timer timeout
@@ -50,16 +59,29 @@ public class LineDetector implements TimerListener {
      * checks the change in the value of the read light
      * and compares with the set threshold
      */
-    public void timedOut(){
+    public void run(){
 
-        int currentLightValue = this.colorSensor.getNormalizedLightValue();
-        int diff = pastLightValue - currentLightValue;
-        if (Math.abs(diff) > LIGHT_THRESHOLD){
-            //we detected a significant change
-            isLine = diff <= 0;
+        while(true) {
+
+            list.add(colorSensor.getNormalizedLightValue());
+            list.remove(0);
+            double diff = Utils.averageList(list, coeffs);
+
+            pastLight = diff;
+
+            if (Math.abs(diff) > LIGHT_THRESHOLD) {
+               // RConsole.println("Detected a line edge on sensor " + String.valueOf(colorSensor.getSensorPort().getId()));
+                //we detected a significant change
+                isLine = diff >= 0;
+            }
+
+
+            try {
+                Thread.sleep(DEFAULT_PERIOD);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
-
-        pastLightValue = currentLightValue;
 	}
 
     /**
@@ -71,10 +93,7 @@ public class LineDetector implements TimerListener {
         return isLine;
     }
 
-    /**
-     * manual start of the timer
-     */
-    public void startTimer(){
-        timer.start();
+    public int getPastLightValue(){
+        return (int) pastLight;
     }
 }//end LineDetector

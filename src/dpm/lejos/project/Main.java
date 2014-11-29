@@ -1,6 +1,5 @@
 package dpm.lejos.project;
 
-import dpm.lejos.orientation.Coordinate;
 import dpm.lejos.orientation.Mapper;
 import dpm.lejos.orientation.Orienteering;
 import lejos.nxt.comm.RConsole;
@@ -16,13 +15,12 @@ import lejos.nxt.comm.RConsole;
 public class Main {
 
     public static void main(String [] argv){
-        //RConsole.openUSB(15000);
+        RConsole.openUSB(15000);
         Robot robot = new Robot();
-
         Odometer odometer = new Odometer(robot);
-        OdometryDisplay display = new OdometryDisplay(odometer);
-        Navigation navigation = new Navigation(robot, odometer, Mapper.MapID.Beta1);
-        Orienteering orienteering = new Orienteering(robot, navigation, Mapper.MapID.Beta1);
+        SystemDisplay display = new SystemDisplay(odometer);
+        Navigation navigation = new Navigation(robot, odometer, Mapper.MapID.Lab5);
+        Orienteering orienteering = new Orienteering(robot, navigation, Mapper.MapID.Lab5);
         Grabber grabber = new Grabber(robot);
         BlockDetection blockDetection = new BlockDetection(robot, odometer, navigation);
 
@@ -31,11 +29,6 @@ public class Main {
         missionPlanner.startMission();
 
         System.exit(0);
-    }
-
-    public static void virtualNavigationTest(Robot robot, Navigation nav) {
-        robot.setPositionOnGrid(new Coordinate(1,0));
-        nav.travelTo(new Coordinate(0,3));
     }
 
 }//end Main

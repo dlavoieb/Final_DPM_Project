@@ -18,14 +18,13 @@ import lejos.nxt.comm.RConsole;
 public class MissionPlanner {
 
     private final Odometer odometer;
-    private final OdometryDisplay display;
+    private final SystemDisplay display;
     private final Navigation m_Navigation;
     private final Grabber m_Grabber;
     private final Orienteering orienteering;
     private final BlockDetection blockDetection;
-    private Robot robot;
 
-    public MissionPlanner(Navigation navigation, Grabber grabber, Orienteering orienteering, Odometer odometer, OdometryDisplay display, BlockDetection blockDetection, Robot robot) {
+    public MissionPlanner(Navigation navigation, Grabber grabber, Orienteering orienteering, Odometer odometer, SystemDisplay display, BlockDetection blockDetection, Robot robot) {
 
         this.m_Navigation = navigation;
         this.m_Grabber = grabber;
@@ -33,7 +32,6 @@ public class MissionPlanner {
         this.odometer = odometer;
         this.display = display;
         this.blockDetection = blockDetection;
-        this.robot = robot;
     }
 
     /**
@@ -49,14 +47,15 @@ public class MissionPlanner {
      * 6- repeat from 2 onwards
      */
     public void startMission(){
-//        localizationAndNavigationTest();
-//        navigationTest(robot);
-//        clawTest();
-//        calibrateBase();
-//        localizationTest();
-//        pickBlockTest();
-        fullTest();
-//        pickBlockTest();
+        odoCorrectionTest();
+    }
+
+    public void odoCorrectionTest(){
+        odometer.startCorrection();
+        odometer.start();
+        display.start();
+        m_Navigation.travelTo(60,0);
+        Button.waitForAnyPress();
     }
 
     public void demoMission(){
@@ -90,7 +89,7 @@ public class MissionPlanner {
     public void calibrateRadius(){
         odometer.start();
         display.start();
-        m_Navigation.travelTo(2 * robot.tileLength, 0);
+        m_Navigation.travelTo(2 * Robot.tileLength, 0);
         System.exit(0);
     }
 
@@ -156,12 +155,11 @@ public class MissionPlanner {
         odometer.start();
         orienteering.deterministicPositioning(odometer);
         Sound.beep();
-        //m_Navigation.navigate(new Coordinate(5,1));
-//        double x = 6 * 30 + 30 / 2.0;
-//        double y = 1 *  30 + 30 / 2.0;
-//        m_Navigation.rotateToCoordinate(x,y);
-//        blockDetection.lookForBlock(m_Grabber);
-        Button.waitForAnyPress();
+        m_Navigation.navigate(new Coordinate(5,1));
+        double x = 6 * 30 + 30 / 2.0;
+        double y = 30 + 30 / 2.0;
+        m_Navigation.rotateToCoordinate(x,y);
+        blockDetection.lookForBlock(m_Grabber);
 
     }
 

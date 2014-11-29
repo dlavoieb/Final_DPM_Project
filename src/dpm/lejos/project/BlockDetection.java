@@ -6,7 +6,9 @@ import lejos.nxt.comm.RConsole;
 import java.util.Arrays;
 
 /**
- * Created by danielmacario on 14-11-16.
+ *
+ * @author Daniel Macario
+ * @version v1.1
  */
 public class BlockDetection {
 
@@ -18,6 +20,8 @@ public class BlockDetection {
      * default constructor
      *
      * @param robot the robot object
+     * @param navigation the navigation reference
+     * @param odometer  the odometer reference
      */
     public BlockDetection(Robot robot, Odometer odometer, Navigation navigation){
         this.m_robot = robot;
