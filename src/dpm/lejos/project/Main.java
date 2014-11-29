@@ -19,8 +19,8 @@ public class Main {
         Robot robot = new Robot();
         Odometer odometer = new Odometer(robot);
         SystemDisplay display = new SystemDisplay(odometer);
-        Navigation navigation = new Navigation(robot, odometer, Mapper.MapID.Beta1);
-        Orienteering orienteering = new Orienteering(robot, navigation, Mapper.MapID.Beta1);
+        Navigation navigation = new Navigation(robot, odometer, Mapper.MapID.Lab5);
+        Orienteering orienteering = new Orienteering(robot, navigation, Mapper.MapID.Lab5);
         Grabber grabber = new Grabber(robot);
         BlockDetection blockDetection = new BlockDetection(robot, odometer, navigation);
 

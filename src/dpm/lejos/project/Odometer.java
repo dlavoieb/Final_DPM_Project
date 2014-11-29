@@ -111,6 +111,10 @@ public class Odometer extends Thread{
         }
     }
 
+    public void startCorrection() {
+        this.odometryCorrection.start();
+    }
+
 	/**
 	 * This method is the single entry point
      * to get the position of the robot.
@@ -175,10 +179,6 @@ public class Odometer extends Thread{
         return lineDetectorRight.isLine();
     }
 
-    public void startCorrection(){
-        this.correct = true;
-    }
-
     private void correct(){
         //logical XOR
         //correction only viable during linear travel
@@ -226,6 +226,7 @@ public class Odometer extends Thread{
 
     public void setNavigation(Navigation navigation){
         this.navigation = navigation;
+        this.odometryCorrection.setNavigation(navigation);
     }
 
 	/**

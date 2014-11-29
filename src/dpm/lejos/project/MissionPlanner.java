@@ -22,7 +22,6 @@ public class MissionPlanner {
     private final Grabber m_Grabber;
     private final Orienteering orienteering;
     private final BlockDetection blockDetection;
-    private Robot robot;
 
     public MissionPlanner(Navigation navigation, Grabber grabber, Orienteering orienteering, Odometer odometer, SystemDisplay display, BlockDetection blockDetection, Robot robot) {
 
@@ -32,7 +31,6 @@ public class MissionPlanner {
         this.odometer = odometer;
         this.display = display;
         this.blockDetection = blockDetection;
-        this.robot = robot;
     }
 
     /**
@@ -90,7 +88,7 @@ public class MissionPlanner {
     public void calibrateRadius(){
         odometer.start();
         display.start();
-        m_Navigation.travelTo(2 * robot.tileLength, 0);
+        m_Navigation.travelTo(2 * Robot.tileLength, 0);
         System.exit(0);
     }
 

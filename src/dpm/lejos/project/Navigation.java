@@ -3,7 +3,6 @@ package dpm.lejos.project;
 import dpm.lejos.orientation.Coordinate;
 import dpm.lejos.orientation.Mapper;
 import dpm.lejos.orientation.Node;
-import dpm.lejos.orientation.Orienteering.*;
 import lejos.nxt.comm.RConsole;
 
 import java.util.ArrayList;
@@ -189,6 +188,7 @@ public class Navigation {
             while(isNavigating()){
                 Thread.sleep(10);
             }
+
             RConsole.println("");
             RConsole.println("travel X = " + Double.toString(x));
             RConsole.println("travel y = " + Double.toString(y));
@@ -321,73 +321,6 @@ public class Navigation {
 
     public void rotate10ClockWise() {
         rotateTo(m_Odometer.getThetaInDegrees() - 10);
-    }
-
-    /**
-    * position the robot facing north
-    * @param destinationDirection the current heading
-    */
-    //TODO: refactor to use rotateTo instead of multiple CW/CCW
-	public void rotateToDirection(Direction destinationDirection) {
-
-        Direction robotDirection = m_robot.getDirection();
-
-        if (robotDirection == Direction.NORTH) {
-            switch (destinationDirection) {
-                case SOUTH:
-                    rotate90CounterClock();
-                    rotate90CounterClock();
-                    break;
-                case EAST:
-                    rotate90ClockWise();
-                    break;
-                case WEST:
-                    rotate90CounterClock();
-                    break;
-            }
-        } else if (robotDirection == Direction.SOUTH) {
-            switch (destinationDirection) {
-                case NORTH:
-                    rotate90CounterClock();
-                    rotate90CounterClock();
-                    break;
-                case EAST:
-                    rotate90CounterClock();
-                    break;
-                case WEST:
-                    rotate90ClockWise();
-                    break;
-            }
-        } else if (robotDirection == Direction.EAST) {
-            switch (destinationDirection) {
-                case NORTH:
-                    rotate90CounterClock();
-                    break;
-                case SOUTH:
-                    rotate90ClockWise();
-                    break;
-                case WEST:
-                    rotate90CounterClock();
-                    rotate90CounterClock();
-                    break;
-            }
-        } else {
-            switch (destinationDirection) {
-                case NORTH:
-                    rotate90ClockWise();
-                    break;
-                case SOUTH:
-                    rotate90CounterClock();
-                    break;
-                case EAST:
-                    rotate90CounterClock();
-                    rotate90CounterClock();
-                    break;
-            }
-        }
-
-        m_robot.setDirection(destinationDirection);
-
     }
 
     /**
