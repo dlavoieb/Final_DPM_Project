@@ -28,9 +28,40 @@ public class BlockDetection {
     public void lookForBlock(Grabber grabber) {
         grabber.deployArms();
         grabber.lowerClaw();
+        RConsole.println("Init block pickup");
+        navigation.moveForward();
+        grabber.closeClaw();
+
+        if (m_robot.clawTouch.isPressed()){
+            RConsole.println("Picked the block!!!");
+            grabber.riseClaw();
+            navigation.rotate90ClockWise();
+            navigation.rotate90ClockWise();
+            navigation.moveForward();
+        }
+
+        RConsole.println("Pickup Failed!");
+        grabber.openClaw();
+        navigation.rotate90ClockWise();
         navigation.moveForward();
         grabber.closeClaw();
         grabber.riseClaw();
+
+
+//        while (true) {
+//            navigation.moveForward();
+//            grabber.closeClaw();
+//
+//            if (m_robot.clawTouch.isPressed()){
+//                RConsole.println("Picked the block!!!");
+//                grabber.riseClaw();
+//                break;
+//            }
+//
+//            RConsole.println("Pickup Failed!");
+//
+//            grabber.openClaw();
+//        }
 //
 //        int i = 0;
 //        int distanceRecorded = 0;

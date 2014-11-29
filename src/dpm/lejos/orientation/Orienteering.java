@@ -85,7 +85,7 @@ public class Orienteering {
 
 //            RConsole.println("data left = " + distanceLeft);
 //            RConsole.println("data right = " + distanceRight);
-//            RConsole.println("data front = " + distanceForward);
+            RConsole.println("data front = " + distanceForward) ;
 
 
             hasWallLeft = distanceLeft < DISTANCE_THRESHOLD;

@@ -33,11 +33,13 @@ public class Mapper {
      * @return the representation of the course layout
      */
     public Node[][] generateGraph() {
+        ArrayList<Coordinate> obstacles;
+
         switch (mapID){
 
             case Lab5:
 
-                ArrayList<Coordinate> obstacles = new ArrayList<Coordinate>();
+                obstacles = new ArrayList<Coordinate>();
                 obstacles.add(new Coordinate(0,0));
                 obstacles.add(new Coordinate(1,2));
                 obstacles.add(new Coordinate(1,3));
@@ -52,7 +54,26 @@ public class Mapper {
                 //return MAP2.createMap();
 
             case Beta1:
-                //return MAP8x8.createMap1();
+
+                obstacles = new ArrayList<Coordinate>();
+
+                obstacles.add(new Coordinate(0,1));
+                obstacles.add(new Coordinate(0,2));
+                obstacles.add(new Coordinate(1,2));
+                obstacles.add(new Coordinate(1,7));
+                obstacles.add(new Coordinate(2,0));
+                obstacles.add(new Coordinate(2,3));
+                obstacles.add(new Coordinate(2,6));
+                obstacles.add(new Coordinate(3,2));
+                obstacles.add(new Coordinate(4,4));
+                obstacles.add(new Coordinate(4,7));
+                obstacles.add(new Coordinate(5,4));
+                obstacles.add(new Coordinate(5,6));
+                obstacles.add(new Coordinate(5,7));
+                obstacles.add(new Coordinate(6,4));
+                obstacles.add(new Coordinate(7,7));
+
+                return MAP8x8.createMap(obstacles);
 
             case Beta2:
                 //return MAP8x8.createMap2();

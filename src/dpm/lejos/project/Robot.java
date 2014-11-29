@@ -7,6 +7,7 @@ import dpm.lejos.orientation.Tile;
 import lejos.nxt.*;
 import lejos.nxt.comm.Bluetooth;
 import lejos.nxt.comm.NXTCommConnector;
+import lejos.nxt.comm.RConsole;
 import lejos.nxt.remote.RemoteMotor;
 import lejos.nxt.remote.RemoteNXT;
 import lejos.util.Delay;
@@ -139,6 +140,7 @@ public class Robot {
         clawTouch = new TouchSensor(slave.S2);
 
         usFront = new UltrasonicSensor(slave.S1);
+        clawClose = Motor.C;
         usLeft = new UltrasonicSensor(SensorPort.S3);
         usRight = new UltrasonicSensor(SensorPort.S4);
         colorSensorLeft = new ColorSensor(SensorPort.S1);
@@ -146,7 +148,6 @@ public class Robot {
 
         motorLeft = Motor.A;
         motorRight = Motor.B;
-        clawClose = Motor.B;
     }
 
     /**

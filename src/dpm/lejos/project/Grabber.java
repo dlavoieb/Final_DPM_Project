@@ -18,18 +18,23 @@ public class Grabber {
     }
 
     public void riseClaw(){
-        robot.clawLift.setSpeed(robot.CLAW_SPEED - 75);
+        robot.clawLift.setSpeed(robot.CLAW_SPEED);
         robot.clawLift.rotate(robot.clawLowerDistance);
     }
 
 	public void deployArms() {
         robot.clawClose.setSpeed(robot.CLAW_SPEED);
-        robot.clawClose.rotate(robot.clawPrepare);
+        robot.clawClose.rotate(robot.clawPrepare - 75);
     }
 
     public void closeClaw() {
         robot.clawClose.setSpeed(robot.CLAW_SPEED);
-        robot.clawClose.rotate(robot.clawCloseAngle);
+        robot.clawClose.rotate(robot.clawCloseAngle + 50);
+    }
+
+    public void openClaw() {
+        robot.clawClose.setSpeed(robot.CLAW_SPEED);
+        robot.clawClose.rotate(-robot.clawCloseAngle - 50);
     }
 
     /**

@@ -3,6 +3,7 @@ package dpm.lejos.project;
 import dpm.lejos.orientation.Coordinate;
 import dpm.lejos.orientation.Orienteering;
 import lejos.nxt.Button;
+import lejos.nxt.LCD;
 import lejos.nxt.Sound;
 import lejos.nxt.comm.RConsole;
 
@@ -132,12 +133,12 @@ public class MissionPlanner {
         odometer.start();
         display.start();
         RConsole.println("Initiated ODO and ODO Display");
-        robot.setPositionOnGrid(new Coordinate(0, 0));
-        robot.setDirection(Orienteering.Direction.NORTH);
-        odometer.setX(15);
+        robot.setPositionOnGrid(new Coordinate(0, 1));
+        robot.setDirection(Orienteering.Direction.SOUTH);
+        odometer.setX(45);
         odometer.setY(15);
-        odometer.setThetaInDegrees(180);
-        m_Navigation.navigate(new Coordinate(7,0));
+        odometer.setThetaInDegrees(0);
+        m_Navigation.navigate(new Coordinate(3,3));
     }
 
     public void localizationAndNavigationTest() {
@@ -148,20 +149,19 @@ public class MissionPlanner {
         orienteering.deterministicPositioning(odometer);
         Sound.beep();
 //        Button.waitForAnyPress();
-        m_Navigation.navigate(new Coordinate(5,1));
+        m_Navigation.navigate(new Coordinate(3,3));
     }
 
     public void fullTest() {
         odometer.start();
-        display.start();
-        RConsole.println("Initiated ODO and ODO Display");
         orienteering.deterministicPositioning(odometer);
         Sound.beep();
-        m_Navigation.navigate(new Coordinate(5,1));
-        double x = 6 * 30 + 30 / 2.0;
-        double y = 1 *  30 + 30 / 2.0;
-        m_Navigation.rotateToCoordinate(x,y);
-        blockDetection.lookForBlock(m_Grabber);
+        //m_Navigation.navigate(new Coordinate(5,1));
+//        double x = 6 * 30 + 30 / 2.0;
+//        double y = 1 *  30 + 30 / 2.0;
+//        m_Navigation.rotateToCoordinate(x,y);
+//        blockDetection.lookForBlock(m_Grabber);
+        Button.waitForAnyPress();
 
     }
 
@@ -179,17 +179,21 @@ public class MissionPlanner {
         odometer.start();
         m_Grabber.deployArms();
         m_Grabber.lowerClaw();
+        m_Grabber.closeClaw();
+        m_Grabber.riseClaw();
+        Button.waitForAnyPress();
+    }
+
+    public void pickBlockTest2() {
+        display.start();
+        odometer.start();
+        m_Grabber.deployArms();
+        m_Grabber.lowerClaw();
         Button.waitForAnyPress();
         m_Grabber.closeClaw();
         Button.waitForAnyPress();
         m_Grabber.riseClaw();
         Button.waitForAnyPress();
-    }
-
-    public void blockDetectionTest() {
-        odometer.start();
-        display.start();
-        blockDetection.lookForBlock(m_Grabber);
     }
 
     public void pickBlockTest() {
@@ -198,6 +202,10 @@ public class MissionPlanner {
         blockDetection.lookForBlock(m_Grabber);
     }
 
-
+    public void straightDriverTest() {
+        odometer.start();
+        display.start();
+        blockDetection.lookForBlock(m_Grabber);
+    }
 
 }//end MissionPlanner
