@@ -23,6 +23,7 @@ public class Navigation {
     private Robot m_robot;
 
     private boolean movingForward = false;
+
     /**
      * default constructor
      *
@@ -183,12 +184,13 @@ public class Navigation {
             m_robot.motorRight.setSpeed(Robot.CRUISE_SPEED);
 
             m_robot.motorLeft.rotate(Utils.robotDistanceToMotorAngle(vector.getMagnitude(), m_robot), true);
-            m_robot.motorRight.rotate(Utils.robotDistanceToMotorAngle(vector.getMagnitude(), m_robot), false);
+            m_robot.motorRight.rotate(Utils.robotDistanceToMotorAngle(vector.getMagnitude(), m_robot), true);
 
-            movingForward = false;
+
             while(isNavigating()){
                 Thread.sleep(10);
             }
+            movingForward = false;
 
             RConsole.println("");
             RConsole.println("travel X = " + Double.toString(x));

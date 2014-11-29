@@ -93,13 +93,6 @@ public class LineDetector extends Thread {
         return isLine;
     }
 
-    /**
-     * manual start of the timer
-     */
-    public void startTimer(){
-        this.start();
-    }
-
     public int getPastLightValue(){
         return (int) pastLight;
     }

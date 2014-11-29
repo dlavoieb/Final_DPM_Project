@@ -19,6 +19,9 @@ public class OdometryCorrection extends Thread{
 
     private enum Side {LEFT, RIGHT}
 
+    public boolean stopOBcorrection;
+
+
     public OdometryCorrection(Odometer odo, Robot robot, Navigation navigation){
         this.odo = odo;
         this.robot = robot;
@@ -135,6 +138,42 @@ public class OdometryCorrection extends Thread{
                             last = now = null;
 
                             break;
+                        }
+                    }
+                }
+
+                if (stopOBcorrection){
+                    double theta = odo.getThetaInDegrees();
+                    if ((theta >= -45 && theta <= 45) || (theta >= 135 || theta <= -135)) {
+                        //travelling along the x axis
+                        if (Math.abs(odo.getY() % (Robot.tileLength / 2.0)) < Robot.acceptableSideError) {
+                            stopOBcorrection = false;
+                        }
+
+                    } else if ((theta >= 45 && theta <= 135) || (theta >= -135 && theta <= -45)) {
+                        //travelling in the y axis
+                        if (Math.abs(odo.getX() % (Robot.tileLength / 2.0)) < Robot.acceptableSideError) {
+                            stopOBcorrection = false;
+                        }
+                    }
+                }
+
+                //check for side error
+                if (!stopOBcorrection) {
+                    double theta = odo.getThetaInDegrees();
+                    if ((theta >= -45 && theta <= 45) || (theta >= 135 || theta <= -135)) {
+                        //travelling along the x axis
+                        if (Math.abs(odo.getY() % (Robot.tileLength / 2.0)) > Robot.acceptableSideError) {
+                            RConsole.println("travelling along the x axis\n bigger difference");
+                            stopMotors();
+                            stopOBcorrection = true;
+                        }
+
+                    } else if ((theta >= 45 && theta <= 135) || (theta >= -135 && theta <= -45)) {
+                        //travelling in the y axis
+                        if (Math.abs(odo.getX() % (Robot.tileLength / 2.0)) > Robot.acceptableSideError) {
+                            stopMotors();
+                            stopOBcorrection = true;
                         }
                     }
                 }
