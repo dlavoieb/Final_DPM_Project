@@ -15,7 +15,7 @@ import java.util.LinkedList;
  */
 public class LineDetector extends Thread {
 
-    private static final int DEFAULT_PERIOD = 50;
+    private static final int DEFAULT_PERIOD = 25;
     private static final int DEFAULT_WINDOW = 4;
     private boolean isLine;
     private SuperColorSensor colorSensor;
@@ -24,6 +24,8 @@ public class LineDetector extends Thread {
     private double[] coeffs = new double[] {1/2.0,-1/6.0, -1/6.0, -1/6.0};
 
     private LinkedList<Integer> list = new LinkedList<Integer>();
+
+    private double pastLight = 0;
 
     /**
      * default constructor
@@ -67,6 +69,7 @@ public class LineDetector extends Thread {
             list.remove(0);
             double diff = Utils.averageList(list, coeffs);
 
+            pastLight = diff;
 
             if (colorSensor.getSensorPort().getId() == 0) {
             //    RConsole.println(String.valueOf(diff));
@@ -108,6 +111,6 @@ public class LineDetector extends Thread {
     }
 
     public int getPastLightValue(){
-        return (int) Utils.averageList(list,coeffs);
+        return (int) pastLight;
     }
 }//end LineDetector
