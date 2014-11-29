@@ -93,6 +93,7 @@ public class Navigation {
     /**
      * preform the list of movements
      * @param directions the list of movements to follow
+     * @return the list
      */
     public ArrayList<Coordinate> computeMoveList(ArrayList<Node> directions) {
 
