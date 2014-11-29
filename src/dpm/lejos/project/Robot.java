@@ -42,22 +42,24 @@ import java.io.IOException;
  */
 public class Robot {
 
-	public final int ACCELERATION = 6500;
-	public final int CLAW_SPEED = 200;
+    public static int CORRECTION_THRESHOLD = 5;
+    public static int ACCELERATION = 6500;
+    public static int CLAW_SPEED = 200;
     //TODO: decide actual cruise speed - seems too slow
-    public final int CRUISE_SPEED = 200;
-    public final int ROTATE_SPEED = 150;
+    public static int CRUISE_SPEED = 200;
+    public static int ROTATE_SPEED = 150;
 
-    public int clawLowerDistance = 470;
-    public int clawPrepare = -360;
-    public int clawCloseAngle = -250;
-    public double wheelBase = 12.5; //TODO : Continue to tweak
-    public double wheelRadius = 2.02; //TODO: Still need to calibrate
-    public double lightSensorOffset = 5; //TODO : Get real value
+    public static int clawLowerDistance = 470;
+    public static int clawPrepare = -360;
+    public static int clawCloseAngle = -250;
+    public static double wheelBase = 12.5; //TODO : Continue to tweak
+    public static double wheelRadius = 2.02; //TODO: Still need to calibrate
+    public static double lightSensorOffset = 5; //TODO : Get real value
+    public static double lsDistance = 12.7;
 
-
-    public final double ACCEPTABLE_ANGLE = 1.00;
-    public final double ACCEPTABLE_LINEAR = 1.00;
+    public static double ACCEPTABLE_ANGLE = 1.00;
+    public static double ACCEPTABLE_LINEAR = 1.00;
+    static int acceptableSideError = 3;
 
     private Direction direction = null;
     private Coordinate positionOnGrid;
@@ -67,9 +69,9 @@ public class Robot {
     //the plane graph is used for navigation
     private Node[][] planeGraph;
 
-    public int LIGHT_THRESHOLD = 10;
-    public double tileLength = 30;
-    public int ODOMETER_PERIOD = 100;
+    public static int LIGHT_THRESHOLD = 10;
+    public static double tileLength = 30;
+    public static int ODOMETER_PERIOD = 100;
 
     /**
      * motor for lifting and lowering the arms

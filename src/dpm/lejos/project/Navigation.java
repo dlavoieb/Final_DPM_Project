@@ -176,11 +176,11 @@ public class Navigation {
             rotateTo(Math.toDegrees(vector.getOrientation()));
 
             movingForward = true;
-            m_robot.motorLeft.setAcceleration(m_robot.ACCELERATION);
-            m_robot.motorRight.setAcceleration(m_robot.ACCELERATION);
+            m_robot.motorLeft.setAcceleration(Robot.ACCELERATION);
+            m_robot.motorRight.setAcceleration(Robot.ACCELERATION);
 
-            m_robot.motorLeft.setSpeed(m_robot.CRUISE_SPEED);
-            m_robot.motorRight.setSpeed(m_robot.CRUISE_SPEED);
+            m_robot.motorLeft.setSpeed(Robot.CRUISE_SPEED);
+            m_robot.motorRight.setSpeed(Robot.CRUISE_SPEED);
 
             m_robot.motorLeft.rotate(Utils.robotDistanceToMotorAngle(vector.getMagnitude(), m_robot), true);
             m_robot.motorRight.rotate(Utils.robotDistanceToMotorAngle(vector.getMagnitude(), m_robot), false);
@@ -232,37 +232,37 @@ public class Navigation {
      */
     public void travelTo(Coordinate destination) {
 
-        RConsole.println("COORDINATE X = " + Double.toString(destination.getX() * m_robot.tileLength + m_robot.tileLength/2.0));
-        RConsole.println("COORDINATE Y = " + Double.toString(destination.getY() *  m_robot.tileLength + m_robot.tileLength / 2.0));
+        RConsole.println("COORDINATE X = " + Double.toString(destination.getX() * Robot.tileLength + Robot.tileLength /2.0));
+        RConsole.println("COORDINATE Y = " + Double.toString(destination.getY() * Robot.tileLength + Robot.tileLength / 2.0));
 
-        travelTo(destination.getX() * m_robot.tileLength + m_robot.tileLength / 2.0, destination.getY() *  m_robot.tileLength + m_robot.tileLength / 2.0);
+        travelTo(destination.getX() * Robot.tileLength + Robot.tileLength / 2.0, destination.getY() * Robot.tileLength + Robot.tileLength / 2.0);
     }
 
     /**
      * move the robot one tile forward
      */
     public void moveForward() {
-        m_robot.motorLeft.setSpeed(m_robot.CRUISE_SPEED);
-        m_robot.motorRight.setSpeed(m_robot.CRUISE_SPEED);
-        m_robot.motorLeft.rotate(Utils.robotDistanceToMotorAngle(m_robot.tileLength, m_robot), true);
-        m_robot.motorRight.rotate(Utils.robotDistanceToMotorAngle(m_robot.tileLength, m_robot), false);
+        m_robot.motorLeft.setSpeed(Robot.CRUISE_SPEED);
+        m_robot.motorRight.setSpeed(Robot.CRUISE_SPEED);
+        m_robot.motorLeft.rotate(Utils.robotDistanceToMotorAngle(Robot.tileLength, m_robot), true);
+        m_robot.motorRight.rotate(Utils.robotDistanceToMotorAngle(Robot.tileLength, m_robot), false);
     }
 
     /**
      * mov the robot forward half a tile
      */
     public void moveForwardHalfATile() {
-        m_robot.motorLeft.setSpeed(m_robot.CRUISE_SPEED);
-        m_robot.motorRight.setSpeed(m_robot.CRUISE_SPEED);
-        m_robot.motorLeft.rotate(Utils.robotDistanceToMotorAngle(m_robot.tileLength / 2, m_robot), true);
-        m_robot.motorRight.rotate(Utils.robotDistanceToMotorAngle(m_robot.tileLength / 2, m_robot), false);
+        m_robot.motorLeft.setSpeed(Robot.CRUISE_SPEED);
+        m_robot.motorRight.setSpeed(Robot.CRUISE_SPEED);
+        m_robot.motorLeft.rotate(Utils.robotDistanceToMotorAngle(Robot.tileLength / 2, m_robot), true);
+        m_robot.motorRight.rotate(Utils.robotDistanceToMotorAngle(Robot.tileLength / 2, m_robot), false);
     }
 
     public void moveForwardQuarterOfATile() {
-        m_robot.motorLeft.setSpeed(m_robot.CRUISE_SPEED);
-        m_robot.motorRight.setSpeed(m_robot.CRUISE_SPEED);
-        m_robot.motorLeft.rotate(Utils.robotDistanceToMotorAngle(m_robot.tileLength / 4, m_robot), true);
-        m_robot.motorRight.rotate(Utils.robotDistanceToMotorAngle(m_robot.tileLength / 4, m_robot), false);
+        m_robot.motorLeft.setSpeed(Robot.CRUISE_SPEED);
+        m_robot.motorRight.setSpeed(Robot.CRUISE_SPEED);
+        m_robot.motorLeft.rotate(Utils.robotDistanceToMotorAngle(Robot.tileLength / 4, m_robot), true);
+        m_robot.motorRight.rotate(Utils.robotDistanceToMotorAngle(Robot.tileLength / 4, m_robot), false);
     }
 
     /**
@@ -284,8 +284,8 @@ public class Navigation {
 
         m_robot.motorLeft.setAcceleration(4000);
         m_robot.motorRight.setAcceleration(4000);
-        m_robot.motorLeft.setSpeed(m_robot.ROTATE_SPEED + 150);
-        m_robot.motorRight.setSpeed(m_robot.ROTATE_SPEED + 155);
+        m_robot.motorLeft.setSpeed(Robot.ROTATE_SPEED + 150);
+        m_robot.motorRight.setSpeed(Robot.ROTATE_SPEED + 155);
 
         if (Math.abs(rotationAngle) < 3) {
             m_robot.motorLeft.rotate((rotationAngle > 0 ? -3 : 3), true);
@@ -417,7 +417,8 @@ public class Navigation {
      * @return boolean true if in acceptable range
      */
     public boolean closeEnough(double x, double y) {
-        return Math.abs(x - m_Odometer.getX()) < m_robot.ACCEPTABLE_LINEAR && Math.abs(y - m_Odometer.getY()) < m_robot.ACCEPTABLE_LINEAR;
+        RConsole.println("Entering close enough x,y");
+        return Math.abs(x - m_Odometer.getX()) < Robot.ACCEPTABLE_LINEAR && Math.abs(y - m_Odometer.getY()) < Robot.ACCEPTABLE_LINEAR;
     }
 
     /**
@@ -426,7 +427,7 @@ public class Navigation {
      * @return boolean true if in acceptable range
      * */
     public boolean closeEnough(double theta) {
-        return Math.abs(theta - m_Odometer.getThetaInDegrees()) <= m_robot.ACCEPTABLE_ANGLE;
+        return Math.abs(theta - m_Odometer.getThetaInDegrees()) <= Robot.ACCEPTABLE_ANGLE;
     }
 
     /**
@@ -435,7 +436,7 @@ public class Navigation {
      * @return boolean true if in acceptable range
      */
     public boolean closeEnough(Coordinate coordinate) {
-        return Math.abs(coordinate.getX() - m_Odometer.getX()) < m_robot.ACCEPTABLE_LINEAR && Math.abs(coordinate.getY() - m_Odometer.getY()) < m_robot.ACCEPTABLE_LINEAR;
+        return Math.abs(coordinate.getX() - m_Odometer.getX()) < Robot.ACCEPTABLE_LINEAR && Math.abs(coordinate.getY() - m_Odometer.getY()) < Robot.ACCEPTABLE_LINEAR;
     }
 
     /**

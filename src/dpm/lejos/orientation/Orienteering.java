@@ -22,7 +22,7 @@ public class Orienteering {
     private Tile[][] plane;
     private Direction startingDir;
     private Direction endingDir;
-    private static int DISTANCE_THRESHOLD = 30;
+    static int DISTANCE_THRESHOLD = 30;
     private Navigation navigation;
     private Robot robot;
 
@@ -132,8 +132,8 @@ public class Orienteering {
 
 
         adjustOdometer(endingPosition, endingDir, odometer);
-        double x = endingPosition.getX() * robot.tileLength+ robot.tileLength/2.0;
-        double y = endingPosition.getY() * robot.tileLength+ robot.tileLength/2.0;
+        double x = endingPosition.getX() * Robot.tileLength + Robot.tileLength /2.0;
+        double y = endingPosition.getY() * Robot.tileLength + Robot.tileLength /2.0;
         RConsole.println("new ODO X = " + Double.toString(x));
         RConsole.println("new ODO Y = " + Double.toString(y));
 
@@ -142,8 +142,8 @@ public class Orienteering {
     }
 
     private void adjustOdometer(Coordinate endingPosition, Direction endingDir, Odometer odometer) {
-        odometer.setX(endingPosition.getX() * robot.tileLength+ robot.tileLength/2.0);
-        odometer.setY(endingPosition.getY() * robot.tileLength+ robot.tileLength/2.0);
+        odometer.setX(endingPosition.getX() * Robot.tileLength + Robot.tileLength /2.0);
+        odometer.setY(endingPosition.getY() * Robot.tileLength + Robot.tileLength /2.0);
 
         switch (endingDir) {
             case NORTH:

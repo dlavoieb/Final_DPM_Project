@@ -1,7 +1,6 @@
 package dpm.lejos.project;
 
 import lejos.nxt.NXTRegulatedMotor;
-import lejos.nxt.comm.RConsole;
 
 /**
  * Odometer class polls the tachometers from
@@ -24,7 +23,6 @@ public class Odometer extends Thread{
     private LineDetector lineDetectorRight;
 
     private final Object lock;
-    private static Robot m_robot;
 
     //Odometer is encoded in radians!
     private double x, y, theta;
@@ -45,10 +43,9 @@ public class Odometer extends Thread{
 	public Odometer(Robot robot){
 
         lock = new Object();
-        m_robot = robot;
 
-        leftMotor = m_robot.motorLeft;
-        rightMotor = m_robot.motorRight;
+        leftMotor = robot.motorLeft;
+        rightMotor = robot.motorRight;
         leftMotor.resetTachoCount();
         rightMotor.resetTachoCount();
 
@@ -58,10 +55,9 @@ public class Odometer extends Thread{
 
         prevTachoL = 0;
         prevTachoR = 0;
-        lineDetectorLeft = new LineDetector(m_robot.colorSensorLeft, m_robot.LIGHT_THRESHOLD, true);
-        lineDetectorRight = new LineDetector(m_robot.colorSensorRight, m_robot.LIGHT_THRESHOLD, true);
-        odometryCorrection = new OdometryCorrection(this);
-        odometryCorrection.start();
+        lineDetectorLeft = new LineDetector(robot.colorSensorLeft, Robot.LIGHT_THRESHOLD, true);
+        lineDetectorRight = new LineDetector(robot.colorSensorRight, Robot.LIGHT_THRESHOLD, true);
+        odometryCorrection = new OdometryCorrection(this, robot, navigation);
     }
 
     /**
@@ -83,12 +79,12 @@ public class Odometer extends Thread{
             int tachoDeltaR = rightMotor.getTachoCount() - prevTachoR;
 
             //convert tacho counts to travelled distance
-            double dLeft = (m_robot.wheelRadius * Math.PI * tachoDeltaL) / 180;
-            double dRright = (m_robot.wheelRadius * Math.PI * tachoDeltaR) / 180;
+            double dLeft = (Robot.wheelRadius * Math.PI * tachoDeltaL) / 180;
+            double dRright = (Robot.wheelRadius * Math.PI * tachoDeltaR) / 180;
             double dCenter = (dLeft + dRright) /2;
 
             //use difference in distance to get angle
-            double deltaTheta = (dRright - dLeft) / m_robot.wheelBase;
+            double deltaTheta = (dRright - dLeft) / Robot.wheelBase;
 
             synchronized (lock) {
                 //update prev tacho counts
@@ -102,15 +98,11 @@ public class Odometer extends Thread{
                 y += dCenter * Math.sin(theta);
             }
 
-            if (correct){
-                correct();
-            }
-
             // this ensures that the odometer only runs once every period
             updateEnd = System.currentTimeMillis();
-            if (updateEnd - updateStart < m_robot.ODOMETER_PERIOD) {
+            if (updateEnd - updateStart < Robot.ODOMETER_PERIOD) {
                 try {
-                    Thread.sleep(m_robot.ODOMETER_PERIOD - (updateEnd - updateStart));
+                    Thread.sleep(Robot.ODOMETER_PERIOD - (updateEnd - updateStart));
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                     break;
