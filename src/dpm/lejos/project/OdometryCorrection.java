@@ -1,7 +1,8 @@
 package dpm.lejos.project;
 
-import lejos.nxt.LCD;
-import lejos.nxt.Sound;
+import lejos.nxt.comm.RConsole;
+
+import java.util.Arrays;
 
 /**
  * @author David Lavoie-Boutin
@@ -9,121 +10,153 @@ import lejos.nxt.Sound;
  */
 public class OdometryCorrection extends Thread{
     private Odometer odo;
+    private Robot robot;
+    private Navigation navigation;
 
+    private double [] last;
 
-    private static final double WIDTH = 8.6;
+    private double[] now;
 
-    private static final int LINE = 490;
+    private enum Side {LEFT, RIGHT}
 
-    private double xLast,yLast;
-
-    private double x,y;
-
-    public OdometryCorrection(Odometer odo){
+    public OdometryCorrection(Odometer odo, Robot robot, Navigation navigation){
         this.odo = odo;
+        this.robot = robot;
+        this.navigation = navigation;
     }
 
+    public double calculate(Side side){
+        double xDist = now[0] - last[0];
+        double yDist = now[1] - last[1];
 
-    public double calculate(boolean right){
-        double xDist = x - xLast;
-        double yDist = y - yLast;
-        double result;
+        double position = Math.sqrt(xDist * xDist +yDist * yDist);
 
-        double position = Math.sqrt(Math.pow(xDist, 2) + Math.pow(yDist, 2));
-
-        if(right){
-            result = Math.PI/2 + Math.atan2(position, WIDTH);
+        switch (side) {
+            case LEFT:
+                return (-Math.atan2(position, Robot.lsDistance));
+            case RIGHT:
+                return (Math.atan2(position, Robot.lsDistance));
+            default:
+                return -1;
         }
-        else{
-            result = Math.PI/2 - Math.atan2(position, WIDTH);
-        }
-
-        return result;
-
     }
 
     public double getNewTheta(double theta){
-        double oldTheta = Math.toDegrees(odo.getThetaNormalized());
+        double oldTheta = odo.getThetaInDegrees();
         double newTheta = 0;
 
-        if (oldTheta >= 45 || oldTheta <= 135){
-            newTheta = theta;
-        } else if (oldTheta >= 315 && oldTheta <= 45){
-            newTheta = Math.PI/2 + theta;
-        } else if (oldTheta >= 225 || oldTheta <= 315){
+        if      (oldTheta >= -45  && oldTheta <= 45)   newTheta = theta;
+        else if (oldTheta >= 45   && oldTheta <= 135)  newTheta = Math.PI/2.0 + theta;
+        else if (oldTheta >= -135 && oldTheta <= -45)  newTheta = - Math.PI/2.0 + theta;
+        else if (oldTheta >= 135  || oldTheta <= -135) {
             newTheta = Math.PI + theta;
-        } else if (oldTheta >= 135 && oldTheta <= 225){
-            newTheta = Math.PI*(3/2) + theta;
+            if (newTheta > Math.PI) {
+                newTheta -= 2 * Math.PI;
+            }
         }
+
         return newTheta;
     }
 
+    private void stopMotors(){
+        robot.motorLeft.stop();
+        robot.motorRight.stop();
+    }
+
     public void run(){
-        double newTheta = 0;
-        int rightValue = odo.getRightLight();
-        int leftValue = odo.getLeftLight();
+        double newTheta;
 
-        while(true){
-            //Right sensor passes first
-            LCD.drawInt(odo.getRightLight(), 0, 5);
+        while(true) {
+            if (navigation.isMovingForward()) {
+                //Right sensor passes first
+                if (odo.isRightLine()) {
+                    RConsole.println("--\nCorrecting Odometry\tRight sensor first\n--");
+                    last = odo.getPosition();
+                    RConsole.println(Arrays.toString(last));
 
-            if(odo.getRightLight() < LINE){
-                Sound.beep();
-                yLast = odo.getY();
-                xLast = odo.getX();
+                    //Wait for left Sensor
+                    while (true) {
+                        if (odo.isLeftLine()) {
+                            now = odo.getPosition();
+                            RConsole.println(Arrays.toString(now));
 
-                //Wait for left Sensor
-                while(true){
-                    if(odo.getLeftLight() < LINE){
-                        y = odo.getY();
-                        x = odo.getX();
+                            double intermediateTheta = calculate(Side.RIGHT);
+                            newTheta = getNewTheta(intermediateTheta);
+                            RConsole.println("New Theta: " + String.valueOf(Math.toDegrees(newTheta)));
+                            sleep(20);
 
-                        newTheta = calculate(true);
+                            odo.setTheta(newTheta);
 
-                        try {
-                            Thread.sleep(20);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
+                            while (odo.isLeftLine()) {
+                                sleep(20);
+                            }
+
+                            if (Math.abs(now[2] - newTheta) > Math.toRadians(Robot.CORRECTION_THRESHOLD)) {
+                                stopMotors();
+                            }
+
+                            last = now = null;
+
+                            break;
                         }
-
-                        break;
                     }
                 }
-            }
-            //Left Sensor passes first
-            if(odo.getLeftLight() < LINE){
-                yLast = odo.getY();
-                xLast = odo.getX();
+                //Left Sensor passes first
+                if (odo.isLeftLine()) {
+                    RConsole.println("--\nCorrecting Odometry\tLeft sensor first\n--");
+                    last = odo.getPosition();
+                    RConsole.println(Arrays.toString(last));
 
-                //Wait for right Sensor
-                while(true){
-                    if(odo.getRightLight() < LINE){
-                        y = odo.getY();
-                        x = odo.getX();
+                    //Wait for right Sensor
+                    while (true) {
+                        if (odo.isRightLine()) {
+                            now = odo.getPosition();
+                            RConsole.println(Arrays.toString(now));
 
-                        newTheta = calculate(false);
+                            newTheta = calculate(Side.LEFT);
 
-                        try {
-                            Thread.sleep(20);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
+                            RConsole.println("Computed Theta: " + String.valueOf(Math.toDegrees(newTheta)));
+                            newTheta = getNewTheta(newTheta);
+                            RConsole.println("New Theta: " + String.valueOf(Math.toDegrees(newTheta)));
+
+                            sleep(20);
+
+                            while (odo.isRightLine()) {
+                                sleep(20);
+                            }
+
+                            odo.setTheta(newTheta);
+
+                            if (Math.abs(now[2] - newTheta) > Math.toRadians(Robot.CORRECTION_THRESHOLD)) {
+                                stopMotors();
+                                RConsole.println("Stop Motors, closeEnough should do the rest");
+                            }
+
+                            last = now = null;
+
+                            break;
                         }
-
-                        break;
                     }
                 }
-            }
-            while(rightValue < LINE && leftValue <LINE){
-                odo.setTheta(getNewTheta(newTheta));
-            }
 
-            try {
-                Thread.sleep(10);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-                break;
+                sleep(10);
+            }
+            else {
+                sleep(1000);
             }
         }
     }
 
+    public void setNavigation(Navigation navigation){
+        this.navigation = navigation;
+    }
+
+
+    private void sleep(int time){
+        try {
+            Thread.sleep(time);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 }

@@ -41,6 +41,7 @@ public class Navigation {
         mapper = new Mapper(id);
         m_Odometer=odometer;
         m_Odometer.setNavigation(this);
+        m_Odometer.startCorrection();
     }
 
     /**
@@ -196,10 +197,10 @@ public class Navigation {
             RConsole.println("Pos Y before closeEnough = " + Double.toString(m_Odometer.getY()));
             RConsole.println("");
 
-//            if (!closeEnough(x, y)) {
-//                RConsole.println("Not close enough, redo!");
-//                travelTo(x, y);
-//            }
+            if (!closeEnough(x, y)) {
+                RConsole.println("Not close enough, redo!");
+                travelTo(x, y);
+            }
         }
         catch (Exception e){
             e.printStackTrace();
@@ -299,10 +300,10 @@ public class Navigation {
         RConsole.println("\nTheta destination = " + Double.toString(theta));
         RConsole.println("Theta current = " + Double.toString(m_Odometer.getThetaInDegrees()));
 
-//        if (!closeEnough(theta)){
-//            RConsole.println("Not close enough, redo!");
-//            rotateTo(theta);
-//        }
+        if (!closeEnough(theta)){
+            RConsole.println("Not close enough, redo!");
+            rotateTo(theta);
+        }
     }
 
     /**
