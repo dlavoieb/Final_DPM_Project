@@ -4,15 +4,9 @@ import dpm.lejos.orientation.Coordinate;
 import dpm.lejos.orientation.Node;
 import dpm.lejos.orientation.Orienteering.*;
 import dpm.lejos.orientation.Tile;
-import dpm.lejos.Sensors.SuperColorSensor;
 import lejos.nxt.*;
-import lejos.nxt.comm.Bluetooth;
-import lejos.nxt.comm.NXTCommConnector;
 import lejos.nxt.remote.RemoteMotor;
 import lejos.nxt.remote.RemoteNXT;
-import lejos.util.Delay;
-
-import java.io.IOException;
 
 /**
  * Provides access to all the robots sensors and actuators
@@ -111,8 +105,8 @@ public class Robot {
 	/**
 	 * Color sensor facing down for odometry correction
 	 */
-    public SuperColorSensor colorSensorLeft;
-    public SuperColorSensor colorSensorRight;
+    public ColorSensor colorSensorLeft;
+    public ColorSensor colorSensorRight;
 
     /**
      * default constructor
@@ -144,8 +138,8 @@ public class Robot {
         usFront = new UltrasonicSensor(slave.S1);
         usLeft = new UltrasonicSensor(SensorPort.S3);
         usRight = new UltrasonicSensor(SensorPort.S4);
-        colorSensorLeft = new SuperColorSensor(SensorPort.S1);
-        colorSensorRight = new SuperColorSensor(SensorPort.S2);
+        colorSensorLeft = new ColorSensor(SensorPort.S1);
+        colorSensorRight = new ColorSensor(SensorPort.S2);
 
         motorLeft = Motor.A;
         motorRight = Motor.B;

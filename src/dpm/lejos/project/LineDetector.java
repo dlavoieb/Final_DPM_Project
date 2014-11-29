@@ -1,9 +1,7 @@
 package dpm.lejos.project;
 
-import dpm.lejos.Sensors.SuperColorSensor;
+import lejos.nxt.ColorSensor;
 import lejos.nxt.comm.RConsole;
-import lejos.util.Timer;
-import lejos.util.TimerListener;
 
 import java.util.LinkedList;
 
@@ -18,7 +16,7 @@ public class LineDetector extends Thread {
     private static final int DEFAULT_PERIOD = 25;
     private static final int DEFAULT_WINDOW = 4;
     private boolean isLine;
-    private SuperColorSensor colorSensor;
+    private ColorSensor colorSensor;
     private int LIGHT_THRESHOLD;
 
     private double[] coeffs = new double[] {1/2.0,-1/6.0, -1/6.0, -1/6.0};
@@ -33,7 +31,7 @@ public class LineDetector extends Thread {
      * @param lightThreshold the normalised light value to use as a threshold
      * @param start boolean to start the timer right away
      */
-    public LineDetector(SuperColorSensor colorSensor, int lightThreshold, boolean start){
+    public LineDetector(ColorSensor colorSensor, int lightThreshold, boolean start){
         this(colorSensor, lightThreshold, DEFAULT_WINDOW, start);
     }
 
@@ -44,7 +42,7 @@ public class LineDetector extends Thread {
      * @param lightThreshold the threshold for line detection
      * @param window the size of the sampling window if different from default
      */
-     public LineDetector(SuperColorSensor colorSensor, int lightThreshold, int window, boolean start) {
+     public LineDetector(ColorSensor colorSensor, int lightThreshold, int window, boolean start) {
          LIGHT_THRESHOLD = lightThreshold;
          this.colorSensor = colorSensor;
          colorSensor.setFloodlight(true);
@@ -71,19 +69,11 @@ public class LineDetector extends Thread {
 
             pastLight = diff;
 
-            if (colorSensor.getSensorPort().getId() == 0) {
-            //    RConsole.println(String.valueOf(diff));
-            } else {
-              //  RConsole.println("\t" + String.valueOf(diff));
-            }
-
             if (Math.abs(diff) > LIGHT_THRESHOLD) {
                // RConsole.println("Detected a line edge on sensor " + String.valueOf(colorSensor.getSensorPort().getId()));
                 //we detected a significant change
                 isLine = diff >= 0;
             }
-
-            if (isLine) RConsole.println("Sensor " + String.valueOf(colorSensor.getSensorPort().getId()) + " on line");
 
 
             try {
