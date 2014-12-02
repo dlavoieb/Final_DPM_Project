@@ -2,6 +2,8 @@ package dpm.lejos.project;
 
 import dpm.lejos.orientation.Mapper;
 import dpm.lejos.orientation.Orienteering;
+import lejos.nxt.Button;
+import lejos.nxt.LCD;
 import lejos.nxt.comm.RConsole;
 
 /**
@@ -15,12 +17,28 @@ import lejos.nxt.comm.RConsole;
 public class Main {
 
     public static void main(String [] argv){
+        int i = 0;
+        LCD.drawString("Choose your map", 0,0);
+
+        while(true){
+            LCD.drawString(String.valueOf(Mapper.MapID.values()[i% Mapper.MapID.values().length]), 0, 3);
+            int option = Button.waitForAnyPress();
+            if (option == Button.ID_LEFT){
+                i+=1;
+            } else if (option == Button.ID_RIGHT){
+                i-=1;
+            } else if (option == Button.ID_ENTER){
+                break;
+            }
+        }
+        Mapper.MapID mapID = Mapper.MapID.values()[i% Mapper.MapID.values().length];
+
         RConsole.openUSB(15000);
         Robot robot = new Robot();
         Odometer odometer = new Odometer(robot);
         SystemDisplay display = new SystemDisplay(odometer);
-        Navigation navigation = new Navigation(robot, odometer, Mapper.MapID.Lab5);
-        Orienteering orienteering = new Orienteering(robot, navigation, Mapper.MapID.Lab5);
+        Navigation navigation = new Navigation(robot, odometer, mapID);
+        Orienteering orienteering = new Orienteering(robot, navigation, mapID);
         Grabber grabber = new Grabber(robot);
         BlockDetection blockDetection = new BlockDetection(robot, odometer, navigation);
 

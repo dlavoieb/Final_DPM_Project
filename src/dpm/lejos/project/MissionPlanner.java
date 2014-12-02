@@ -122,6 +122,7 @@ public class MissionPlanner {
 
     public void localizationTest() {
         Button.waitForAnyPress();
+
         odometer.start();
         display.start();
         RConsole.println("Initiated ODO and ODO Display");
