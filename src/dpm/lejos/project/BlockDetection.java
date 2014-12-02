@@ -1,5 +1,7 @@
 package dpm.lejos.project;
 
+import dpm.lejos.orientation.Mapper;
+import lejos.nxt.Button;
 import lejos.nxt.UltrasonicSensor;
 import lejos.nxt.comm.RConsole;
 
@@ -30,26 +32,110 @@ public class BlockDetection {
     }
 
     public void lookForBlock(Grabber grabber) {
-        grabber.deployArms();
-        grabber.lowerClaw();
-        RConsole.println("Init block pickup");
-        navigation.moveForward();
-        grabber.closeClaw();
+        int thirdOfTileMovementCount = 0;
 
-        if (m_robot.clawTouch.isPressed()){
-            RConsole.println("Picked the block!!!");
-            grabber.riseClaw();
-            navigation.rotate90ClockWise();
-            navigation.rotate90ClockWise();
-            navigation.moveForward();
+        if (navigation.mapper.mapID == Mapper.MapID.Final1) {
+            grabber.deployArms();
+            grabber.lowerClaw();
+        } else {
+            navigation.moveBackwardHalfATile();
+            grabber.deployArms();
+            grabber.lowerClaw();
+            navigation.moveForwardHalfATile();
+        }
+        RConsole.println("Init block pickup");
+
+        while (true) {
+            navigation.moveForwardThirdOfATile();
+            thirdOfTileMovementCount++;
+            grabber.closeClaw();
+
+            if (m_robot.clawTouch.isPressed()){
+                RConsole.println("Picked the block!!!");
+                grabber.riseClaw();
+                break;
+            }
+
+            grabber.openClaw();
+            grabber.closeClaw();
+
+            if (m_robot.clawTouch.isPressed()){
+                RConsole.println("Picked the block!!!");
+                grabber.riseClaw();
+                break;
+            }
+
+            RConsole.println("Pickup Failed!");
+            grabber.openClaw();
         }
 
-        RConsole.println("Pickup Failed!");
-        grabber.openClaw();
-        navigation.rotate90ClockWise();
-        navigation.moveForward();
-        grabber.closeClaw();
-        grabber.riseClaw();
+        while (thirdOfTileMovementCount > 0) {
+            navigation.moveBackwardThirdOfATile();
+            thirdOfTileMovementCount--;
+        }
+
+//        navigation.moveForwardThirdOfATile();
+//        thirdOfTileMovementCount++;
+//        grabber.closeClaw();
+//        grabber.openClaw();
+//        grabber.closeClaw();
+//
+//
+//        RConsole.println("Pickup Failed!");
+//        grabber.openClaw();
+//        navigation.moveForwardThirdOfATile();
+//        grabber.closeClaw();
+//        grabber.openClaw();
+//        grabber.closeClaw();
+//
+//        if (m_robot.clawTouch.isPressed()){
+//            RConsole.println("Picked the block!!!");
+//            grabber.riseClaw();
+//            navigation.rotate90ClockWise();
+//            navigation.rotate90ClockWise();
+//            navigation.moveForwardHalfATile();
+//            navigation.rotate90ClockWise();
+//            navigation.moveForward();
+//            Button.waitForAnyPress();
+//        }
+//
+//        RConsole.println("Pickup Failed!");
+//        grabber.openClaw();
+//        navigation.moveForwardThirdOfATile();
+//        grabber.closeClaw();
+//        grabber.openClaw();
+//        grabber.closeClaw();
+//
+//        if (m_robot.clawTouch.isPressed()){
+//            RConsole.println("Picked the block!!!");
+//            grabber.riseClaw();
+//            navigation.rotate90ClockWise();
+//            navigation.rotate90ClockWise();
+//            navigation.moveForwardHalfATile();
+//            navigation.rotate90ClockWise();
+//            navigation.moveForward();
+//            Button.waitForAnyPress();
+//        }
+//
+//        if (m_robot.clawTouch.isPressed()){
+//            RConsole.println("Picked the block!!!");
+//            grabber.riseClaw();
+//            navigation.rotate90ClockWise();
+//            navigation.rotate90ClockWise();
+//            navigation.moveForwardHalfATile();
+//            navigation.rotate90ClockWise();
+//            navigation.moveForward();
+//            Button.waitForAnyPress();
+//        }
+//
+//
+//        navigation.moveBackwardHalfATile();
+//        RConsole.println("Pickup Failed!");
+//        grabber.openClaw();
+//        navigation.moveForwardThirdOfATile();
+//        grabber.closeClaw();
+//        grabber.openClaw();
+//        grabber.closeClaw();
 
 
 //        while (true) {

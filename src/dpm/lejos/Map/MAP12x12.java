@@ -3,12 +3,14 @@ package dpm.lejos.Map;
 import dpm.lejos.orientation.Coordinate;
 import dpm.lejos.orientation.Node;
 
+import java.util.ArrayList;
+
 /**
- * @author David Lavoie-Boutin
- * @version v1.0
+ * Created by danielmacario on 14-12-01.
  */
-public class MAP1 {
-    public static Node[][] createMap(){
+public class MAP12x12 {
+
+    public static Node[][] createMap(ArrayList<Coordinate> obstacles){
 
         Node r0c0 = new Node(new Coordinate(0,0));
         Node r0c1 = new Node(new Coordinate(0,1));
@@ -167,173 +169,170 @@ public class MAP1 {
         Node r11c11 = new Node(new Coordinate(11,11));
 
         r0c0.addNeighbours(new Node[] {r1c0, r0c1});
-        r0c1.addNeighbours(new Node[] {r0c0, r1c1 });
-
-        r0c3.addNeighbours(new Node[] {r0c4});
+        r0c1.addNeighbours(new Node[] {r0c0, r1c1, r0c2});
+        r0c2.addNeighbours(new Node[] {r0c1, r1c2, r0c3});
+        r0c3.addNeighbours(new Node[] {r0c2, r1c3, r0c4});
         r0c4.addNeighbours(new Node[] {r0c3, r1c4, r0c5});
-        r0c5.addNeighbours(new Node[] {r0c4, r1c5});
-
-        r0c7.addNeighbours(new Node[] {r1c7, r0c8});
+        r0c5.addNeighbours(new Node[] {r0c4, r1c5, r0c6});
+        r0c6.addNeighbours(new Node[] {r0c5, r1c6, r0c7});
+        r0c7.addNeighbours(new Node[] {r0c6, r1c7, r0c8});
         r0c8.addNeighbours(new Node[] {r0c7, r1c8, r0c9});
         r0c9.addNeighbours(new Node[] {r0c8, r1c9, r0c10});
-        r0c10.addNeighbours(new Node[] {r0c9, r1c10, r0c11});
-        r0c11.addNeighbours(new Node[] {r0c10});
-
-
-        r1c1.addNeighbours(new Node[] {r2c1, r1c2});
-        r1c2.addNeighbours(new Node[] {r1c1, r2c2});
-
-        r1c4.addNeighbours(new Node[] {r0c4, r2c4, r1c5});
+        r0c10.addNeighbours(new Node[] {r0c9,  r1c10, r0c11});
+        r0c11.addNeighbours(new Node[] {r0c10,  r1c11});
+        r1c0.addNeighbours(new Node[] {r0c0, r2c0, r1c1});
+        r1c1.addNeighbours(new Node[] {r1c0, r0c1, r2c1, r1c2});
+        r1c2.addNeighbours(new Node[] {r1c1, r0c2, r2c2, r1c3});
+        r1c3.addNeighbours(new Node[] {r1c2, r0c3, r2c3, r1c4});
+        r1c4.addNeighbours(new Node[] {r1c3, r0c4, r2c4, r1c5});
         r1c5.addNeighbours(new Node[] {r1c4, r0c5, r2c5, r1c6});
-        r1c6.addNeighbours(new Node[] {r1c5, r2c6, r1c7});
+        r1c6.addNeighbours(new Node[] {r1c5, r0c6, r2c6, r1c7});
         r1c7.addNeighbours(new Node[] {r1c6, r0c7, r2c7, r1c8});
         r1c8.addNeighbours(new Node[] {r1c7, r0c8, r2c8, r1c9});
-        r1c9.addNeighbours(new Node[] {r1c8, r0c9, r1c10});
-        r1c10.addNeighbours(new Node[] {r1c9, r0c10, r2c10});
-
-
-        r2c0.addNeighbours(new Node[] {r3c0, r2c1});
+        r1c9.addNeighbours(new Node[] {r1c8, r0c9, r2c9, r1c10});
+        r1c10.addNeighbours(new Node[] {r1c9, r0c10, r2c10, r1c11});
+        r1c11.addNeighbours(new Node[] {r1c10, r0c11, r2c11});
+        r2c0.addNeighbours(new Node[] {r1c0, r3c0, r2c1});
         r2c1.addNeighbours(new Node[] {r2c0, r1c1, r3c1, r2c2});
-        r2c2.addNeighbours(new Node[] {r2c1, r1c2, r2c3});
+        r2c2.addNeighbours(new Node[] {r2c1, r1c2, r3c2, r2c3});
         r2c3.addNeighbours(new Node[] {r2c2, r1c3, r3c3, r2c4});
-        r2c4.addNeighbours(new Node[] {r2c3, r1c4, r2c5});
-        r2c5.addNeighbours(new Node[] {r2c4, r1c5, r2c6});
+        r2c4.addNeighbours(new Node[] {r2c3, r1c4, r3c4, r2c5});
+        r2c5.addNeighbours(new Node[] {r2c4, r1c5, r3c5, r2c6});
         r2c6.addNeighbours(new Node[] {r2c5, r1c6, r3c6, r2c7});
         r2c7.addNeighbours(new Node[] {r2c6, r1c7, r3c7, r2c8});
-        r2c8.addNeighbours(new Node[] {r2c7, r1c8, r3c8});
-
-        r2c10.addNeighbours(new Node[] {r1c10, r3c10, r2c11});
+        r2c8.addNeighbours(new Node[] {r2c7, r1c8, r3c8, r2c9});
+        r2c9.addNeighbours(new Node[] {r2c8, r1c9, r3c9, r2c10});
+        r2c10.addNeighbours(new Node[] {r2c9, r1c10, r3c10, r2c11});
         r2c11.addNeighbours(new Node[] {r2c10, r1c11, r3c11});
-
         r3c0.addNeighbours(new Node[] {r2c0, r4c0, r3c1});
-        r3c1.addNeighbours(new Node[] {r3c0, r2c1, r4c1});
-
-        r3c3.addNeighbours(new Node[] {r2c3, r4c3});
-
-
-        r3c6.addNeighbours(new Node[] {r2c6, r4c6, r3c7});
+        r3c1.addNeighbours(new Node[] {r3c0, r2c1, r4c1, r3c2});
+        r3c2.addNeighbours(new Node[] {r3c1, r2c2, r4c2, r3c3});
+        r3c3.addNeighbours(new Node[] {r3c2, r2c3, r4c3, r3c4});
+        r3c4.addNeighbours(new Node[] {r3c3, r2c4, r4c4, r3c5});
+        r3c5.addNeighbours(new Node[] {r3c4, r2c5, r4c5, r3c6});
+        r3c6.addNeighbours(new Node[] {r3c5, r2c6, r4c6, r3c7});
         r3c7.addNeighbours(new Node[] {r3c6, r2c7, r4c7, r3c8});
-        r3c8.addNeighbours(new Node[] {r3c7, r2c8, r3c9});
-        r3c9.addNeighbours(new Node[] {r3c8, r4c9, r3c10});
+        r3c8.addNeighbours(new Node[] {r3c7, r2c8, r4c8, r3c9});
+        r3c9.addNeighbours(new Node[] {r3c8, r2c9, r4c9, r3c10});
         r3c10.addNeighbours(new Node[] {r3c9, r2c10, r4c10, r3c11});
         r3c11.addNeighbours(new Node[] {r3c10, r2c11, r4c11});
-
         r4c0.addNeighbours(new Node[] {r3c0, r5c0, r4c1});
         r4c1.addNeighbours(new Node[] {r4c0, r3c1, r5c1, r4c2});
-        r4c2.addNeighbours(new Node[] {r4c1, r5c2, r4c3});
+        r4c2.addNeighbours(new Node[] {r4c1, r3c2, r5c2, r4c3});
         r4c3.addNeighbours(new Node[] {r4c2, r3c3, r5c3, r4c4});
-        r4c4.addNeighbours(new Node[] {r4c3, r5c4, r4c5});
-        r4c5.addNeighbours(new Node[] {r4c4, r4c6});
+        r4c4.addNeighbours(new Node[] {r4c3, r3c4, r5c4, r4c5});
+        r4c5.addNeighbours(new Node[] {r4c4, r3c5, r5c5, r4c6});
         r4c6.addNeighbours(new Node[] {r4c5, r3c6, r5c6, r4c7});
-        r4c7.addNeighbours(new Node[] {r4c6, r3c7, r5c7});
-
-        r4c9.addNeighbours(new Node[] {r3c9, r5c9, r4c10});
+        r4c7.addNeighbours(new Node[] {r4c6, r3c7, r5c7, r4c8});
+        r4c8.addNeighbours(new Node[] {r4c7, r3c8, r5c8, r4c9});
+        r4c9.addNeighbours(new Node[] {r4c8, r3c9, r5c9, r4c10});
         r4c10.addNeighbours(new Node[] {r4c9, r3c10, r5c10, r4c11});
         r4c11.addNeighbours(new Node[] {r4c10, r3c11, r5c11});
-
         r5c0.addNeighbours(new Node[] {r4c0, r6c0, r5c1});
         r5c1.addNeighbours(new Node[] {r5c0, r4c1, r6c1, r5c2});
         r5c2.addNeighbours(new Node[] {r5c1, r4c2, r6c2, r5c3});
         r5c3.addNeighbours(new Node[] {r5c2, r4c3, r6c3, r5c4});
-        r5c4.addNeighbours(new Node[] {r5c3, r4c4, r6c4});
-
-        r5c6.addNeighbours(new Node[] {r4c6, r6c6, r5c7});
+        r5c4.addNeighbours(new Node[] {r5c3, r4c4, r6c4, r5c5});
+        r5c5.addNeighbours(new Node[] {r5c4, r4c5, r6c5, r5c6});
+        r5c6.addNeighbours(new Node[] {r5c5, r4c6, r6c6, r5c7});
         r5c7.addNeighbours(new Node[] {r5c6, r4c7, r6c7, r5c8});
-        r5c8.addNeighbours(new Node[] {r5c7, r6c8, r5c9});
+        r5c8.addNeighbours(new Node[] {r5c7, r4c8, r6c8, r5c9});
         r5c9.addNeighbours(new Node[] {r5c8, r4c9, r6c9, r5c10});
         r5c10.addNeighbours(new Node[] {r5c9, r4c10, r6c10, r5c11});
         r5c11.addNeighbours(new Node[] {r5c10, r4c11, r6c11});
-
         r6c0.addNeighbours(new Node[] {r5c0, r7c0, r6c1});
         r6c1.addNeighbours(new Node[] {r6c0, r5c1, r7c1, r6c2});
-        r6c2.addNeighbours(new Node[] {r6c1, r5c2, r6c3});
+        r6c2.addNeighbours(new Node[] {r6c1, r5c2, r7c2, r6c3});
         r6c3.addNeighbours(new Node[] {r6c2, r5c3, r7c3, r6c4});
         r6c4.addNeighbours(new Node[] {r6c3, r5c4, r7c4, r6c5});
-        r6c5.addNeighbours(new Node[] {r6c4, r7c5, r6c6});
-        r6c6.addNeighbours(new Node[] {r6c5, r5c6, r6c7});
+        r6c5.addNeighbours(new Node[] {r6c4, r5c5, r7c5, r6c6});
+        r6c6.addNeighbours(new Node[] {r6c5, r5c6, r7c6, r6c7});
         r6c7.addNeighbours(new Node[] {r6c6, r5c7, r7c7, r6c8});
         r6c8.addNeighbours(new Node[] {r6c7, r5c8, r7c8, r6c9});
         r6c9.addNeighbours(new Node[] {r6c8, r5c9, r7c9, r6c10});
         r6c10.addNeighbours(new Node[] {r6c9, r5c10, r7c10, r6c11});
         r6c11.addNeighbours(new Node[] {r6c10, r5c11, r7c11});
-
-        r7c0.addNeighbours(new Node[] {r6c0, r7c1});
-        r7c1.addNeighbours(new Node[] {r7c0, r6c1, r8c1});
-
-        r7c3.addNeighbours(new Node[] {r6c3, r8c3, r7c4});
+        r7c0.addNeighbours(new Node[] {r6c0, r8c0, r7c1});
+        r7c1.addNeighbours(new Node[] {r7c0, r6c1, r8c1, r7c2});
+        r7c2.addNeighbours(new Node[] {r7c1, r6c2, r8c2, r7c3});
+        r7c3.addNeighbours(new Node[] {r7c2, r6c3, r8c3, r7c4});
         r7c4.addNeighbours(new Node[] {r7c3, r6c4, r8c4, r7c5});
-        r7c5.addNeighbours(new Node[] {r7c4, r6c5, r8c5});
-
-        r7c7.addNeighbours(new Node[] {r6c7, r8c7, r7c8});
+        r7c5.addNeighbours(new Node[] {r7c4, r6c5, r8c5, r7c6});
+        r7c6.addNeighbours(new Node[] {r7c5, r6c6, r8c6, r7c7});
+        r7c7.addNeighbours(new Node[] {r7c6, r6c7, r8c7, r7c8});
         r7c8.addNeighbours(new Node[] {r7c7, r6c8, r8c8, r7c9});
         r7c9.addNeighbours(new Node[] {r7c8, r6c9, r8c9, r7c10});
         r7c10.addNeighbours(new Node[] {r7c9, r6c10, r8c10, r7c11});
         r7c11.addNeighbours(new Node[] {r7c10, r6c11, r8c11});
-
-
-        r8c1.addNeighbours(new Node[] {r7c1, r9c1, r8c2});
-        r8c2.addNeighbours(new Node[] {r8c1 , r8c3});
-        r8c3.addNeighbours(new Node[] {r8c2, r7c3, r8c4});
+        r8c0.addNeighbours(new Node[] {r7c0, r9c0, r8c1});
+        r8c1.addNeighbours(new Node[] {r8c0, r7c1, r9c1, r8c2});
+        r8c2.addNeighbours(new Node[] {r8c1, r7c2, r9c2, r8c3});
+        r8c3.addNeighbours(new Node[] {r8c2, r7c3, r9c3, r8c4});
         r8c4.addNeighbours(new Node[] {r8c3, r7c4, r9c4, r8c5});
-        r8c5.addNeighbours(new Node[] {r8c4, r7c5, r9c5});
-
-        r8c7.addNeighbours(new Node[] {r7c7, r9c7, r8c8});
+        r8c5.addNeighbours(new Node[] {r8c4, r7c5, r9c5, r8c6});
+        r8c6.addNeighbours(new Node[] {r8c5, r7c6, r9c6, r8c7});
+        r8c7.addNeighbours(new Node[] {r8c6, r7c7, r9c7, r8c8});
         r8c8.addNeighbours(new Node[] {r8c7, r7c8, r9c8, r8c9});
         r8c9.addNeighbours(new Node[] {r8c8, r7c9, r9c9, r8c10});
         r8c10.addNeighbours(new Node[] {r8c9, r7c10, r9c10, r8c11});
         r8c11.addNeighbours(new Node[] {r8c10, r7c11, r9c11});
-
-        r9c0.addNeighbours(new Node[] {r10c0, r9c1});
-        r9c1.addNeighbours(new Node[] {r9c0, r8c1, r10c1});
-
-
-        r9c4.addNeighbours(new Node[] {r8c4, r10c4, r9c5});
+        r9c0.addNeighbours(new Node[] {r8c0, r10c0, r9c1});
+        r9c1.addNeighbours(new Node[] {r9c0, r8c1, r10c1, r9c2});
+        r9c2.addNeighbours(new Node[] {r9c1, r8c2, r10c2, r9c3});
+        r9c3.addNeighbours(new Node[] {r9c2, r8c3, r10c3, r9c4});
+        r9c4.addNeighbours(new Node[] {r9c3, r8c4, r10c4, r9c5});
         r9c5.addNeighbours(new Node[] {r9c4, r8c5, r10c5, r9c6});
-        r9c6.addNeighbours(new Node[] {r9c5 , r9c7});
+        r9c6.addNeighbours(new Node[] {r9c5, r8c6, r10c6, r9c7});
         r9c7.addNeighbours(new Node[] {r9c6, r8c7, r10c7, r9c8});
-        r9c8.addNeighbours(new Node[] {r9c7, r8c8, r9c9});
+        r9c8.addNeighbours(new Node[] {r9c7, r8c8, r10c8, r9c9});
         r9c9.addNeighbours(new Node[] {r9c8, r8c9, r10c9, r9c10});
         r9c10.addNeighbours(new Node[] {r9c9, r8c10, r10c10, r9c11});
         r9c11.addNeighbours(new Node[] {r9c10, r8c11, r10c11});
-
         r10c0.addNeighbours(new Node[] {r9c0, r11c0, r10c1});
         r10c1.addNeighbours(new Node[] {r10c0, r9c1, r11c1, r10c2});
-        r10c2.addNeighbours(new Node[] {r10c1, r11c2});
-
-        r10c4.addNeighbours(new Node[] {r9c4, r11c4, r10c5});
-        r10c5.addNeighbours(new Node[] {r10c4, r9c5, r11c5});
-
-        r10c7.addNeighbours(new Node[] {r9c7, r11c7});
-
-        r10c9.addNeighbours(new Node[] {r9c9, r11c9, r10c10});
+        r10c2.addNeighbours(new Node[] {r10c1, r9c2, r11c2, r10c3});
+        r10c3.addNeighbours(new Node[] {r10c2, r9c3, r11c3, r10c4});
+        r10c4.addNeighbours(new Node[] {r10c3, r9c4, r11c4, r10c5});
+        r10c5.addNeighbours(new Node[] {r10c4, r9c5, r11c5, r10c6});
+        r10c6.addNeighbours(new Node[] {r10c5, r9c6, r11c6, r10c7});
+        r10c7.addNeighbours(new Node[] {r10c6, r9c7, r11c7, r10c8});
+        r10c8.addNeighbours(new Node[] {r10c7, r9c8, r11c8, r10c9});
+        r10c9.addNeighbours(new Node[] {r10c8, r9c9, r11c9, r10c10});
         r10c10.addNeighbours(new Node[] {r10c9, r9c10, r11c10, r10c11});
         r10c11.addNeighbours(new Node[] {r10c10, r9c11, r11c11});
-
         r11c0.addNeighbours(new Node[] {r10c0, r11c1});
         r11c1.addNeighbours(new Node[] {r11c0, r10c1, r11c2});
-        r11c2.addNeighbours(new Node[] {r11c1, r10c2});
-
-        r11c4.addNeighbours(new Node[] {r10c4, r11c5});
-        r11c5.addNeighbours(new Node[] {r11c4, r10c5});
-
-        r11c7.addNeighbours(new Node[] {r10c7});
-
-        r11c9.addNeighbours(new Node[] {r10c9, r11c10});
+        r11c2.addNeighbours(new Node[] {r11c1, r10c2, r11c3});
+        r11c3.addNeighbours(new Node[] {r11c2, r10c3, r11c4});
+        r11c4.addNeighbours(new Node[] {r11c3, r10c4, r11c5});
+        r11c5.addNeighbours(new Node[] {r11c4, r10c5, r11c6});
+        r11c6.addNeighbours(new Node[] {r11c5, r10c6, r11c7});
+        r11c7.addNeighbours(new Node[] {r11c6, r10c7, r11c8});
+        r11c8.addNeighbours(new Node[] {r11c7, r10c8, r11c9});
+        r11c9.addNeighbours(new Node[] {r11c8, r10c9, r11c10});
         r11c10.addNeighbours(new Node[] {r11c9, r10c10, r11c11});
         r11c11.addNeighbours(new Node[] {r11c10, r10c11});
 
-        return new Node[][] { {r0c0,r0c1,r0c2,r0c3,r0c4,r0c5,r0c6,r0c7,r0c8,r0c9,r0c10,r0c11},
-                              {r1c0,r1c1,r1c2,r1c3,r1c4,r1c5,r1c6,r1c7,r1c8,r1c9,r1c10,r1c11},
-                              {r2c0,r2c1,r2c2,r2c3,r2c4,r2c5,r2c6,r2c7,r2c8,r2c9,r2c10,r2c11},
-                              {r3c0,r3c1,r3c2,r3c3,r3c4,r3c5,r3c6,r3c7,r3c8,r3c9,r3c10,r3c11},
-                              {r4c0,r4c1,r4c2,r4c3,r4c4,r4c5,r4c6,r4c7,r4c8,r4c9,r4c10,r4c11},
-                              {r5c0,r5c1,r5c2,r5c3,r5c4,r5c5,r5c6,r5c7,r5c8,r5c9,r5c10,r5c11},
-                              {r6c0,r6c1,r6c2,r6c3,r6c4,r6c5,r6c6,r6c7,r6c8,r6c9,r6c10,r6c11},
-                              {r7c0,r7c1,r7c2,r7c3,r7c4,r7c5,r7c6,r7c7,r7c8,r7c9,r7c10,r7c11},
-                              {r8c0,r8c1,r8c2,r8c3,r8c4,r8c5,r8c6,r8c7,r8c8,r8c9,r8c10,r8c11},
-                              {r9c0,r9c1,r9c2,r9c3,r9c4,r9c5,r9c6,r9c7,r9c8,r9c9,r9c10,r9c11},
-                              {r10c0,r10c1,r10c2,r10c3,r10c4,r10c5,r10c6,r10c7,r10c8,r10c9,r10c10,r10c11},
-                              {r11c0,r11c1,r11c2,r11c3,r11c4,r11c5,r11c6,r11c7,r11c8,r11c9,r11c10,r11c11}
+
+        Node[][] map = new Node[][] { {r0c0,r0c1,r0c2,r0c3,r0c4,r0c5,r0c6,r0c7,r0c8,r0c9,r0c10,r0c11},
+                                        {r1c0,r1c1,r1c2,r1c3,r1c4,r1c5,r1c6,r1c7,r1c8,r1c9,r1c10,r1c11},
+                                        {r2c0,r2c1,r2c2,r2c3,r2c4,r2c5,r2c6,r2c7,r2c8,r2c9,r2c10,r2c11},
+                                        {r3c0,r3c1,r3c2,r3c3,r3c4,r3c5,r3c6,r3c7,r3c8,r3c9,r3c10,r3c11},
+                                        {r4c0,r4c1,r4c2,r4c3,r4c4,r4c5,r4c6,r4c7,r4c8,r4c9,r4c10,r4c11},
+                                        {r5c0,r5c1,r5c2,r5c3,r5c4,r5c5,r5c6,r5c7,r5c8,r5c9,r5c10,r5c11},
+                                        {r6c0,r6c1,r6c2,r6c3,r6c4,r6c5,r6c6,r6c7,r6c8,r6c9,r6c10,r6c11},
+                                        {r7c0,r7c1,r7c2,r7c3,r7c4,r7c5,r7c6,r7c7,r7c8,r7c9,r7c10,r7c11},
+                                        {r8c0,r8c1,r8c2,r8c3,r8c4,r8c5,r8c6,r8c7,r8c8,r8c9,r8c10,r8c11},
+                                        {r9c0,r9c1,r9c2,r9c3,r9c4,r9c5,r9c6,r9c7,r9c8,r9c9,r9c10,r9c11},
+                                        {r10c0,r10c1,r10c2,r10c3,r10c4,r10c5,r10c6,r10c7,r10c8,r10c9,r10c10,r10c11},
+                                        {r11c0,r11c1,r11c2,r11c3,r11c4,r11c5,r11c6,r11c7,r11c8,r11c9,r11c10,r11c11}
         };
+
+        for (Coordinate obstacleCoordinate : obstacles) {
+            map[obstacleCoordinate.getX()][obstacleCoordinate.getY()].setObstacle(true);
+        }
+
+        return map;
     }
+
 }

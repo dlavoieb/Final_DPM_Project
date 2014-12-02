@@ -1,10 +1,10 @@
 package dpm.lejos.project;
 
-import dpm.lejos.orientation.Mapper;
 import dpm.lejos.orientation.Orienteering;
 import lejos.nxt.Button;
 import lejos.nxt.LCD;
 import lejos.nxt.comm.RConsole;
+import lejos.util.ButtonCounter;
 
 /**
  * Main executable
@@ -17,32 +17,47 @@ import lejos.nxt.comm.RConsole;
 public class Main {
 
     public static void main(String [] argv){
-        int i = 0;
-        LCD.drawString("Choose your map", 0,0);
+       // RConsole.openUSB(15000);
 
-        while(true){
-            LCD.drawString(String.valueOf(Mapper.MapID.values()[i% Mapper.MapID.values().length]), 0, 3);
-            int option = Button.waitForAnyPress();
-            if (option == Button.ID_LEFT){
-                i+=1;
-            } else if (option == Button.ID_RIGHT){
-                i-=1;
-            } else if (option == Button.ID_ENTER){
-                break;
-            }
-        }
-        Mapper.MapID mapID = Mapper.MapID.values()[i% Mapper.MapID.values().length];
+        int buttonChoice;
+        int map = 0;
+        int dropOffX = 0;
+        int dropOffY = 0;
+        LCD.clear();
+        LCD.drawString("Right Selects \nMap", 0,3);
+        ButtonCounter counter = new ButtonCounter();
+        counter.count();
+        map = counter.getRightCount();
+        LCD.clear();
+        LCD.drawString("dropX  dropY", 0,0);
+        counter.count();
+        dropOffX = counter.getRightCount();
+        counter.count();
+        dropOffY = counter.getRightCount();
 
-        RConsole.openUSB(15000);
+        do {
+            LCD.clear();
+            LCD.drawString("MAP " + map, 0, 1);
+            LCD.drawString("XP " + dropOffX, 0, 2);
+            LCD.drawString("YP " + dropOffY, 0, 3);
+            buttonChoice = Button.waitForAnyPress();
+        } while (buttonChoice != Button.ID_ENTER);
+
+
         Robot robot = new Robot();
         Odometer odometer = new Odometer(robot);
         SystemDisplay display = new SystemDisplay(odometer);
-        Navigation navigation = new Navigation(robot, odometer, mapID);
-        Orienteering orienteering = new Orienteering(robot, navigation, mapID);
+        RConsole.println("Intiated odometer and display");
+        Navigation navigation = new Navigation(robot, odometer, map);
+        RConsole.println("Intiated navigation");
+        Orienteering orienteering = new Orienteering(robot, navigation);
+        RConsole.println("Intiated orienteering");
         Grabber grabber = new Grabber(robot);
         BlockDetection blockDetection = new BlockDetection(robot, odometer, navigation);
+        RConsole.println("Intiated blockdetection");
 
-        MissionPlanner missionPlanner = new MissionPlanner(navigation, grabber, orienteering, odometer, display, blockDetection, robot);
+        MissionPlanner missionPlanner = new MissionPlanner(navigation, grabber, orienteering, odometer, display, blockDetection, robot,
+                dropOffX, dropOffY);
 
         missionPlanner.startMission();
 

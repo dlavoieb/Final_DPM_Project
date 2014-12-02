@@ -35,14 +35,38 @@ public class Navigation {
         mapper = new Mapper(Mapper.MapID.Lab5);
         m_Odometer=odometer;
         m_Odometer.setNavigation(this);
+
 	}
 
-    public Navigation(Robot robot, Odometer odometer, Mapper.MapID id){
+    public Navigation(Robot robot, Odometer odometer, int id){
         m_robot = robot;
-        mapper = new Mapper(id);
+        createMapper(id);
         m_Odometer=odometer;
         m_Odometer.setNavigation(this);
         m_Odometer.startCorrection();
+    }
+
+    public void createMapper(int id) {
+        switch (id) {
+            case 1:
+                mapper = new Mapper(Mapper.MapID.Final1);
+                break;
+            case 2:
+                mapper = new Mapper(Mapper.MapID.Final2);
+                break;
+            case 3:
+                mapper = new Mapper(Mapper.MapID.Final3);
+                break;
+            case 4:
+                mapper = new Mapper(Mapper.MapID.Final4);
+                break;
+            case 5:
+                mapper = new Mapper(Mapper.MapID.Final5);
+                break;
+            case 6:
+                mapper = new Mapper(Mapper.MapID.Final6);
+                break;
+        }
     }
 
     /**
@@ -55,7 +79,13 @@ public class Navigation {
 
         Coordinate startingCoordinate = m_robot.getPositionOnGrid();
         RConsole.println("start x = " + Integer.toString(startingCoordinate.getX()) + " y = " + Integer.toString(startingCoordinate.getY()));
-        //TODO: make sure that this is not BACKWARDS!!!!
+        mapper.graphPlane[10][0].setObstacle(true);
+        mapper.graphPlane[10][1].setObstacle(true);
+        mapper.graphPlane[11][0].setObstacle(true);
+        mapper.graphPlane[11][1].setObstacle(true);
+
+        cleanGraph();
+
         Node current = mapper.graphPlane[startingCoordinate.getX()][startingCoordinate.getY()];
         Node finish = mapper.graphPlane[endingCoordinate.getX()][endingCoordinate.getY()];
 
@@ -70,7 +100,7 @@ public class Navigation {
                 break;
             } else {
                 for(Node node : current.getNeighbours()){
-                    if(!node.getVisited()){
+                    if(!node.getVisited() && !node.isObstacle()){
                         queue.add(node);
                         node.setVisited(true);
                         node.setPrevious(current);
@@ -86,8 +116,28 @@ public class Navigation {
         }
 
         mapper.printDirections(reverseDirections);
-        ArrayList<Coordinate> moveList = computeMoveList(reverseDirections);
+        //ArrayList<Coordinate> moveList = computeMoveList(reverseDirections);
+        ArrayList<Coordinate> moveList = computeMoveListWithChains(reverseDirections);
         performMoves(moveList);
+    }
+
+    private void cleanGraph() {
+
+        for (Node[] row : mapper.graphPlane) {
+            for (Node node : row) {
+                node.setVisited(false);
+                node.setPrevious(null);
+            }
+        }
+
+    }
+
+    public ArrayList<Coordinate> computeMoveListWithChains(ArrayList<Node> directions) {
+        ArrayList<Coordinate> path = new ArrayList<Coordinate>();
+        for (Node node: directions) {
+            path.add(node.getCoordinate());
+        }
+        return path;
     }
 
     /**
@@ -248,8 +298,31 @@ public class Navigation {
     public void moveForward() {
         m_robot.motorLeft.setSpeed(Robot.CRUISE_SPEED);
         m_robot.motorRight.setSpeed(Robot.CRUISE_SPEED);
-        m_robot.motorLeft.rotate(Utils.robotDistanceToMotorAngle(Robot.tileLength, m_robot), true);
-        m_robot.motorRight.rotate(Utils.robotDistanceToMotorAngle(Robot.tileLength, m_robot), false);
+
+        double oldTheta = m_Odometer.getThetaInDegrees();
+
+        if      (oldTheta >= -45  && oldTheta <= 45) {
+            travelTo(m_Odometer.getX()+ Robot.tileLength, m_Odometer.getY());
+        }
+        else if (oldTheta >= 45   && oldTheta <= 135)  {
+            travelTo(m_Odometer.getX(), m_Odometer.getY() + Robot.tileLength);
+        }
+        else if (oldTheta >= -135 && oldTheta <= -45)  {
+            travelTo(m_Odometer.getX(), m_Odometer.getY() - Robot.tileLength);
+        }
+        else if (oldTheta >= 135  || oldTheta <= -135) {
+            travelTo(m_Odometer.getX()- Robot.tileLength, m_Odometer.getY());
+        }
+
+//        m_robot.motorLeft.rotate(Utils.robotDistanceToMotorAngle(Robot.tileLength, m_robot), true);
+//        m_robot.motorRight.rotate(Utils.robotDistanceToMotorAngle(Robot.tileLength, m_robot), false);
+    }
+
+    public void moveBackwardHalfATile() {
+        m_robot.motorLeft.setSpeed(Robot.CRUISE_SPEED);
+        m_robot.motorRight.setSpeed(Robot.CRUISE_SPEED);
+        m_robot.motorLeft.rotate(-Utils.robotDistanceToMotorAngle(Robot.tileLength / 2, m_robot), true);
+        m_robot.motorRight.rotate(-Utils.robotDistanceToMotorAngle(Robot.tileLength / 2, m_robot), false);
     }
 
     /**
@@ -262,11 +335,25 @@ public class Navigation {
         m_robot.motorRight.rotate(Utils.robotDistanceToMotorAngle(Robot.tileLength / 2, m_robot), false);
     }
 
-    public void moveForwardQuarterOfATile() {
+    public void moveForwardThirdOfATile() {
         m_robot.motorLeft.setSpeed(Robot.CRUISE_SPEED);
         m_robot.motorRight.setSpeed(Robot.CRUISE_SPEED);
-        m_robot.motorLeft.rotate(Utils.robotDistanceToMotorAngle(Robot.tileLength / 4, m_robot), true);
-        m_robot.motorRight.rotate(Utils.robotDistanceToMotorAngle(Robot.tileLength / 4, m_robot), false);
+        m_robot.motorLeft.rotate(Utils.robotDistanceToMotorAngle(Robot.tileLength / 3, m_robot), true);
+        m_robot.motorRight.rotate(Utils.robotDistanceToMotorAngle(Robot.tileLength / 3, m_robot), false);
+    }
+
+    public void moveBackwardThirdOfATile() {
+        m_robot.motorLeft.setSpeed(Robot.CRUISE_SPEED);
+        m_robot.motorRight.setSpeed(Robot.CRUISE_SPEED);
+        m_robot.motorLeft.rotate(Utils.robotDistanceToMotorAngle(-Robot.tileLength / 3, m_robot), true);
+        m_robot.motorRight.rotate(Utils.robotDistanceToMotorAngle(-Robot.tileLength / 3, m_robot), false);
+    }
+
+    public void moveBackSpecifiedAmount(double x) {
+        m_robot.motorLeft.setSpeed(Robot.CRUISE_SPEED);
+        m_robot.motorRight.setSpeed(Robot.CRUISE_SPEED);
+        m_robot.motorLeft.rotate(Utils.robotDistanceToMotorAngle(- x, m_robot), true);
+        m_robot.motorRight.rotate(Utils.robotDistanceToMotorAngle(- x, m_robot), false);
     }
 
     /**
@@ -286,10 +373,10 @@ public class Navigation {
 
         RConsole.println("Angle to rotate! = " + Double.toString(rotationAngle));
 
-        m_robot.motorLeft.setAcceleration(4000);
-        m_robot.motorRight.setAcceleration(4000);
+        m_robot.motorLeft.setAcceleration(5000);
+        m_robot.motorRight.setAcceleration(5000);
         m_robot.motorLeft.setSpeed(Robot.ROTATE_SPEED + 150);
-        m_robot.motorRight.setSpeed(Robot.ROTATE_SPEED + 155);
+        m_robot.motorRight.setSpeed(Robot.ROTATE_SPEED + 150);
 
         if (Math.abs(rotationAngle) < 3) {
             m_robot.motorLeft.rotate((rotationAngle > 0 ? -3 : 3), true);
@@ -303,10 +390,10 @@ public class Navigation {
         RConsole.println("\nTheta destination = " + Double.toString(theta));
         RConsole.println("Theta current = " + Double.toString(m_Odometer.getThetaInDegrees()));
 
-        if (!closeEnough(theta)){
-            RConsole.println("Not close enough, redo!");
-            rotateTo(theta);
-        }
+//        if (!closeEnough(theta)){
+//            RConsole.println("Not close enough, redo!");
+//            rotateTo(theta);
+//        }
     }
 
     /**
