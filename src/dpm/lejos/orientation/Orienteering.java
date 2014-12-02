@@ -3,7 +3,6 @@ package dpm.lejos.orientation;
 import dpm.lejos.project.Navigation;
 import dpm.lejos.project.Odometer;
 import dpm.lejos.project.Robot;
-import lejos.nxt.Button;
 import lejos.nxt.LCD;
 import lejos.nxt.UltrasonicSensor;
 import lejos.nxt.comm.RConsole;
@@ -23,7 +22,6 @@ public class Orienteering {
     private Tile[][] plane;
     private Direction startingDir;
     private Direction endingDir;
-    static int DISTANCE_THRESHOLD = 30;
     private Navigation navigation;
     private Robot robot;
 
@@ -91,9 +89,9 @@ public class Orienteering {
             RConsole.println("data front = " + distanceForward) ;
 
 
-            hasWallLeft = distanceLeft < DISTANCE_THRESHOLD;
-            hasWallRight = distanceRight < DISTANCE_THRESHOLD;
-            hasWallAhead = distanceForward < DISTANCE_THRESHOLD;
+            hasWallLeft = distanceLeft < Robot.DISTANCE_THRESHOLD;
+            hasWallRight = distanceRight < Robot.DISTANCE_THRESHOLD;
+            hasWallAhead = distanceForward < Robot.DISTANCE_THRESHOLD;
 
             if (distanceForward < 10) {
                 navigation.moveBackSpecifiedAmount(9 - distanceForward);

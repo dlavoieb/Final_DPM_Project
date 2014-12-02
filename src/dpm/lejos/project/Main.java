@@ -1,6 +1,5 @@
 package dpm.lejos.project;
 
-import dpm.lejos.orientation.Mapper;
 import dpm.lejos.orientation.Orienteering;
 import lejos.nxt.Button;
 import lejos.nxt.LCD;
@@ -18,23 +17,24 @@ import lejos.util.ButtonCounter;
 public class Main {
 
     public static void main(String [] argv){
-        RConsole.openUSB(15000);
+       // RConsole.openUSB(15000);
 
         int buttonChoice;
         int map = 0;
         int dropOffX = 0;
         int dropOffY = 0;
-
+        LCD.clear();
+        LCD.drawString("Right Selects \nMap", 0,3);
         ButtonCounter counter = new ButtonCounter();
         counter.count();
         map = counter.getRightCount();
+        LCD.clear();
+        LCD.drawString("dropX  dropY", 0,0);
         counter.count();
         dropOffX = counter.getRightCount();
         counter.count();
         dropOffY = counter.getRightCount();
 
-
-        // wait for button press
         do {
             LCD.clear();
             LCD.drawString("MAP " + map, 0, 1);
