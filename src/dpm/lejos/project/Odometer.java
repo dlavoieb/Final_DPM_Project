@@ -27,6 +27,7 @@ public class Odometer extends Thread{
     //Odometer is encoded in radians!
     private double x, y, theta;
     private int prevTachoL, prevTachoR;
+    private boolean running = true;
 
     /**
      * default constructor for unit tests

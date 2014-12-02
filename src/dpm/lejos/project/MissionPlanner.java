@@ -23,8 +23,12 @@ public class MissionPlanner {
     private final Grabber m_Grabber;
     private final Orienteering orienteering;
     private final BlockDetection blockDetection;
+    private final Robot robot;
+    private int dropOffX;
+    private int dropOffY;
 
-    public MissionPlanner(Navigation navigation, Grabber grabber, Orienteering orienteering, Odometer odometer, SystemDisplay display, BlockDetection blockDetection, Robot robot) {
+    public MissionPlanner(Navigation navigation, Grabber grabber, Orienteering orienteering, Odometer odometer, SystemDisplay display,
+                          BlockDetection blockDetection, Robot robot, int dropOffX, int dropOffY) {
 
         this.m_Navigation = navigation;
         this.m_Grabber = grabber;
@@ -32,6 +36,9 @@ public class MissionPlanner {
         this.odometer = odometer;
         this.display = display;
         this.blockDetection = blockDetection;
+        this.robot = robot;
+        this.dropOffX = dropOffX;
+        this.dropOffY = dropOffY;
     }
 
     /**
@@ -47,7 +54,12 @@ public class MissionPlanner {
      * 6- repeat from 2 onwards
      */
     public void startMission(){
-        odoCorrectionTest();
+        //odoCorrectionTest();
+//        localizationTest();
+//        localizationAndNavigationTest();
+//        pickBlockTest();
+//        touchSensorTest();
+        fullTest();
     }
 
     public void odoCorrectionTest(){
@@ -123,7 +135,7 @@ public class MissionPlanner {
     public void localizationTest() {
         Button.waitForAnyPress();
         odometer.start();
-        display.start();
+        //display.start();
         RConsole.println("Initiated ODO and ODO Display");
         orienteering.deterministicPositioning(odometer);
     }
@@ -148,18 +160,32 @@ public class MissionPlanner {
         orienteering.deterministicPositioning(odometer);
         Sound.beep();
 //        Button.waitForAnyPress();
-        m_Navigation.navigate(new Coordinate(3,3));
+        m_Navigation.navigate(new Coordinate(5,1));
+        //blockDetection.lookForBlock(m_Grabber);
     }
 
     public void fullTest() {
         odometer.start();
         orienteering.deterministicPositioning(odometer);
         Sound.beep();
-        m_Navigation.navigate(new Coordinate(5,1));
-        double x = 6 * 30 + 30 / 2.0;
-        double y = 30 + 30 / 2.0;
-        m_Navigation.rotateToCoordinate(x,y);
+        Sound.beep();
+        m_Navigation.navigate(new Coordinate(9,1));
+//        double x = 1 * Robot.tileLength + Robot.tileLength / 2.0;
+//        double y = 10 * Robot.tileLength + Robot.tileLength / 2.0;
+//        m_Navigation.rotateToCoordinate(y, x);
+        //blockDetection.lookForBlock(m_Grabber);
+        m_Navigation.rotateTo(0);
+//        double x = 10 * 30 + 30 / 2.0;
+//        double y = 30 + 30 / 2.0;
+//        m_Navigation.rotateToCoordinate(x,y);
         blockDetection.lookForBlock(m_Grabber);
+        robot.setPositionOnGrid(new Coordinate(9,1));
+        robot.setDirection(Orienteering.Direction.NORTH);
+        m_Navigation.navigate(new Coordinate(dropOffY, dropOffX));
+        m_Navigation.moveBackwardHalfATile();
+        m_Grabber.lowerClaw();
+        m_Grabber.openClaw();
+        Button.waitForAnyPress();
 
     }
 
@@ -204,6 +230,14 @@ public class MissionPlanner {
         odometer.start();
         display.start();
         blockDetection.lookForBlock(m_Grabber);
+    }
+
+    public void touchSensorTest() {
+        while (true) {
+            if (robot.clawTouch.isPressed()) {
+                RConsole.println("Touch sensor pressed!");
+            }
+        }
     }
 
 }//end MissionPlanner

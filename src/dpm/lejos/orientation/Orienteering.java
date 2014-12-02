@@ -3,6 +3,7 @@ package dpm.lejos.orientation;
 import dpm.lejos.project.Navigation;
 import dpm.lejos.project.Odometer;
 import dpm.lejos.project.Robot;
+import lejos.nxt.Button;
 import lejos.nxt.LCD;
 import lejos.nxt.UltrasonicSensor;
 import lejos.nxt.comm.RConsole;
@@ -40,6 +41,7 @@ public class Orienteering {
         this.robot = robot;
         robot.setPlane(plane);
         this.navigation = navigation;
+        this.plane = createPlaneFromGraph(navigation.mapper.graphPlane);
     }
 
     public Orienteering(Mapper.MapID mapId) {
@@ -84,14 +86,18 @@ public class Orienteering {
             int distanceRight = getFilteredData(robot.usRight);
             int distanceForward = getFilteredData(robot.usFront);
 
-//            RConsole.println("data left = " + distanceLeft);
-//            RConsole.println("data right = " + distanceRight);
+            RConsole.println("data left = " + distanceLeft);
+            RConsole.println("data right = " + distanceRight);
             RConsole.println("data front = " + distanceForward) ;
 
 
             hasWallLeft = distanceLeft < DISTANCE_THRESHOLD;
             hasWallRight = distanceRight < DISTANCE_THRESHOLD;
             hasWallAhead = distanceForward < DISTANCE_THRESHOLD;
+
+            if (distanceForward < 10) {
+                navigation.moveBackSpecifiedAmount(9 - distanceForward);
+            }
 
             RConsole.println( "ahead" + Boolean.toString(hasWallAhead) );
             RConsole.println( "right" + Boolean.toString(hasWallRight) );
@@ -139,6 +145,8 @@ public class Orienteering {
 
         //Use for debugging purposes
         //printPlaneOptions(plane);
+        LCD.drawString("Start X = " + String.valueOf(startingPosition.getX()),0,0);
+        LCD.drawString("Start Y = " + String.valueOf(startingPosition.getY()),0,1);
     }
 
     private void adjustOdometer(Coordinate endingPosition, Direction endingDir, Odometer odometer) {

@@ -68,7 +68,6 @@ public class OdometryCorrection extends Thread{
 
     public void run(){
         double newTheta;
-
         while(true) {
             if (navigation.isMovingForward()) {
                 //Right sensor passes first

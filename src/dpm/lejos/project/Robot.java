@@ -54,7 +54,7 @@ public class Robot {
     public static double wheelBase = 12.5; //TODO : Continue to tweak
     public static double wheelRadius = 2.02; //TODO: Still need to calibrate
     public static double lightSensorOffset = 5; //TODO : Get real value
-    public static double lsDistance = 12.7;
+    public static double lsDistance = 11.7;
 
     public static double ACCEPTABLE_ANGLE = 1.00;
     public static double ACCEPTABLE_LINEAR = 1.00;
