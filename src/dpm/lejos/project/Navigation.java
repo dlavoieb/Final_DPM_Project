@@ -12,7 +12,7 @@ import java.util.ArrayList;
  *
  * All motion is managed by this class
  *
- * @author David Lavoie-Boutin
+ * @author Daniel Macario, David Lavoie-Boutin
  * @version 1.5
  */
 public class Navigation {
@@ -38,6 +38,13 @@ public class Navigation {
 
 	}
 
+    /**
+     * Initialize a navigation instance associated to a particular map.
+     * @param robot Robot instance used for navigation.
+     * @param odometer Odometer instance used to keep track of the position of
+     *                 the robot.
+     * @param id ID the robot will be placed in.
+     */
     public Navigation(Robot robot, Odometer odometer, int id){
         m_robot = robot;
         createMapper(id);
@@ -46,6 +53,12 @@ public class Navigation {
         m_Odometer.startCorrection();
     }
 
+    /**
+     * Based on the integer id passed we create an instance of the map used
+     * for navigation.
+     * @param id Integer ID specifying the number of the map used
+     *           to navigate in.
+     */
     public void createMapper(int id) {
         switch (id) {
             case 1:
@@ -70,7 +83,7 @@ public class Navigation {
     }
 
     /**
-     * perform the navigation planning to get to the desired coordinate
+     * Perform the navigation planning to get to the desired coordinate
      *
      * call to <code>computeMoveList</code> that will move the robot
      * @param endingCoordinate the desired finish point
@@ -116,11 +129,14 @@ public class Navigation {
         }
 
         mapper.printDirections(reverseDirections);
-        //ArrayList<Coordinate> moveList = computeMoveList(reverseDirections);
         ArrayList<Coordinate> moveList = computeMoveListWithChains(reverseDirections);
         performMoves(moveList);
     }
 
+    /**
+     * Cleans the graph before initiating the navigation procedure again, so that
+     * all the nodes are reset to the default state of not visited.
+     */
     private void cleanGraph() {
 
         for (Node[] row : mapper.graphPlane) {
@@ -132,6 +148,15 @@ public class Navigation {
 
     }
 
+    /**
+     * Determines the set of nodes that we need to travel to in order
+     * to go from one destination to another.
+     * @param directions An ArrayList specifying the set of coordinates
+     *                   to traverse in order to go from one node on the graph
+     *                   to another.
+     * @return An ArrayList of coordinate objects specifying the path we need
+     * to follow to go from one node on the graph to another.
+     */
     public ArrayList<Coordinate> computeMoveListWithChains(ArrayList<Node> directions) {
         ArrayList<Coordinate> path = new ArrayList<Coordinate>();
         for (Node node: directions) {
@@ -141,13 +166,14 @@ public class Navigation {
     }
 
     /**
-     * preform the list of movements
+     * Minimizes the number of node chains to go from
+     * one node on the graph to another.
      * @param directions the list of movements to follow
      * @return the list
      */
     public ArrayList<Coordinate> computeMoveList(ArrayList<Node> directions) {
 
-        ArrayList<Coordinate> coorList = new ArrayList<Coordinate>();
+        ArrayList<Coordinate> coordinateList = new ArrayList<Coordinate>();
         int index = 0;
         while (directions.size()>1) {
             Node initial = directions.get(0);
@@ -168,7 +194,7 @@ public class Navigation {
                 index = 0;
 
                 RConsole.println("X: " + directions.get(index).getX() + ", Y: " + directions.get(index).getY());
-                coorList.add(directions.get(index).getCoordinate());
+                coordinateList.add(directions.get(index).getCoordinate());
 
             } else if (initial.getY() == next.getY()) {
                 // next has same y
@@ -184,12 +210,19 @@ public class Navigation {
                 index = 0;
 
                 RConsole.println("X: " + directions.get(index).getX() + ", Y: " + directions.get(index).getY());
-                coorList.add(directions.get(index).getCoordinate());
+                coordinateList.add(directions.get(index).getCoordinate());
             }
         }
-        return coorList;
+        return coordinateList;
     }
 
+    /**
+     * Executes the shortest path calculated to go from one node
+     * to another.
+     * @param coordinates An ArrayList specifying the set of coordinates
+     *                    that we will need to traverse in order
+     *                    to go from one node to another on the graph.
+     */
     public void performMoves(ArrayList <Coordinate> coordinates){
         for (Coordinate coordinate : coordinates) {
             travelTo(coordinate);
@@ -204,11 +237,11 @@ public class Navigation {
     }
 
 	/**
-	 * method used to send the robot to a
-     * predetermined absolute location
+	 * Method used to displace the robot to a
+     * predetermined location on the coordinate system
 	 *
-     * we assume that there is now no
-     * obstacles between us and our destination
+     * We assume that there are no
+     * obstacles between us and our destination.
      *
 	 * @param x the x coordinate
 	 * @param y the y coordinate
@@ -260,7 +293,11 @@ public class Navigation {
         }
     }
 
-
+    /**
+     * Rotates the robot to a specified coordinate on the grid.
+     * @param x The x coordinate to rotate to.
+     * @param y The y coordinate to rotate to
+     */
     public void rotateToCoordinate(double x, double y) {
         try {
             double[] currentPosition = m_Odometer.getPosition();
@@ -280,7 +317,7 @@ public class Navigation {
     }
 
     /**
-     * moves the robot to the specified coordinate
+     * Moves the robot to the specified coordinate.
      * See the plane encoding in the orienteering or navigator classes
      * @param destination the coordinate reference for the destination
      */
@@ -293,7 +330,8 @@ public class Navigation {
     }
 
     /**
-     * move the robot one tile forward
+     * Move the robot on tile forward, the equivalent
+     * of 30 cm.
      */
     public void moveForward() {
         m_robot.motorLeft.setSpeed(Robot.CRUISE_SPEED);
@@ -313,11 +351,11 @@ public class Navigation {
         else if (oldTheta >= 135  || oldTheta <= -135) {
             travelTo(m_Odometer.getX()- Robot.tileLength, m_Odometer.getY());
         }
-
-//        m_robot.motorLeft.rotate(Utils.robotDistanceToMotorAngle(Robot.tileLength, m_robot), true);
-//        m_robot.motorRight.rotate(Utils.robotDistanceToMotorAngle(Robot.tileLength, m_robot), false);
     }
 
+    /**
+     * Moves the robot backward 15 cm.
+     */
     public void moveBackwardHalfATile() {
         m_robot.motorLeft.setSpeed(Robot.CRUISE_SPEED);
         m_robot.motorRight.setSpeed(Robot.CRUISE_SPEED);
@@ -326,7 +364,7 @@ public class Navigation {
     }
 
     /**
-     * mov the robot forward half a tile
+     * Moves the robot forward 15 cm.
      */
     public void moveForwardHalfATile() {
         m_robot.motorLeft.setSpeed(Robot.CRUISE_SPEED);
@@ -335,6 +373,9 @@ public class Navigation {
         m_robot.motorRight.rotate(Utils.robotDistanceToMotorAngle(Robot.tileLength / 2, m_robot), false);
     }
 
+    /**
+     * Moves the robot forward 10 cm.
+     */
     public void moveForwardThirdOfATile() {
         m_robot.motorLeft.setSpeed(Robot.CRUISE_SPEED);
         m_robot.motorRight.setSpeed(Robot.CRUISE_SPEED);
@@ -342,6 +383,9 @@ public class Navigation {
         m_robot.motorRight.rotate(Utils.robotDistanceToMotorAngle(Robot.tileLength / 3, m_robot), false);
     }
 
+    /**
+     * Moves the robot backwards a 10 cm.
+     */
     public void moveBackwardThirdOfATile() {
         m_robot.motorLeft.setSpeed(Robot.CRUISE_SPEED);
         m_robot.motorRight.setSpeed(Robot.CRUISE_SPEED);
@@ -349,6 +393,10 @@ public class Navigation {
         m_robot.motorRight.rotate(Utils.robotDistanceToMotorAngle(-Robot.tileLength / 3, m_robot), false);
     }
 
+    /**
+     * Moves the robot backwards a specified distance
+     * @param x The distance to move back.
+     */
     public void moveBackSpecifiedAmount(double x) {
         m_robot.motorLeft.setSpeed(Robot.CRUISE_SPEED);
         m_robot.motorRight.setSpeed(Robot.CRUISE_SPEED);
@@ -389,11 +437,6 @@ public class Navigation {
 
         RConsole.println("\nTheta destination = " + Double.toString(theta));
         RConsole.println("Theta current = " + Double.toString(m_Odometer.getThetaInDegrees()));
-
-//        if (!closeEnough(theta)){
-//            RConsole.println("Not close enough, redo!");
-//            rotateTo(theta);
-//        }
     }
 
     /**
