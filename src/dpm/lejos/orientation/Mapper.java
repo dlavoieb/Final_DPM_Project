@@ -1,3 +1,7 @@
+/**
+ * @author Daniel Macario
+ * @version 1.0
+ */
 package dpm.lejos.orientation;
 
 import dpm.lejos.Map.*;
@@ -7,13 +11,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author Daniel Macario
- * @version 1.0
+ * Mapper class is used to create the graph instance used for navigation and
+ * localization based on the input to the robot at the the beginning of a run.
  */
 public class Mapper {
 
     public MapID mapID;
 
+    /**
+     * Enum specifying the maps that are encoded in the system.
+     */
     public enum MapID {Lab5, Map1, Map2, Beta1, Beta2, Beta3, Final1, Final2, Final3, Final4, Final5, Final6}
 
     public Node[][] graphPlane;
@@ -33,8 +40,11 @@ public class Mapper {
      * @return the representation of the course layout
      */
     public Node[][] generateGraph() {
-        ArrayList<Coordinate> obstacles;
 
+
+        // We pass the map creation class the location of the obstacles
+        // so that can create new maps with a modular approach.
+        ArrayList<Coordinate> obstacles;
         switch (mapID){
 
             case Lab5:
@@ -54,6 +64,7 @@ public class Mapper {
                 //return MAP8x8.createMap3();
 
             case Final1:
+
 
                 obstacles = new ArrayList<Coordinate>();
                 obstacles.add(new Coordinate(0,2));
@@ -255,6 +266,13 @@ public class Mapper {
             }
     }
 
+    /**
+     * Prints the directions specified by the navigation algdorithm
+     * to go from point A to point B on the graph.
+     * @param directions An ArrayList containing the set of nodes
+     *                   connecting the path to go from one point to another
+     *                   on the graph.
+     */
     public void printDirections(List<Node> directions) {
         for (Node node : directions)
             RConsole.println("Coords = " + node.getX() + " " + node.getY());

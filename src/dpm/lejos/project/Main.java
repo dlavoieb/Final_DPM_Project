@@ -44,6 +44,7 @@ public class Main {
         } while (buttonChoice != Button.ID_ENTER);
 
 
+        //Initializes the fundamental systems needed to accomplish the task.
         Robot robot = new Robot();
         Odometer odometer = new Odometer(robot);
         SystemDisplay display = new SystemDisplay(odometer);
@@ -64,4 +65,4 @@ public class Main {
         System.exit(0);
     }
 
-}//end Main
+}

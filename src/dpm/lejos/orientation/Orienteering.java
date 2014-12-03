@@ -1,3 +1,7 @@
+/**
+ * @author Daniel Macario
+ * @version 1.0
+ */
 package dpm.lejos.orientation;
 
 import dpm.lejos.project.Navigation;
@@ -12,10 +16,7 @@ import java.util.Arrays;
 
 /**
  * Orientation and navigation methods
- * for initial position determination
- *
- * @author Daniel Macario David Lavoie-Boutin
- * @version 1.0
+ * for initial position determination.
  */
 public class Orienteering {
 
@@ -25,6 +26,12 @@ public class Orienteering {
     private Navigation navigation;
     private Robot robot;
 
+    /**
+     *
+     * @param robot
+     * @param navigation
+     * @param mapId
+     */
     public Orienteering(Robot robot, Navigation navigation, Mapper.MapID mapId) {
 
         Mapper mapper = new Mapper(mapId);

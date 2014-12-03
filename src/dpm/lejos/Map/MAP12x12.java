@@ -1,3 +1,6 @@
+/**
+ * Created by danielmacario on 14-12-01.
+ */
 package dpm.lejos.Map;
 
 import dpm.lejos.orientation.Coordinate;
@@ -6,7 +9,10 @@ import dpm.lejos.orientation.Node;
 import java.util.ArrayList;
 
 /**
- * Created by danielmacario on 14-12-01.
+ * Creates an instance of the 12x12 graph used to navigate the grid.
+ * Each tile on the map is represented with a node object, each of which
+ * contain a coordinate and also boolean specifying whether they are an
+ * obstacle or not.
  */
 public class MAP12x12 {
 
@@ -314,6 +320,7 @@ public class MAP12x12 {
         r11c11.addNeighbours(new Node[] {r11c10, r10c11});
 
 
+        // Used to pick the end points of the navigation.
         Node[][] map = new Node[][] { {r0c0,r0c1,r0c2,r0c3,r0c4,r0c5,r0c6,r0c7,r0c8,r0c9,r0c10,r0c11},
                                         {r1c0,r1c1,r1c2,r1c3,r1c4,r1c5,r1c6,r1c7,r1c8,r1c9,r1c10,r1c11},
                                         {r2c0,r2c1,r2c2,r2c3,r2c4,r2c5,r2c6,r2c7,r2c8,r2c9,r2c10,r2c11},
@@ -328,6 +335,7 @@ public class MAP12x12 {
                                         {r11c0,r11c1,r11c2,r11c3,r11c4,r11c5,r11c6,r11c7,r11c8,r11c9,r11c10,r11c11}
         };
 
+        // We update the graph marking the nodes that are obstacles as obstacles.
         for (Coordinate obstacleCoordinate : obstacles) {
             map[obstacleCoordinate.getX()][obstacleCoordinate.getY()].setObstacle(true);
         }

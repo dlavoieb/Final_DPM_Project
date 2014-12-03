@@ -2,6 +2,7 @@ package dpm.lejos.orientation;
 
 /**
  * Coordinate class abstracts the x,y coordinate pair
+ * as an object.
  */
 public class Coordinate {
 	private int x;

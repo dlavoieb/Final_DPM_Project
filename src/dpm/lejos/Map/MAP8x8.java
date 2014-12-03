@@ -15,8 +15,6 @@ public class MAP8x8 {
 
         Node[][] map = new Node[1][1];
 
-
-
         return map;
 
     }

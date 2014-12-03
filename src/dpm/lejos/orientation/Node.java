@@ -18,6 +18,11 @@ public class Node {
     private boolean isObstacle;
     private Node previous;
 
+    /**
+     * Initializes a node object specifying a tile on the map
+     * for navigation purposes.
+     * @param coordinate
+     */
     public Node(Coordinate coordinate) {
         this.coordinate = coordinate;
         this.neighbours = new ArrayList<Node>();
@@ -28,18 +33,34 @@ public class Node {
         return neighbours;
     }
 
+    /**
+     * Specifies the neighbours for a given node on the grid.
+     * @param neighbours An ArrayList specifying the neighbouring nodes to
+     *                   the current instance.
+     */
     public void setNeighbours(ArrayList<Node> neighbours) {
         this.neighbours = neighbours;
     }
 
-    public void addNeighbour(Node n) {
-        this.neighbours.add(n);
-    }
-
-    public void addNeighbours(Node[] n) {
-        for (Node node : n) {
+    /**
+     * Adds the nodes passed as neighbours to current Node
+     * instance.
+     * @param nodes An array containing the set of neighbours
+     *              to the current instance.
+     */
+    public void addNeighbours(Node[] nodes) {
+        for (Node node : nodes) {
             neighbours.add(node);
         }
+    }
+
+    /**
+     * Adds the passed node to the neighbours arraylist of
+     * the current instance.
+     * @param n A node that is a neighbour to the current instance.
+     */
+    public void addNeighbour(Node n) {
+        this.neighbours.add(n);
     }
 
     public void setVisited(boolean visited) {
