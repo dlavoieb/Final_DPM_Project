@@ -17,8 +17,6 @@ public class Odometer extends Thread{
 	private NXTRegulatedMotor leftMotor;
 	private NXTRegulatedMotor rightMotor;
 
-    private boolean correct = false;
-
     private LineDetector lineDetectorLeft;
     private LineDetector lineDetectorRight;
 
@@ -27,7 +25,6 @@ public class Odometer extends Thread{
     //Odometer is encoded in radians!
     private double x, y, theta;
     private int prevTachoL, prevTachoR;
-    private boolean running = true;
 
     /**
      * default constructor for unit tests
@@ -62,12 +59,13 @@ public class Odometer extends Thread{
     }
 
     /**
-     * runnable method overriding the thread method.
+     * Runnable method overriding the thread method.
      *
-     * This method will be ran in a separate thread
-     * continuously polling the tachometers and
-     * integrating the instantaneous speed to get
-     * the total linear and angular displacement
+     * This method will be ran in a separate thread to the
+     * main execution thread, and it will
+     * continuously poll the tachometers and
+     * to calculate the position of the robot on the grid
+     * at all times.
      */
     public void run() {
         long updateStart, updateEnd;
@@ -112,6 +110,9 @@ public class Odometer extends Thread{
         }
     }
 
+    /**
+     * Initiates the odometer thread.
+     */
     public void startCorrection() {
         this.odometryCorrection.start();
     }
@@ -128,6 +129,10 @@ public class Odometer extends Thread{
         }
     }
 
+    /**
+     * Retrieves the current angle of orientation of the robot.
+     * @return
+     */
     public double getThetaNormalized() {
         synchronized (lock) {
             if (theta < -Math.PI){
@@ -137,6 +142,22 @@ public class Odometer extends Thread{
             } else {
                 return theta;
             }
+        }
+    }
+
+    /**
+     * Single point of entry to set
+     * the position of the odometer
+     *
+     * @param position array containing the position
+     *                 of the robot [x,y,theta]
+     */
+    public void setPosition(double[] position){
+        if (position.length != 3) return;
+        synchronized (lock){
+            x = position[0];
+            y = position[1];
+            theta = position[2];
         }
     }
 
@@ -176,31 +197,15 @@ public class Odometer extends Thread{
         return lineDetectorLeft.isLine();
     }
 
+
     public boolean isRightLine(){
         return lineDetectorRight.isLine();
     }
-
 
     public void setNavigation(Navigation navigation){
         this.navigation = navigation;
         this.odometryCorrection.setNavigation(navigation);
     }
-
-	/**
-	 * Single point of entry to set
-     * the position of the odometer
-	 *
-     * @param position array containing the position
-     *                 of the robot [x,y,theta]
-	 */
-	public void setPosition(double[] position){
-        if (position.length != 3) return;
-        synchronized (lock){
-            x = position[0];
-            y = position[1];
-            theta = position[2];
-        }
-	}
 
     public void setX(double x) {
         synchronized (lock) {
