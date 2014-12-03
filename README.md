@@ -15,7 +15,7 @@ David Lavoie-Boutin.
 
 Daniel Macario.
 
-Hardware Design, Testing and Documentation:
+**Hardware Design, Testing and Documentation:**
 
 Marco Manglaviti
 
