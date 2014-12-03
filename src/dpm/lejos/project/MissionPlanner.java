@@ -3,14 +3,15 @@ package dpm.lejos.project;
 import dpm.lejos.orientation.Coordinate;
 import dpm.lejos.orientation.Orienteering;
 import lejos.nxt.Button;
-import lejos.nxt.LCD;
 import lejos.nxt.Sound;
 import lejos.nxt.comm.RConsole;
 
 /**
  * High level mission planning.
  *
- * Implements the over all strategy
+ * Implements the over all strategy of the application. This class
+ * Manages the high level switching between the subsystems needed to
+ * accomplish the task.
  *
  * @author David Lavoie-Boutin
  * @version 1.0
@@ -27,6 +28,20 @@ public class MissionPlanner {
     private int dropOffX;
     private int dropOffY;
 
+    /**
+     * Initializes a MissionPlanner instance, used to complete the search and rescue task.
+     * @param navigation Navigation instance used to travel between tiles.
+     * @param grabber Grabber instance used to locate and pick-up blocks
+     * @param orienteering Orienteering instance used to localize the robot on the grid.
+     * @param odometer Odometer instance used to keep track of the position of the robot
+     *                 on the coordinate system.
+     * @param display Display instance used to print to the LCD screen of the master brick.
+     * @param blockDetection Block detection instance used to determine the location of
+     *                       blocks on the pick-up area.
+     * @param robot Robot instance used to control the movement of the robot.
+     * @param dropOffX X coordinate where the grabbed blocks should be dropped.
+     * @param dropOffY Y coordinate where the grabbed blocks should be dropped.
+     */
     public MissionPlanner(Navigation navigation, Grabber grabber, Orienteering orienteering, Odometer odometer, SystemDisplay display,
                           BlockDetection blockDetection, Robot robot, int dropOffX, int dropOffY) {
 
@@ -51,15 +66,9 @@ public class MissionPlanner {
      * 3- Pickup blocks
      * 4- Navigate to drop off area
      * 5- Drop blocks
-     * 6- repeat from 2 onwards
      */
     public void startMission(){
-        //odoCorrectionTest();
-//        localizationTest();
-//        localizationAndNavigationTest();
-//        pickBlockTest();
-//        touchSensorTest();
-        fullTest();
+        completeTask();
     }
 
     public void odoCorrectionTest(){
@@ -98,6 +107,10 @@ public class MissionPlanner {
         }
     }
 
+    /**
+     * Protocol used to calibrate the radius of the wheels for the best
+     * possible turning.
+     */
     public void calibrateRadius(){
         odometer.start();
         display.start();
@@ -105,6 +118,10 @@ public class MissionPlanner {
         System.exit(0);
     }
 
+    /**
+     * Protocol used to calibrate the size of the wheelbase for the best
+     * possible navigation.
+     */
     public void calibrateBase(){
         odometer.start();
         display.start();
@@ -112,16 +129,14 @@ public class MissionPlanner {
         m_Navigation.moveForward();
         m_Navigation.moveForward();
         m_Navigation.rotateTo(180);
-//        m_Navigation.rotateTo(0);
-//        m_Navigation.rotateTo(180);
-//        m_Navigation.rotateTo(0);
         Button.waitForAnyPress();
         System.exit(0);
     }
 
-
+    /**
+     * Odometer test to verify that the subsystem is working properly.
+     */
     public void odometryTest(){
-        //m_Navigation.floatMotors();
         odometer.start();
         display.start();
         RConsole.println("I made it this far!");
@@ -132,15 +147,22 @@ public class MissionPlanner {
         System.exit(0);
     }
 
+    /**
+     * Subroutine to test that the vehicle is capable of
+     * localizing on a specified map
+     */
     public void localizationTest() {
         Button.waitForAnyPress();
-
         odometer.start();
-        //display.start();
         RConsole.println("Initiated ODO and ODO Display");
         orienteering.deterministicPositioning(odometer);
     }
 
+    /**
+     * Subroutine to test that the vehicle is capable of
+     * navigating on a specified map
+     * @param robot Robot instance used to control the movement of the robot.
+     */
     public void navigationTest(Robot robot) {
         odometer.start();
         display.start();
@@ -153,43 +175,56 @@ public class MissionPlanner {
         m_Navigation.navigate(new Coordinate(3,3));
     }
 
+    /**
+     * Integration test of the localization and navigation
+     * subroutines.
+     */
     public void localizationAndNavigationTest() {
         odometer.start();
         display.start();
         RConsole.println("Initiated ODO and ODO Display");
-//        Button.waitForAnyPress();
         orienteering.deterministicPositioning(odometer);
         Sound.beep();
-//        Button.waitForAnyPress();
         m_Navigation.navigate(new Coordinate(5,1));
-        //blockDetection.lookForBlock(m_Grabber);
     }
 
-    public void fullTest() {
+    /**
+     * Main subroutine for the entire search and rescue task.
+     */
+    public void completeTask() {
         odometer.start();
+
+        //localize
         orienteering.deterministicPositioning(odometer);
         Sound.beep();
         Sound.beep();
+
+        //navigate to the north-east corner of the pick-up location
         m_Navigation.navigate(new Coordinate(9,1));
-//        double x = 1 * Robot.tileLength + Robot.tileLength / 2.0;
-//        double y = 10 * Robot.tileLength + Robot.tileLength / 2.0;
-//        m_Navigation.rotateToCoordinate(y, x);
-        //blockDetection.lookForBlock(m_Grabber);
+
+        //Look south towards the blocks
         m_Navigation.rotateTo(0);
-//        double x = 10 * 30 + 30 / 2.0;
-//        double y = 30 + 30 / 2.0;
-//        m_Navigation.rotateToCoordinate(x,y);
+
+        //Initiate blockpicking algorithm
         blockDetection.lookForBlock(m_Grabber);
         robot.setPositionOnGrid(new Coordinate(9,1));
         robot.setDirection(Orienteering.Direction.NORTH);
+
+        //Navigate towards the drop-off location
         m_Navigation.navigate(new Coordinate(dropOffY, dropOffX));
         m_Navigation.moveBackwardHalfATile();
+
+        //Drop the block
         m_Grabber.lowerClaw();
         m_Grabber.openClaw();
         Button.waitForAnyPress();
 
     }
 
+    /**
+     * Test used to determine the effectiveness of the robot
+     * rotation.
+     */
     public void rotationTest() {
         odometer.start();
         display.start();
@@ -199,6 +234,9 @@ public class MissionPlanner {
         m_Navigation.rotate90CounterClock();
     }
 
+    /**
+     * Test used to verify the functionality of the claw.
+     */
     public void clawTest() {
         display.start();
         odometer.start();
@@ -209,7 +247,22 @@ public class MissionPlanner {
         Button.waitForAnyPress();
     }
 
-    public void pickBlockTest2() {
+    /**
+     * Test to verify the functionality of the block-picking
+     * algorithm.
+     */
+    public void pickBlockTest() {
+        odometer.start();
+        display.start();
+        blockDetection.lookForBlock(m_Grabber);
+    }
+
+    /**
+     * Second test for the block-picking algorithm with a variation
+     * in the starting position. Instead of standing at the north-east corner
+     * we stand at the north-west corner.
+     */
+    public void pickBlockTestWithDifferentStartingPosition() {
         display.start();
         odometer.start();
         m_Grabber.deployArms();
@@ -221,18 +274,19 @@ public class MissionPlanner {
         Button.waitForAnyPress();
     }
 
-    public void pickBlockTest() {
-        odometer.start();
-        display.start();
-        blockDetection.lookForBlock(m_Grabber);
-    }
-
+    /**
+     * Test the straight driving capabilities of the robot.
+     */
     public void straightDriverTest() {
         odometer.start();
         display.start();
         blockDetection.lookForBlock(m_Grabber);
     }
 
+    /**
+     * Test the functionality of the touch sensor on the left
+     * arm of the claw.
+     */
     public void touchSensorTest() {
         while (true) {
             if (robot.clawTouch.isPressed()) {
