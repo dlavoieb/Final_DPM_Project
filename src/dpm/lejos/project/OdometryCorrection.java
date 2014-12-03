@@ -5,10 +5,14 @@ import lejos.nxt.comm.RConsole;
 import java.util.Arrays;
 
 /**
+ * Corrects the position reported by the odometer
+ * based on readings from the light sensors
+ *
  * @author David Lavoie-Boutin
- * @version v1.0
+ * @version v1.3
  */
 public class OdometryCorrection extends Thread{
+
     private Odometer odo;
     private Robot robot;
     private Navigation navigation;

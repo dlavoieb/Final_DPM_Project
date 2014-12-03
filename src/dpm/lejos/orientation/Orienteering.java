@@ -44,7 +44,6 @@ public class Orienteering {
     public Orienteering(Robot robot, Navigation navigation) {
         this.plane = createPlane();
         this.robot = robot;
-        robot.setPlane(plane);
         this.navigation = navigation;
         this.plane = createPlaneFromGraph(navigation.mapper.graphPlane);
     }
@@ -139,8 +138,6 @@ public class Orienteering {
 
         //Set the attributes used to know the position of the robot on the grid
         robot.setPositionOnGrid(endingPosition);
-        robot.setDirection(endingDir);
-
 
         adjustOdometer(endingPosition, endingDir, odometer);
         double x = endingPosition.getX() * Robot.tileLength + Robot.tileLength /2.0;

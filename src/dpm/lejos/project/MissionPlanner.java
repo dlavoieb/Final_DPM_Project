@@ -168,7 +168,6 @@ public class MissionPlanner {
         display.start();
         RConsole.println("Initiated ODO and ODO Display");
         robot.setPositionOnGrid(new Coordinate(0, 1));
-        robot.setDirection(Orienteering.Direction.SOUTH);
         odometer.setX(45);
         odometer.setY(15);
         odometer.setThetaInDegrees(0);
@@ -208,7 +207,6 @@ public class MissionPlanner {
         //Initiate blockpicking algorithm
         blockDetection.lookForBlock(m_Grabber);
         robot.setPositionOnGrid(new Coordinate(9,1));
-        robot.setDirection(Orienteering.Direction.NORTH);
 
         //Navigate towards the drop-off location
         m_Navigation.navigate(new Coordinate(dropOffY, dropOffX));
