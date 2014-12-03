@@ -5,6 +5,7 @@ documentation
 *.nxj
 *.nxd
 out
+*.iml
 
 #junit reports#
 reports
