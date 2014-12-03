@@ -1,5 +1,9 @@
 package dpm.lejos.project;
 
+import dpm.lejos.orientation.Coordinate;
+import dpm.lejos.orientation.Node;
+import dpm.lejos.orientation.Orienteering.*;
+import dpm.lejos.orientation.Tile;
 import lejos.nxt.*;
 import lejos.nxt.comm.Bluetooth;
 import lejos.nxt.comm.NXTCommConnector;
@@ -49,12 +53,21 @@ public class Robot {
     public static int clawCloseAngle = -250;
     public static double wheelBase = 12.5; //TODO : Continue to tweak
     public static double wheelRadius = 2.02; //TODO: Still need to calibrate
+    public static double lightSensorOffset = 5; //TODO : Get real value
     public static double lsDistance = 11.7;
 
     public static double ACCEPTABLE_ANGLE = 1.00;
     public static double ACCEPTABLE_LINEAR = 1.00;
     static int acceptableSideError = 3;
     public static int DISTANCE_THRESHOLD = 30;
+
+    private Direction direction = null;
+    private Coordinate positionOnGrid;
+    //the plane is used for localization
+    private Tile[][] plane;
+
+    //the plane graph is used for navigation
+    private Node[][] planeGraph;
 
     public static int LIGHT_THRESHOLD = 10;
     public static double tileLength = 30;
@@ -140,5 +153,72 @@ public class Robot {
     }
 
     public  Robot (boolean test){}
+    /**
+     * returns the graph used for navigation
+     * @return the node table
+     */
+    public Node[][] getPlaneGraph() {
+        return planeGraph;
+    }
+
+    /**
+     * sets the graph used for navigation
+     * @param planeGraph the new node table
+     */
+    public void setPlaneGraph(Node[][] planeGraph) {
+        this.planeGraph = planeGraph;
+    }
+
+    /**
+     * returns the plane object used for localization
+     * and navigation purposes
+     * @return the tile table
+     */
+    public Tile[][] getPlane() {
+        return plane;
+    }
+
+    /**
+     * Sets the plane object used for localization
+     * and navigation purposes
+     * @param plane the new tile table
+     */
+    public void setPlane(Tile[][] plane) {
+        this.plane = plane;
+    }
+
+    /**
+     * returns the coordinate represeting the position of the robot
+     * on the grid
+     * @return the current coordinate on the grid
+     */
+    public Coordinate getPositionOnGrid() {
+        return positionOnGrid;
+    }
+
+    /**
+     * sets the coordinate representing the position of the robot
+     * on the grid
+     * @param positionOnGrid the new coordinate on the grid
+     */
+    public void setPositionOnGrid(Coordinate positionOnGrid) {
+        this.positionOnGrid = positionOnGrid;
+    }
+
+    /**
+     * get the current direction the robot is looking at
+     * @return the current cardinal direction
+     */
+    public Direction getDirection() {
+        return direction;
+    }
+
+    /**
+     * Modify the direction the robot is looking at
+     * @param direction the new cardinal direction
+     */
+    public void setDirection(Direction direction) {
+        this.direction = direction;
+    }
 
 }//end Robot
