@@ -117,16 +117,6 @@ public class Navigation {
                         queue.add(node);
                         node.setVisited(true);
                         node.setPrevious(current);
-                        //
-                        // Dear maintainer:
-                        //
-                        // Once you are done trying to 'optimize' this routine,
-                        // and have realized what a terrible mistake that was,
-                        // please increment the following counter as a warning
-                        // to the next guy:
-                        //
-                        // total_hours_wasted_here = 42
-                        //
                     }
                 }
             }
@@ -545,7 +535,7 @@ public class Navigation {
     public static Vector vectorDisplacement(double[] currentPosition, double[] destination){
         Vector vector = new Vector();
         if (currentPosition.length == 3 && destination.length == 2){
-            //Calcualte the magnitude of the vector using Pythagoras
+            //calculate the magnitude of the vector using Pythagoras
             vector.setMagnitude(Math.sqrt(destination[0] * destination[0] - 2 * destination[0] * currentPosition[0] + currentPosition[0] * currentPosition[0] + destination[1] * destination[1] - 2 * destination[1] * currentPosition[1] + currentPosition[1] * currentPosition[1]));
 
             double x = destination[0] - currentPosition[0];
