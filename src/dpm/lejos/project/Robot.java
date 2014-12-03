@@ -59,7 +59,7 @@ public class Robot {
     public static double ACCEPTABLE_ANGLE = 1.00;
     public static double ACCEPTABLE_LINEAR = 1.00;
     static int acceptableSideError = 3;
-    public static int DISTANCE_THRESHOLD = 15;
+    public static int DISTANCE_THRESHOLD = 30;
 
     private Direction direction = null;
     private Coordinate positionOnGrid;
