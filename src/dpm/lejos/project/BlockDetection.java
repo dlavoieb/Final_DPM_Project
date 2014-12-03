@@ -19,8 +19,8 @@ public class BlockDetection {
     private Navigation navigation;
 
     /**
-     * default constructor
-     *
+     * Initializes a BlockDetection instance used to detect and pickup
+     * blocks.
      * @param robot the robot object
      * @param navigation the navigation reference
      * @param odometer  the odometer reference
@@ -31,13 +31,25 @@ public class BlockDetection {
         this.navigation = navigation;
     }
 
+    /**
+     * Algorithm used to locate and pick up blocks. It swipes the 4x4
+     * pick up area at a set of arbitrary position with the claw deployed,
+     * if the touch sensor closes then we have detected an object and can initate
+     * the navigation procedure to the drop-off area.
+     * @param grabber
+     */
     public void lookForBlock(Grabber grabber) {
         int thirdOfTileMovementCount = 0;
 
+
+        // Special instructions for the final map 1 where there is an
+        // obstacle blocking the default procedure of the algorithm.
         if (navigation.mapper.mapID == Mapper.MapID.Final1) {
             grabber.deployArms();
             grabber.lowerClaw();
         } else {
+            // If we are not in map1, then we move back before lowering
+            // the claw/
             navigation.moveBackwardHalfATile();
             grabber.deployArms();
             grabber.lowerClaw();
@@ -45,7 +57,12 @@ public class BlockDetection {
         }
         RConsole.println("Init block pickup");
 
+        // We move forward a third of a tile, and then close
+        // the claw, if we pickup a block then we break, otherwise
+        // we open the claw and move forward again. This simple algorithm
+        // reported a success rate of 80% during our testing trials.
         while (true) {
+
             navigation.moveForwardThirdOfATile();
             thirdOfTileMovementCount++;
             grabber.closeClaw();
@@ -69,137 +86,13 @@ public class BlockDetection {
             grabber.openClaw();
         }
 
+        // Upon grabbing a block, we move back to the
+        // starting position where the pick-up algorithm
+        // was initiated
         while (thirdOfTileMovementCount > 0) {
             navigation.moveBackwardThirdOfATile();
             thirdOfTileMovementCount--;
         }
-
-//        navigation.moveForwardThirdOfATile();
-//        thirdOfTileMovementCount++;
-//        grabber.closeClaw();
-//        grabber.openClaw();
-//        grabber.closeClaw();
-//
-//
-//        RConsole.println("Pickup Failed!");
-//        grabber.openClaw();
-//        navigation.moveForwardThirdOfATile();
-//        grabber.closeClaw();
-//        grabber.openClaw();
-//        grabber.closeClaw();
-//
-//        if (m_robot.clawTouch.isPressed()){
-//            RConsole.println("Picked the block!!!");
-//            grabber.riseClaw();
-//            navigation.rotate90ClockWise();
-//            navigation.rotate90ClockWise();
-//            navigation.moveForwardHalfATile();
-//            navigation.rotate90ClockWise();
-//            navigation.moveForward();
-//            Button.waitForAnyPress();
-//        }
-//
-//        RConsole.println("Pickup Failed!");
-//        grabber.openClaw();
-//        navigation.moveForwardThirdOfATile();
-//        grabber.closeClaw();
-//        grabber.openClaw();
-//        grabber.closeClaw();
-//
-//        if (m_robot.clawTouch.isPressed()){
-//            RConsole.println("Picked the block!!!");
-//            grabber.riseClaw();
-//            navigation.rotate90ClockWise();
-//            navigation.rotate90ClockWise();
-//            navigation.moveForwardHalfATile();
-//            navigation.rotate90ClockWise();
-//            navigation.moveForward();
-//            Button.waitForAnyPress();
-//        }
-//
-//        if (m_robot.clawTouch.isPressed()){
-//            RConsole.println("Picked the block!!!");
-//            grabber.riseClaw();
-//            navigation.rotate90ClockWise();
-//            navigation.rotate90ClockWise();
-//            navigation.moveForwardHalfATile();
-//            navigation.rotate90ClockWise();
-//            navigation.moveForward();
-//            Button.waitForAnyPress();
-//        }
-//
-//
-//        navigation.moveBackwardHalfATile();
-//        RConsole.println("Pickup Failed!");
-//        grabber.openClaw();
-//        navigation.moveForwardThirdOfATile();
-//        grabber.closeClaw();
-//        grabber.openClaw();
-//        grabber.closeClaw();
-
-
-//        while (true) {
-//            navigation.moveForward();
-//            grabber.closeClaw();
-//
-//            if (m_robot.clawTouch.isPressed()){
-//                RConsole.println("Picked the block!!!");
-//                grabber.riseClaw();
-//                break;
-//            }
-//
-//            RConsole.println("Pickup Failed!");
-//
-//            grabber.openClaw();
-//        }
-//
-//        int i = 0;
-//        int distanceRecorded = 0;
-//        boolean blockDetected = false;
-//        while (i < 90) {
-//            distanceRecorded = getFilteredData(m_robot.usFront);
-//            RConsole.println("Distance to block = " + Integer.toString(distanceRecorded));
-//            if (distanceRecorded >= 10 && distanceRecorded <= 15) {
-//                blockDetected = true;
-//                break;
-//            }
-//            i += 10;
-//            navigation.rotate10ClockWise();
-//        }
-//
-//        if (blockDetected) {
-//            grabber.pickUpBlock();
-//        }
-//        lookForBlock(grabber);
-    }
-
-    /**
-     * take five readings with the ultrasonic sensor
-     * and return the median value
-     * @return the filtered distance read with the us sensor
-     * @param us
-     */
-    private int getFilteredData(UltrasonicSensor us) {
-        int distance;
-        int[] dist = new int[5];
-
-        for (int i = 0; i < 5; i++) {
-
-            us.ping();
-            // wait for ping to complete
-            //TODO: decide on a time for us readings
-            sleep(25);
-            // there will be a delay
-            dist[i] = us.getDistance();
-
-        }
-
-        Arrays.sort(dist);
-        distance = dist[2];
-
-        //if (distance < DISTANCE_THRESHOLD)
-
-        return distance;
     }
 
     public void sleep(int delay) {
