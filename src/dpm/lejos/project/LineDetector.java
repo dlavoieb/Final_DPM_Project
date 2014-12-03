@@ -1,7 +1,6 @@
 package dpm.lejos.project;
 
 import lejos.nxt.ColorSensor;
-import lejos.nxt.comm.RConsole;
 
 import java.util.LinkedList;
 
@@ -65,7 +64,7 @@ public class LineDetector extends Thread {
 
             list.add(colorSensor.getNormalizedLightValue());
             list.remove(0);
-            double diff = Utils.averageList(list, coeffs);
+            double diff = Utils.filterList(list, coeffs);
 
             pastLight = diff;
 

@@ -3,7 +3,6 @@ package dpm.lejos.test;
 import dpm.lejos.project.Robot;
 import dpm.lejos.project.Utils;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 
 import java.util.LinkedList;
@@ -43,7 +42,7 @@ public class UtilsTest {
         list.add(10);
         list.add(10);
         double [] coefs = new double [] {1/2.0, -1/6.0, -1/6.0, -1/6.0};
-        Assert.assertEquals(0, Utils.averageList(list, coefs), 0.001);
+        Assert.assertEquals(0, Utils.filterList(list, coefs), 0.001);
         list = new LinkedList<Integer>();
         list.add(20);
         list.add(10);
@@ -51,6 +50,6 @@ public class UtilsTest {
         list.add(10);
 
 
-        Assert.assertEquals(5.16666, Utils.averageList(list, coefs), 0.001);
+        Assert.assertEquals(5.16666, Utils.filterList(list, coefs), 0.001);
     }
 }
