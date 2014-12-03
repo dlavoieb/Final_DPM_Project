@@ -9,7 +9,7 @@ We were tasked with building a search and rescue robot capable of localising it 
 (each tile is 30x30 cm), and then picking up styrofoam blocks from a specified area and deliver them to a given
 coordinate on the grid.
 
-Software Developers:
+**Software Developers:**
 
 David Lavoie-Boutin.
 
