@@ -196,6 +196,9 @@ public class Mapper {
                 obstacles.add(new Coordinate(11,2));
                 obstacles.add(new Coordinate(11,9));
 
+
+                return MAP12x12.createMap(obstacles);
+
             case Final5:
 
                 obstacles = new ArrayList<Coordinate>();
@@ -222,6 +225,7 @@ public class Mapper {
                 obstacles.add(new Coordinate(9,11));
                 obstacles.add(new Coordinate(10,3));
                 obstacles.add(new Coordinate(10,8));
+                return MAP12x12.createMap(obstacles);
 
             case Final6:
 
