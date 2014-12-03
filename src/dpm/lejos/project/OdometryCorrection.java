@@ -23,15 +23,23 @@ public class OdometryCorrection extends Thread{
 
     private enum Side {LEFT, RIGHT}
 
-    public boolean stopOBcorrection;
-
-
+    /**
+     * constructor
+     * @param odo odometer reference
+     * @param robot robot reference
+     * @param navigation reference to the navigation object
+     */
     public OdometryCorrection(Odometer odo, Robot robot, Navigation navigation){
         this.odo = odo;
         this.robot = robot;
         this.navigation = navigation;
     }
 
+    /**
+     * get the angle offset form the line perpendicular to the black lines
+     * @param side which sensor crossed the line first
+     * @return the angle offset
+     */
     public double calculate(Side side){
         double xDist = now[0] - last[0];
         double yDist = now[1] - last[1];
@@ -48,6 +56,11 @@ public class OdometryCorrection extends Thread{
         }
     }
 
+    /**
+     * compute the global heading based on the measured angle
+     * @param theta the angle offset from the the black line
+     * @return the global heading
+     */
     public double getNewTheta(double theta){
         double oldTheta = odo.getThetaInDegrees();
         double newTheta = 0;
@@ -65,11 +78,23 @@ public class OdometryCorrection extends Thread{
         return newTheta;
     }
 
+    /**
+     * method to stop the motors forcing navigation to recompute the motion
+     */
     private void stopMotors(){
         robot.motorLeft.stop();
         robot.motorRight.stop();
     }
 
+    /**
+     * main runnable method
+     *
+     * this method compares the status of the two light
+     * sensors and computed the current angle based on
+     * the measured time difference between two lines detected
+     *
+     * it then adjusts the odometer values to match those measured
+     */
     public void run(){
         double newTheta;
         while(true) {
@@ -144,43 +169,6 @@ public class OdometryCorrection extends Thread{
                         }
                     }
                 }
-
-                if (stopOBcorrection){
-                    double theta = odo.getThetaInDegrees();
-                    if ((theta >= -45 && theta <= 45) || (theta >= 135 || theta <= -135)) {
-                        //travelling along the x axis
-                        if (Math.abs(odo.getY() % (Robot.tileLength / 2.0)) < Robot.acceptableSideError) {
-                            stopOBcorrection = false;
-                        }
-
-                    } else if ((theta >= 45 && theta <= 135) || (theta >= -135 && theta <= -45)) {
-                        //travelling in the y axis
-                        if (Math.abs(odo.getX() % (Robot.tileLength / 2.0)) < Robot.acceptableSideError) {
-                            stopOBcorrection = false;
-                        }
-                    }
-                }
-
-                //check for side error
-                if (!stopOBcorrection) {
-                    double theta = odo.getThetaInDegrees();
-                    if ((theta >= -45 && theta <= 45) || (theta >= 135 || theta <= -135)) {
-                        //travelling along the x axis
-                        if (Math.abs(odo.getY() % (Robot.tileLength / 2.0)) > Robot.acceptableSideError) {
-                            RConsole.println("travelling along the x axis\n bigger difference");
-                            stopMotors();
-                            stopOBcorrection = true;
-                        }
-
-                    } else if ((theta >= 45 && theta <= 135) || (theta >= -135 && theta <= -45)) {
-                        //travelling in the y axis
-                        if (Math.abs(odo.getX() % (Robot.tileLength / 2.0)) > Robot.acceptableSideError) {
-                            stopMotors();
-                            stopOBcorrection = true;
-                        }
-                    }
-                }
-
                 sleep(10);
             }
             else {
@@ -189,6 +177,14 @@ public class OdometryCorrection extends Thread{
         }
     }
 
+    /**
+     * set the navigation object used to determine
+     * when to enable odometry correction
+     *
+     * needed to avoid circular dependencies in the constructors
+     *
+     * @param navigation reference to the navigation class
+     */
     public void setNavigation(Navigation navigation){
         this.navigation = navigation;
     }
