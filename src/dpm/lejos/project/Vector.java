@@ -9,7 +9,17 @@ public class Vector {
     private double magnitude;
     private double orientation;
 
+    /**
+     * default constructor
+     */
     public Vector (){}
+
+    /**
+     * recommended constructor that initialized the members
+     * with the provided values
+     * @param magnitude the length of the vector
+     * @param orientation the direction of the vector
+     */
     public Vector (double magnitude, double orientation){
         this.magnitude = magnitude;
         this.orientation = orientation;
