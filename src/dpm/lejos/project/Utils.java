@@ -32,7 +32,18 @@ public class Utils {
         return robotDistanceToMotorAngle(Math.PI * Robot.wheelBase * angle / 360.0 + 0.1, robot);
 	}
 
-    public static double averageList(LinkedList<Integer> list, double[] coefs){
+    /**
+     * Apply filter to given list
+     *
+     * All filter basically perform a vector
+     * dot product of an array of readings
+     * and a coefficient array
+     *
+     * @param list the list of readings
+     * @param coefs the list of coefficient
+     * @return the filtered value
+     */
+    public static double filterList(LinkedList<Integer> list, double[] coefs){
         if (coefs.length < list.size()){
             throw new ArrayIndexOutOfBoundsException();
         }
@@ -45,6 +56,11 @@ public class Utils {
         return sum;
     }
 
+    /**
+     * method the
+     * @param list
+     * @return the median value of the list
+     */
     public static int medianList(LinkedList<Integer> list){
         return list.get(list.size()/2);
     }
