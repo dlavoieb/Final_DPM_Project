@@ -1,4 +1,4 @@
-project_team8
+DPM Final Project Team 8
 =============
 
 DPM project repository for team 8.
